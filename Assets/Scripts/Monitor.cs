@@ -25,6 +25,8 @@ public class Monitor : MonoBehaviour
         // System.DateTime.Now.ToString()
         SetMonitorText("Hello World");
         AddMonitorTextLine("How are you doing?");
+        AddMonitorTextLine("Im fine!");
+
         RenderMonitorText();
     }
 
@@ -54,11 +56,10 @@ public class Monitor : MonoBehaviour
 
     public void RemoveMonitorTextLineLast()
     {
-        if (textArray.Count > 0)
-        {
-            int lastIndex = textArray.Count - 1;
-            textArray.RemoveAt(lastIndex);
-        }
+        if (checkError(textArray.Count < 1, "No lines to remove")) return;
+
+        int lastIndex = textArray.Count - 1;
+        textArray.RemoveAt(lastIndex);
     }
 
     public void RemoveMonitorTextLineAtPosition(int index)
