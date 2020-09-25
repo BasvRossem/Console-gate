@@ -12,15 +12,17 @@ public class Cursor
     public Vector2Int Up = new Vector2Int(0, -1);
     public Vector2Int Down = new Vector2Int(0, 1);
 
-    private Vector2Int bounds;
+    private Vector2Int min_bounds;
+    private Vector2Int max_bounds;
     public Vector2Int position;
+    public Vector2Int offset;
     public int x;
     public int y;
 
-    public Cursor(int x = 0, int y = 0, int bounds_x = int.MaxValue, int bounds_y = int.MaxValue)
+    public Cursor(int x = 0, int y = 0)
     {
         SetPosition(x, y);
-        SetBounds(bounds_x, bounds_y);
+        SetBounds();
         UpdateXY();
     }
 
@@ -35,9 +37,10 @@ public class Cursor
         position = new Vector2Int(x, y);
     }
 
-    public void SetBounds(int bounds_x = int.MaxValue, int bounds_y = int.MaxValue)
+    public void SetBounds(int min_x = 0, int max_x = int.MaxValue, int min_y = 0, int max_y = int.MaxValue)
     {
-        bounds = new Vector2Int(bounds_x, bounds_y);
+        min_bounds = new Vector2Int(min_x, min_y);
+        max_bounds = new Vector2Int(max_x, max_y);
     }
 
     public void Move(Vector2Int direction)
@@ -45,10 +48,11 @@ public class Cursor
         position += direction;
 
         // If the curser is out of bounds, put it in bounds
-        if (position.x < 0) position.x = 0;
-        if (position.x > bounds.x) position.x = bounds.x;
-        if (position.y < 0) position.y = 0;
-        if (position.y > bounds.y) position.y = bounds.y;
+        if (position.x < min_bounds.x) position.x = min_bounds.x;
+        if (position.x > max_bounds.x) position.x = max_bounds.x;
+
+        if (position.y < min_bounds.y) position.y = min_bounds.y;
+        if (position.y > max_bounds.y) position.y = max_bounds.y;
 
         UpdateXY();
     }
@@ -61,7 +65,7 @@ public class TextGrid
 
     private List<char[]> grid;
 
-    private char[] MakeArray(int length, char character)
+    private char[] MakeRow(int length, char character)
     {
         char[] arr = new char[length];
         for (int i = 0; i < length; i++)
@@ -77,7 +81,7 @@ public class TextGrid
         columnAmount = ColumnAmount;
 
         grid = new List<char[]>(rowAmount);
-        for (int row = 0; row < rowAmount; row++) grid.Add(MakeArray(columnAmount, ' '));
+        for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
     }
 
     public char this[int index_row, int index_column]
@@ -99,7 +103,7 @@ public class TextGrid
 
     public void Clear(int index)
     {
-        grid[index] = new char[columnAmount];
+        grid[index] = MakeRow(columnAmount, ' ');
     }
 }
 
@@ -125,6 +129,18 @@ public class Monitor : MonoBehaviour
     {
         ResetMonitor();
         // System.DateTime.Now.ToString()
+
+        DrawLineVertical(0, 0, RowAmount);
+        DrawLineVertical(ColumnAmount - 1, 0, RowAmount);
+        DrawLineHorizontal(0, 1, ColumnAmount - 1);
+        DrawLineHorizontal(RowAmount - 1, 1, ColumnAmount - 1);
+
+        cursor = new Cursor();
+        cursor.SetBounds(1, ColumnAmount - 1, 1, RowAmount - 1);
+
+        // Move cursor to top left
+        cursor.Move(new Vector2Int(-1 * ColumnAmount, -1 * RowAmount));
+
         AddMonitorTextLine("|--------------------|");
         AddMonitorTextLine("| Hello World        |");
         AddMonitorTextLine("| How are you doing? |");
@@ -154,8 +170,6 @@ public class Monitor : MonoBehaviour
 
     public void ResetMonitor()
     {
-        cursor = new Cursor();
-        cursor.SetBounds(ColumnAmount, RowAmount);
         textGrid = new TextGrid(RowAmount, ColumnAmount);
     }
 
@@ -171,19 +185,36 @@ public class Monitor : MonoBehaviour
         {
             WriteCharacter(character);
         }
-        cursor.SetPosition(0, cursor.y);
+
         cursor.Move(cursor.Down);
+        cursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
     }
 
     public void RemoveMonitorTextLineAtPosition(int index)
     {
-        if (checkError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
-        if (checkError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
+        if (CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
+        if (CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
 
         textGrid.Clear(index);
     }
 
-    private bool checkError(bool condition, string errorMessage)
+    public void DrawLineHorizontal(int row, int startColumn, int endColumn)
+    {
+        for (int column = startColumn; column < endColumn; column++)
+        {
+            textGrid[row][column] = '-';
+        }
+    }
+
+    public void DrawLineVertical(int column, int startRow, int endRow)
+    {
+        for (int row = startRow; row < endRow; row++)
+        {
+            textGrid[row][column] = '|';
+        }
+    }
+
+    private bool CheckError(bool condition, string errorMessage)
     {
         if (condition)
         {
