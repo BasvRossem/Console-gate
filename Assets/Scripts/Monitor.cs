@@ -56,6 +56,11 @@ public class Cursor
 
         UpdateXY();
     }
+
+    public void Reset()
+    {
+        Move(new Vector2Int(int.MinValue, int.MinValue));
+    }
 }
 
 public class TextGrid
@@ -115,7 +120,7 @@ public class Monitor : MonoBehaviour
     private const int ColumnAmount = 80;
     private TextGrid textGrid;
 
-    private Cursor cursor;
+    public Cursor cursor;
 
     private string text;
 
@@ -127,26 +132,6 @@ public class Monitor : MonoBehaviour
 
     private void Update()
     {
-        ResetMonitor();
-        // System.DateTime.Now.ToString()
-
-        DrawLineVertical(0, 0, RowAmount);
-        DrawLineVertical(ColumnAmount - 1, 0, RowAmount);
-        DrawLineHorizontal(0, 1, ColumnAmount - 1);
-        DrawLineHorizontal(RowAmount - 1, 1, ColumnAmount - 1);
-
-        cursor = new Cursor();
-        cursor.SetBounds(1, ColumnAmount - 1, 1, RowAmount - 1);
-
-        // Move cursor to top left
-        cursor.Move(new Vector2Int(-1 * ColumnAmount, -1 * RowAmount));
-
-        AddMonitorTextLine("|--------------------|");
-        AddMonitorTextLine("| Hello World        |");
-        AddMonitorTextLine("| How are you doing? |");
-        AddMonitorTextLine("| Im fine!           |");
-        AddMonitorTextLine("|----------:D----------|");
-
         RenderMonitorText();
     }
 
@@ -212,6 +197,31 @@ public class Monitor : MonoBehaviour
         {
             textGrid[row][column] = '|';
         }
+    }
+
+    public void DrawRectangle(int startRow, int startColumn, int endRow, int endColumn)
+    {
+        // Draw lines
+        DrawLineHorizontal(startRow, startColumn + 1, endColumn);
+        DrawLineHorizontal(endRow, startColumn + 1, endColumn);
+        DrawLineVertical(startColumn, startRow + 1, endRow);
+        DrawLineVertical(endColumn, startRow + 1, endRow);
+
+        // Draw Corners
+        textGrid[startRow, startColumn] = '*';
+        textGrid[startRow, endColumn] = '*';
+        textGrid[endRow, startColumn] = '*';
+        textGrid[endRow, endColumn] = '*';
+    }
+
+    public int GetRowAmount()
+    {
+        return RowAmount;
+    }
+
+    public int GetColumnAmount()
+    {
+        return ColumnAmount;
     }
 
     private bool CheckError(bool condition, string errorMessage)
