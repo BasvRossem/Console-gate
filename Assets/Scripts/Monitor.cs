@@ -114,7 +114,7 @@ public class TextGrid
 
 public class Monitor : MonoBehaviour
 {
-    private TextMeshProUGUI monitor;
+    public TextMeshProUGUI textMesh;
 
     private const int RowAmount = 24;
     private const int ColumnAmount = 80;
@@ -126,7 +126,6 @@ public class Monitor : MonoBehaviour
 
     private void Start()
     {
-        monitor = GetComponent<TextMeshProUGUI>();
         ResetMonitor();
     }
 
@@ -150,7 +149,7 @@ public class Monitor : MonoBehaviour
             text += new string(textGrid[y]);
             text += "\n";
         }
-        monitor.SetText(text);
+        textMesh.SetText(text);
     }
 
     public void ResetMonitor()
