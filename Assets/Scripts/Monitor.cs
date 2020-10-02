@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cursor
 {
@@ -121,6 +122,7 @@ public class Monitor : MonoBehaviour
     private TextGrid textGrid;
 
     public Cursor cursor;
+    public UICursor uiCursor;
 
     private string text;
 
@@ -132,6 +134,7 @@ public class Monitor : MonoBehaviour
     private void Update()
     {
         RenderMonitorText();
+        moveUICursorRight();
     }
 
     public void WriteCharacter(char letter)
@@ -230,5 +233,15 @@ public class Monitor : MonoBehaviour
             Debug.LogError(errorMessage);
         }
         return condition;
+    }
+
+    public void moveUICursorRight()
+    {
+        //Vector2 newPosition = textMesh.textInfo.characterInfo[0].topLeft;
+        TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
+        Vector2 newPosition = (characterInfo.topLeft + characterInfo.bottomRight) / 2;
+        Vector2 meshPosition = textMesh.transform.position;
+        //Debug.Log(meshPosition);
+        uiCursor.SetPositionCenter(newPosition + meshPosition);
     }
 }

@@ -9,20 +9,20 @@ Shader "Effects/ColorInverter"
 
 		SubShader
 	{
+		// Reder last
 		Tags { "Queue" = "Transparent" }
+
 
 		Pass
 		{
-		   ZWrite On
-		   ColorMask 0
+			// Prevent color from objects behind
+			ColorMask 0
 		}
 
-		// Invert the destination colour
-		// Inver the destination alpha
-		Blend OneMinusDstColor OneMinusSrcAlpha
 
-		// Add source an destination colors together
-		BlendOp Add
+		// We know this works
+		// But WHY???
+		Blend OneMinusDstColor OneMinusSrcAlpha
 
 		Pass
 		{
@@ -58,5 +58,7 @@ Shader "Effects/ColorInverter"
 
 			ENDCG
 		}
+
+
 	}
 }
