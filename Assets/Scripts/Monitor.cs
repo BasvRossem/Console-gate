@@ -143,7 +143,7 @@ public class Monitor : MonoBehaviour
         cursor.Move(cursor.Right);
     }
 
-    private void RenderMonitorText()
+    public void AssembleText()
     {
         text = "";
 
@@ -152,6 +152,11 @@ public class Monitor : MonoBehaviour
             text += new string(textGrid[y]);
             text += "\n";
         }
+    }
+
+    public void RenderMonitorText()
+    {
+        AssembleText();
         textMesh.SetText(text);
     }
 
@@ -235,13 +240,36 @@ public class Monitor : MonoBehaviour
         return condition;
     }
 
+    public void ShowUICursor(bool onOff)
+    {
+        uiCursor.SetVisible(onOff);
+    }
+
     public void moveUICursorRight()
     {
-        //Vector2 newPosition = textMesh.textInfo.characterInfo[0].topLeft;
         TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
         Vector2 newPosition = (characterInfo.topLeft + characterInfo.bottomRight) / 2;
         Vector2 meshPosition = textMesh.transform.position;
-        //Debug.Log(meshPosition);
         uiCursor.SetPositionCenter(newPosition + meshPosition);
+    }
+
+    public void SelectRow(int row)
+    {
+        // Retrieve character data
+        TMP_LineInfo lineInfo = textMesh.textInfo.lineInfo[row];
+        TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
+        TMP_CharacterInfo characterInfoFinal = textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
+
+        Debug.Log(characterInfoBegin.character);
+        Debug.Log(characterInfoFinal.character);
+
+        Vector2 newPositionCenter = (characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2;
+        Vector2 newSize = new Vector2(0, 0);
+        newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
+        newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
+
+        // TODO: Fix Position
+        uiCursor.SetPositionCenter(newPositionCenter);
+        uiCursor.SetSize(newSize);
     }
 }
