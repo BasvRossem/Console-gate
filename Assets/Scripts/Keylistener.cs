@@ -7,13 +7,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-//public enum KeyBoardOptions: List<KeyCode>
-//{
-//    Alphabetical = new List<KeyCode>(
-//        Enum.GetValues(typeof(KeyCode))
-//        .Where(k => (int)k <= KeyCode.Z && (int)k >= (int)KeyCode.A)
-//    )
-//}
+public enum KeyBoardOptions
+{
+    Alphabetical,
+    Numerical,
+    Function,
+    Interpunction
+}
 
 
 class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
@@ -50,6 +50,7 @@ public class Keylistener : MonoBehaviour
         subscribedEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
         addKey(new List<KeyCode> { KeyCode.A , KeyCode.B}, ping);
         addKey(new List<KeyCode> { KeyCode.A , KeyCode.B, KeyCode.C}, ping2);
+        addKey(KeyBoardOptions.Alphabetical, alphabetical);
     }
 
     public void ping(List<KeyCode> arg)
@@ -60,6 +61,12 @@ public class Keylistener : MonoBehaviour
     public void ping2(List<KeyCode> arg)
     {
         print("Triple press?");
+    }
+
+    public void alphabetical(List<KeyCode> arg)
+    {
+        print("You pressed an alphabetical key:");
+        print(arg);
     }
 
 
@@ -111,6 +118,46 @@ public class Keylistener : MonoBehaviour
         }
 
         subscribedEvents[key].AddListener(callback);
+        return true;
+    }
+
+    public bool addKey(KeyBoardOptions option, UnityAction<List<KeyCode>> callback)
+    {
+        List<KeyCode> keys = new List<KeyCode>();
+        switch (option)
+        {
+            case KeyBoardOptions.Alphabetical:
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.A && (int)k <= (int)KeyCode.Z).ToArray());
+                break;
+
+            case KeyBoardOptions.Numerical:
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.Alpha0 && (int)k <= (int)KeyCode.Alpha9).ToArray());
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.Keypad0 && (int)k <= (int)KeyCode.Keypad9).ToArray());
+                break;
+
+            case KeyBoardOptions.Function:
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.F1 && (int)k <= (int)KeyCode.F15).ToArray());
+                break;
+
+            case KeyBoardOptions.Interpunction:
+                keys.Add(KeyCode.Period);
+                keys.Add(KeyCode.KeypadPeriod);
+                keys.Add(KeyCode.Comma);
+                keys.Add(KeyCode.Slash);
+                keys.Add(KeyCode.Backslash);
+                keys.Add(KeyCode.Colon);
+                keys.Add(KeyCode.Semicolon);
+                break;
+
+            default:
+                throw new NotImplementedException();
+        }
+        
+        foreach(KeyCode k in keys)
+        {
+            addKey(new List<KeyCode> { k }, callback);
+        }
+        
         return true;
     }
 
