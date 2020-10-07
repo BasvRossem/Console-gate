@@ -244,6 +244,11 @@ public class Monitor : MonoBehaviour
         uiCursor.SetVisible(onOff);
     }
 
+    public void SetUiCursorBlinking(bool onOff)
+    {
+        uiCursor.SetBlinking(onOff);
+    }
+
     public void moveUICursorRight()
     {
         TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];

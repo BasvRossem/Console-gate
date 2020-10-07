@@ -7,6 +7,7 @@ public class UICursor : MonoBehaviour
     private float lastBlinkUpdate;
 
     public bool isVisible;
+    public bool blinking;
 
     private Vector2 position;
     public Vector2 characterSize;
@@ -24,7 +25,7 @@ public class UICursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isVisible && Time.time - lastBlinkUpdate > blinkingSpeed)
+        if (isVisible && blinking && Time.time - lastBlinkUpdate > blinkingSpeed)
         {
             GetComponent<Image>().enabled = !GetComponent<Image>().enabled;
             lastBlinkUpdate = Time.time;
@@ -37,7 +38,10 @@ public class UICursor : MonoBehaviour
         isVisible = onOff;
     }
 
-
+    public void SetBlinking(bool onOff)
+    {
+        blinking = onOff;
+    }
 
     public Vector2 GetSize()
     {
