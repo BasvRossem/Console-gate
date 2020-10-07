@@ -2,30 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Option
-{
-    public string text;
-
-    public virtual void Run()
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public class OptionPrint : Option
-{
-    private string print;
-    public OptionPrint(string shownText, string printText)
-    {
-        text = shownText;
-        print = printText;
-    }
-
-    public override void Run()
-    {
-        Debug.Log(print);
-    }
-}
 
 public class Menu : MonoBehaviour
 {
@@ -38,12 +14,13 @@ public class Menu : MonoBehaviour
 
     void Start()
     {
-        listener.addKey(new List<KeyCode> {KeyCode.Return}, selectOption);
-        listener.addKey(new List<KeyCode> {KeyCode.UpArrow}, previous);
-        listener.addKey(new List<KeyCode> {KeyCode.DownArrow}, next);
+        listener.addKey(new List<KeyCode> { KeyCode.Return }, selectOption);
+        listener.addKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
+        listener.addKey(new List<KeyCode> { KeyCode.DownArrow }, next);
 
         monitor.ShowUICursor(true);
         monitor.SetUiCursorBlinking(false);
+
         monitor.cursor = new Cursor();
 
         optionNumber = 0;
@@ -52,8 +29,7 @@ public class Menu : MonoBehaviour
     void Update()
     {
         monitor.ResetMonitor();
-
-        monitor.cursor.Reset();
+        monitor.cursor.ResetPosition();
 
         writeOptionsToMonitor();
 
@@ -69,7 +45,7 @@ public class Menu : MonoBehaviour
 
     private void writeOptionsToMonitor()
     {
-        foreach(Option option in options)
+        foreach (Option option in options)
         {
             monitor.AddMonitorTextLine(option.text);
         }

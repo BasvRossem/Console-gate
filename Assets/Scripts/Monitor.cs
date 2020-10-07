@@ -58,7 +58,7 @@ public class Cursor
         UpdateXY();
     }
 
-    public void Reset()
+    public void ResetPosition()
     {
         Move(new Vector2Int(int.MinValue, int.MinValue));
     }
@@ -128,6 +128,7 @@ public class Monitor : MonoBehaviour
 
     private void Start()
     {
+        cursor = new Cursor();
         ResetMonitor();
     }
 

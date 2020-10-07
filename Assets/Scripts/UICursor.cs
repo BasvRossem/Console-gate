@@ -9,13 +9,11 @@ public class UICursor : MonoBehaviour
     public bool isVisible;
     public bool blinking;
 
-    private Vector2 position;
     public Vector2 characterSize;
 
     // Start is called before the first frame update
     void Start()
     {
-        position = new Vector2(0, 0);
         characterSize = GetSize();
         isVisible = true;
 
