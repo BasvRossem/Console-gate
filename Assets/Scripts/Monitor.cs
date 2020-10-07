@@ -134,7 +134,6 @@ public class Monitor : MonoBehaviour
     private void Update()
     {
         RenderMonitorText();
-        moveUICursorRight();
     }
 
     public void WriteCharacter(char letter)
@@ -260,16 +259,20 @@ public class Monitor : MonoBehaviour
         TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
         TMP_CharacterInfo characterInfoFinal = textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
 
-        Debug.Log(characterInfoBegin.character);
-        Debug.Log(characterInfoFinal.character);
+        // Debug.Log(characterInfoBegin.character);
+        // Debug.Log(characterInfoFinal.character);
 
-        Vector2 newPositionCenter = (characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2;
-        Vector2 newSize = new Vector2(0, 0);
-        newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
-        newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
+
+        // Debug.Log(characterInfoBegin.topLeft.ToString() + ", " + characterInfoFinal.bottomRight.ToString());
+        Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + textMesh.transform.position;
+        Vector2 newPositionOffset = new Vector2(-1, -1);
+        // Debug.Log(newPositionCenter);
+        Vector2 newSize = new Vector2(uiCursor.characterSize.x * ColumnAmount, uiCursor.characterSize.y);
+        // newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
+        // newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
 
         // TODO: Fix Position
-        uiCursor.SetPositionCenter(newPositionCenter);
         uiCursor.SetSize(newSize);
+        uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
     }
 }

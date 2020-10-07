@@ -8,8 +8,8 @@ public class UICursor : MonoBehaviour
 
     public bool isVisible;
 
-    Vector2 position;
-    Vector2 characterSize;
+    private Vector2 position;
+    public Vector2 characterSize;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +61,7 @@ public class UICursor : MonoBehaviour
 
     public void SetPositionTopLeft(Vector2 position)
     {
+        Debug.Log(position);
         var rectTransform = GetComponent<RectTransform>();
         float width = rectTransform.sizeDelta.x;
         float height = rectTransform.sizeDelta.y;
@@ -68,5 +69,6 @@ public class UICursor : MonoBehaviour
 
         transform.position = position;
         transform.position += centerOffset;
+        Debug.Log(transform.position);
     }
 }
