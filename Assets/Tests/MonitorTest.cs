@@ -9,7 +9,7 @@ public class MonitorTest : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        monitor.ShowUICursor(true);
+        monitor.uiCursor.Show(true);
     }
 
     // Update is called once per frame

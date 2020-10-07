@@ -19,8 +19,8 @@ public class Menu : MonoBehaviour
         listener.addKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
         listener.addKey(new List<KeyCode> { KeyCode.DownArrow }, next);
 
-        monitor.ShowUICursor(true);
-        monitor.SetUiCursorBlinking(false);
+        monitor.uiCursor.Show(true);
+        monitor.uiCursor.Blink(false);
 
         monitor.cursor = new Cursor();
 

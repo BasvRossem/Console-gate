@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Cursor
 {
@@ -27,6 +23,13 @@ public class Cursor
         UpdateXY();
     }
 
+    public void SetBounds(int min_x = 0, int max_x = int.MaxValue, int min_y = 0, int max_y = int.MaxValue)
+    {
+        min_bounds = new Vector2Int(min_x, min_y);
+        max_bounds = new Vector2Int(max_x, max_y);
+    }
+
+    // Positioning
     private void UpdateXY()
     {
         x = position.x;
@@ -36,12 +39,6 @@ public class Cursor
     public void SetPosition(int x = 0, int y = 0)
     {
         position = new Vector2Int(x, y);
-    }
-
-    public void SetBounds(int min_x = 0, int max_x = int.MaxValue, int min_y = 0, int max_y = int.MaxValue)
-    {
-        min_bounds = new Vector2Int(min_x, min_y);
-        max_bounds = new Vector2Int(max_x, max_y);
     }
 
     public void Move(Vector2Int direction)
@@ -71,6 +68,15 @@ public class TextGrid
 
     private List<char[]> grid;
 
+    public TextGrid(int RowAmount, int ColumnAmount)
+    {
+        rowAmount = RowAmount;
+        columnAmount = ColumnAmount;
+
+        grid = new List<char[]>(rowAmount);
+        for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+    }
+
     private char[] MakeRow(int length, char character)
     {
         char[] arr = new char[length];
@@ -81,15 +87,17 @@ public class TextGrid
         return arr;
     }
 
-    public TextGrid(int RowAmount, int ColumnAmount)
+    public Vector2Int GetSize()
     {
-        rowAmount = RowAmount;
-        columnAmount = ColumnAmount;
-
-        grid = new List<char[]>(rowAmount);
-        for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+        return new Vector2Int(grid.Count, grid[0].Length);
     }
 
+    public void Clear(int index)
+    {
+        grid[index] = MakeRow(columnAmount, ' ');
+    }
+
+    // Operators
     public char this[int index_row, int index_column]
     {
         get => grid[index_row][index_column];
@@ -100,16 +108,6 @@ public class TextGrid
     {
         get => grid[index_row];
         set => grid[index_row] = value;
-    }
-
-    public Vector2Int GetSize()
-    {
-        return new Vector2Int(grid.Count, grid[0].Length);
-    }
-
-    public void Clear(int index)
-    {
-        grid[index] = MakeRow(columnAmount, ' ');
     }
 }
 
@@ -137,13 +135,14 @@ public class Monitor : MonoBehaviour
         RenderMonitorText();
     }
 
-    public void WriteCharacter(char letter)
+    // Writing to the monitor
+    private void WriteCharacter(char letter)
     {
         textGrid[cursor.y, cursor.x] = letter;
         cursor.Move(cursor.Right);
     }
 
-    public void AssembleText()
+    private void AssembleText()
     {
         text = "";
 
@@ -184,12 +183,13 @@ public class Monitor : MonoBehaviour
 
     public void RemoveMonitorTextLineAtPosition(int index)
     {
-        if (CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
-        if (CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
+        if (Tools.CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
+        if (Tools.CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
 
         textGrid.Clear(index);
     }
 
+    // Drawing shapes to the monitor
     public void DrawLineHorizontal(int row, int startColumn, int endColumn)
     {
         for (int column = startColumn; column < endColumn; column++)
@@ -221,6 +221,7 @@ public class Monitor : MonoBehaviour
         textGrid[endRow, endColumn] = '*';
     }
 
+    // Monitor information
     public int GetRowAmount()
     {
         return RowAmount;
@@ -231,25 +232,7 @@ public class Monitor : MonoBehaviour
         return ColumnAmount;
     }
 
-    private bool CheckError(bool condition, string errorMessage)
-    {
-        if (condition)
-        {
-            Debug.LogError(errorMessage);
-        }
-        return condition;
-    }
-
-    public void ShowUICursor(bool onOff)
-    {
-        uiCursor.SetVisible(onOff);
-    }
-
-    public void SetUiCursorBlinking(bool onOff)
-    {
-        uiCursor.SetBlinking(onOff);
-    }
-
+    // UI Cursor
     public void moveUICursorRight()
     {
         TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
@@ -265,19 +248,10 @@ public class Monitor : MonoBehaviour
         TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
         TMP_CharacterInfo characterInfoFinal = textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
 
-        // Debug.Log(characterInfoBegin.character);
-        // Debug.Log(characterInfoFinal.character);
-
-
-        // Debug.Log(characterInfoBegin.topLeft.ToString() + ", " + characterInfoFinal.bottomRight.ToString());
         Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + textMesh.transform.position;
         Vector2 newPositionOffset = new Vector2(-1, -1);
-        // Debug.Log(newPositionCenter);
         Vector2 newSize = new Vector2(uiCursor.characterSize.x * ColumnAmount, uiCursor.characterSize.y);
-        // newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
-        // newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
 
-        // TODO: Fix Position
         uiCursor.SetSize(newSize);
         uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
     }

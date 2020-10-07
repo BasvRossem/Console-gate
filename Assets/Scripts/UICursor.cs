@@ -35,7 +35,7 @@ public class UICursor : MonoBehaviour
     /// Turn the visibility of the cursor on or off.
     /// </summary>
     /// <param name="visibility">If it should be visible</param>
-    public void SetVisible(bool visibility)
+    public void Show(bool visibility)
     {
         GetComponent<Image>().enabled = visibility;
         isVisible = visibility;
@@ -45,7 +45,7 @@ public class UICursor : MonoBehaviour
     /// Turn the blinkin geffect on or off.
     /// </summary>
     /// <param name="blink">If the cursor should blink.</param>
-    public void SetBlinking(bool blink)
+    public void Blink(bool blink)
     {
         blinking = blink;
     }
