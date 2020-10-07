@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cursor
 {
@@ -114,19 +115,19 @@ public class TextGrid
 
 public class Monitor : MonoBehaviour
 {
-    private TextMeshProUGUI monitor;
+    public TextMeshProUGUI textMesh;
 
     private const int RowAmount = 24;
     private const int ColumnAmount = 80;
     private TextGrid textGrid;
 
     public Cursor cursor;
+    public UICursor uiCursor;
 
     private string text;
 
     private void Start()
     {
-        monitor = GetComponent<TextMeshProUGUI>();
         ResetMonitor();
     }
 
@@ -141,7 +142,7 @@ public class Monitor : MonoBehaviour
         cursor.Move(cursor.Right);
     }
 
-    private void RenderMonitorText()
+    public void AssembleText()
     {
         text = "";
 
@@ -150,7 +151,12 @@ public class Monitor : MonoBehaviour
             text += new string(textGrid[y]);
             text += "\n";
         }
-        monitor.SetText(text);
+    }
+
+    public void RenderMonitorText()
+    {
+        AssembleText();
+        textMesh.SetText(text);
     }
 
     public void ResetMonitor()
@@ -231,5 +237,47 @@ public class Monitor : MonoBehaviour
             Debug.LogError(errorMessage);
         }
         return condition;
+    }
+
+    public void ShowUICursor(bool onOff)
+    {
+        uiCursor.SetVisible(onOff);
+    }
+
+    public void SetUiCursorBlinking(bool onOff)
+    {
+        uiCursor.SetBlinking(onOff);
+    }
+
+    public void moveUICursorRight()
+    {
+        TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
+        Vector2 newPosition = (characterInfo.topLeft + characterInfo.bottomRight) / 2;
+        Vector2 meshPosition = textMesh.transform.position;
+        uiCursor.SetPositionCenter(newPosition + meshPosition);
+    }
+
+    public void SelectRow(int row)
+    {
+        // Retrieve character data
+        TMP_LineInfo lineInfo = textMesh.textInfo.lineInfo[row];
+        TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
+        TMP_CharacterInfo characterInfoFinal = textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
+
+        // Debug.Log(characterInfoBegin.character);
+        // Debug.Log(characterInfoFinal.character);
+
+
+        // Debug.Log(characterInfoBegin.topLeft.ToString() + ", " + characterInfoFinal.bottomRight.ToString());
+        Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + textMesh.transform.position;
+        Vector2 newPositionOffset = new Vector2(-1, -1);
+        // Debug.Log(newPositionCenter);
+        Vector2 newSize = new Vector2(uiCursor.characterSize.x * ColumnAmount, uiCursor.characterSize.y);
+        // newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
+        // newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
+
+        // TODO: Fix Position
+        uiCursor.SetSize(newSize);
+        uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
     }
 }

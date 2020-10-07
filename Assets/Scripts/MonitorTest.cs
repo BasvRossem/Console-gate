@@ -9,6 +9,7 @@ public class MonitorTest : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        monitor.ShowUICursor(true);
     }
 
     // Update is called once per frame
@@ -28,5 +29,9 @@ public class MonitorTest : MonoBehaviour
         monitor.AddMonitorTextLine("How are you doing?");
         monitor.AddMonitorTextLine("Im fine!");
         monitor.AddMonitorTextLine(System.DateTime.Now.ToString());
+
+        monitor.RenderMonitorText();
+
+        monitor.SelectRow(2);
     }
 }
