@@ -27,14 +27,14 @@ public class OptionPrint : Option
     }
 }
 
-public class menu : MonoBehaviour
+public class Menu : MonoBehaviour
 {
     public Monitor monitor;
     public Keylistener listener;
 
     private int optionNumber;
 
-    private List<Option> options;
+    public List<Option> options;
 
     void Start()
     {
@@ -47,15 +47,7 @@ public class menu : MonoBehaviour
         monitor.cursor = new Cursor();
 
         optionNumber = 0;
-
-        options = new List<Option>();
-        options.Add(new OptionPrint("1. Open monitor 1", "Monitor 1 is opened"));
-        options.Add(new OptionPrint("2. Execute order 66", "TRAITORS"));
-        options.Add(new OptionPrint("3. Choose option 2", "Option 2 has been chosen, but at what cost?"));
-        options.Add(new OptionPrint("4. Have a nice dinner", "You had a nice dinner :-)"));
     }
-
-
 
     void Update()
     {
@@ -68,6 +60,11 @@ public class menu : MonoBehaviour
         monitor.RenderMonitorText();
 
         monitor.SelectRow(optionNumber);
+    }
+
+    public void SetOptions(List<Option> newOptions)
+    {
+        options = newOptions;
     }
 
     private void writeOptionsToMonitor()
