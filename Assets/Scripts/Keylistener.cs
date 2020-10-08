@@ -12,7 +12,8 @@ public enum KeyBoardOptions
     Alphabetical,
     Numerical,
     Function,
-    Interpunction
+    Interpunction,
+    Any
 }
 
 
@@ -40,17 +41,14 @@ public class Keylistener : MonoBehaviour
         .ToArray();
 
     private KeyCodeComparer customComparer;
-    private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedEvents;
+    private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedKeyEvents;
     private List<KeyCode> _keysDown;
 
 
     public void Start()
     {
         customComparer = new KeyCodeComparer();
-        subscribedEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
-        addKey(new List<KeyCode> { KeyCode.A , KeyCode.B}, ping);
-        addKey(new List<KeyCode> { KeyCode.A , KeyCode.B, KeyCode.C}, ping2);
-        addKey(KeyBoardOptions.Alphabetical, alphabetical);
+        subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
     }
 
     public void ping(List<KeyCode> arg)
@@ -72,7 +70,6 @@ public class Keylistener : MonoBehaviour
 
     public void OnEnable()
     {
-        print(Enum.GetValues(typeof(KeyCode)));
         _keysDown = new List<KeyCode>();
     }
     public void OnDisable()
@@ -96,32 +93,33 @@ public class Keylistener : MonoBehaviour
 
         if (_keysDown.Count > 0)
         {
+            List<KeyCode> _keysUp = new List<KeyCode>();
             for (int i = 0; i < _keysDown.Count; i++)
             {
                 KeyCode kc = _keysDown[i];
                 if (Input.GetKeyUp(kc))
                 {
-                    executeKeyCallback(_keysDown);
                     _keysDown.RemoveAt(i);
                     i--;
-                    //executeKeyCallback(_keysDown);
+                    _keysUp.Add(kc);
                 }
             }
+            executeKeyCallback(_keysUp);
         }
     }
 
     public bool addKey(List<KeyCode> key, UnityAction<List<KeyCode>> callback)
     {
-        if (!subscribedEvents.ContainsKey(key))
+        if (!subscribedKeyEvents.ContainsKey(key))
         {
-            subscribedEvents.Add(key, new UnityEvent<List<KeyCode>>());
+            subscribedKeyEvents.Add(key, new UnityEvent<List<KeyCode>>());
         }
 
-        subscribedEvents[key].AddListener(callback);
+        subscribedKeyEvents[key].AddListener(callback);
         return true;
     }
 
-    public bool addKey(KeyBoardOptions option, UnityAction<List<KeyCode>> callback)
+    public bool addOption(KeyBoardOptions option, UnityAction<List<KeyCode>> callback)
     {
         List<KeyCode> keys = new List<KeyCode>();
         switch (option)
@@ -149,6 +147,10 @@ public class Keylistener : MonoBehaviour
                 keys.Add(KeyCode.Semicolon);
                 break;
 
+            case KeyBoardOptions.Any:
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>());
+                break;
+
             default:
                 throw new NotImplementedException();
         }
@@ -163,18 +165,18 @@ public class Keylistener : MonoBehaviour
 
     public UnityEvent<List<KeyCode>> getCallback(List<KeyCode> key)
     {
-        if (!subscribedEvents.ContainsKey(key))
+        if (!subscribedKeyEvents.ContainsKey(key))
         {
             return null;
         }
-        return subscribedEvents[key];
+        return subscribedKeyEvents[key];
     }
 
     public void executeKeyCallback(List<KeyCode> key)
     {
-        if (subscribedEvents.ContainsKey(key))
+        if (subscribedKeyEvents.ContainsKey(key))
         {
-            subscribedEvents[key].Invoke(key);
+            subscribedKeyEvents[key].Invoke(key);
         }
     }
 }
