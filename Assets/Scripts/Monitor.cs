@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class Cursor
     public int y;
 
     private string name;
+    public const string DefaultName = "Default";
 
     /// <summary>
     /// Initialize a cursor at he specified location.
@@ -28,7 +30,7 @@ public class Cursor
     /// <param name="x">The x coordinate in comparison to the text grid. Default of 0.</param>
     /// <param name="y">The y coordinate in comparison to the text grid. Default of 0.</param>
     /// <param name="cursorName">The name of the cursor. Default of "Default".</param>
-    public Cursor(int x = 0, int y = 0, string cursorName = "Default")
+    public Cursor(int x = 0, int y = 0, string cursorName = Cursor.DefaultName)
     {
         SetPosition(x, y);
         SetBounds();
@@ -205,14 +207,18 @@ public class Monitor : MonoBehaviour
     private const int ColumnAmount = 80;
     private TextGrid textGrid;
 
-    public Cursor cursor;
+    private Cursor defaultCursor;
+    public Cursor selectedCursor;
+    public List<Cursor> cursors;
     public UICursor uiCursor;
 
     private string text;
 
     private void Start()
     {
-        cursor = new Cursor();
+        defaultCursor = new Cursor();
+        selectedCursor = defaultCursor;
+        cursors.Add(defaultCursor);
         ResetMonitor();
     }
 
@@ -222,14 +228,20 @@ public class Monitor : MonoBehaviour
     }
 
     // Writing to the monitor
+    private void NullCoalesceSelectedCursor()
+    {
+        selectedCursor = selectedCursor ?? defaultCursor;
+    }
+
     /// <summary>
     /// Write a single character to the monitor and move the cursor accordingly.
     /// </summary>
     /// <param name="letter"></param>
     private void WriteCharacter(char letter)
     {
-        textGrid[cursor.y, cursor.x] = letter;
-        cursor.Move(cursor.Right);
+        NullCoalesceSelectedCursor();
+        textGrid[selectedCursor.y, selectedCursor.x] = letter;
+        selectedCursor.Move(selectedCursor.Right);
     }
 
     /// <summary>
@@ -287,8 +299,9 @@ public class Monitor : MonoBehaviour
             WriteCharacter(character);
         }
 
-        cursor.Move(cursor.Down);
-        cursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+        NullCoalesceSelectedCursor();
+        selectedCursor.Move(selectedCursor.Down);
+        selectedCursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
     }
 
     /// <summary>
