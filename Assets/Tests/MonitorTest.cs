@@ -20,10 +20,9 @@ public class MonitorTest : MonoBehaviour
         monitor.DrawRectangle(0, 0, 23, 79);
         monitor.DrawRectangle(1, 2, 6, 25);
 
-        monitor.cursor = new Cursor();
-        monitor.cursor.SetBounds(4, monitor.GetColumnAmount() - 1, 2, monitor.GetRowAmount() - 1);
+        monitor.selectedCursor.SetBounds(4, monitor.GetColumnAmount() - 1, 2, monitor.GetRowAmount() - 1);
 
-        monitor.cursor.ResetPosition();
+        monitor.selectedCursor.ResetPosition();
 
         monitor.AddMonitorTextLine("Hello World");
         monitor.AddMonitorTextLine("How are you doing?");

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -218,7 +219,10 @@ public class Monitor : MonoBehaviour
     {
         defaultCursor = new Cursor();
         selectedCursor = defaultCursor;
+
+        cursors = new List<Cursor>();
         cursors.Add(defaultCursor);
+
         ResetMonitor();
     }
 
@@ -227,7 +231,7 @@ public class Monitor : MonoBehaviour
         RenderMonitorText();
     }
 
-    // Writing to the monitor
+    // Cursor
     /// <summary>
     /// Select the deafult cursor if no cursor is selected.
     /// </summary>
@@ -236,6 +240,61 @@ public class Monitor : MonoBehaviour
         selectedCursor = selectedCursor ?? defaultCursor;
     }
 
+    /// <summary>
+    /// Find a cursor in the cursor list with the given name.
+    /// </summary>
+    /// <param name="name">Name of the cursor.</param>
+    /// <returns>If the cursor exists, it returns the cursor, else null.</returns>
+    private Cursor FindCursor(string name)
+    {
+        IEnumerable<Cursor> foundCursors = cursors.Where(cursor => cursor.GetName() == name);
+        if (foundCursors.Count() == 0) return null;
+        return foundCursors.First();
+    }
+
+    /// <summary>
+    /// Selects a cursor using the name.
+    /// </summary>
+    /// <param name="name">Name of the cursor to select.</param>
+    /// <returns>True is succesful, false if no cursor with the given name is found.</returns>
+    public bool SelectCursor(string name)
+    {
+        Cursor newSelected = FindCursor(name);
+        if (Tools.CheckError(newSelected == null, string.Format("No cursor found with name \"{0}\"", name))) return false;
+
+        selectedCursor = newSelected;
+        return true;
+    }
+
+    /// <summary>
+    /// Add a new cursor to the monitor.
+    /// </summary>
+    /// <param name="name">Name of the new cursor.</param>
+    /// <returns>The new cursor name, or null if a cursor with that name already exists.</returns>
+    public string AddCursor(string name)
+    {
+        if (Tools.CheckError(FindCursor(name) != null, "A cursor with this name already exists.")) return null;
+
+        Cursor newCursor = new Cursor(cursorName: name);
+        cursors.Add(newCursor);
+
+        return name;
+    }
+
+    /// <summary>
+    /// Remove a cursor using the name.
+    /// </summary>
+    /// <param name="name">Name of the cursor to select.</param>
+    /// <returns>True is succesful, false if no cursor with the given name exists.</returns>
+    public bool RemoveCursor(string name)
+    {
+        Cursor cursorToRemove = FindCursor(name);
+        if (Tools.CheckError(cursorToRemove == null, string.Format("No cursor found with name \"{0}\"", name))) return false;
+        cursors.Remove(cursorToRemove);
+        return true;
+    }
+
+    // Writing to the monitor
     /// <summary>
     /// Write a single character to the monitor and move the cursor accordingly.
     /// </summary>

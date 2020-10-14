@@ -28,7 +28,7 @@ public class Menu : MonoBehaviour
     private void Update()
     {
         monitor.ResetMonitor();
-        monitor.cursor.ResetPosition();
+        monitor.selectedCursor.ResetPosition();
 
         writeOptionsToMonitor();
 
