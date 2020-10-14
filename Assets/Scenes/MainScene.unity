@@ -334,6 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monitor: {fileID: 2079924436}
+  testString: The cursor should now follow this line
 --- !u!1 &837561048
 GameObject:
   m_ObjectHideFlags: 0

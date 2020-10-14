@@ -14,6 +14,8 @@ public class UICursor : MonoBehaviour
 
     public Vector2 characterSize;
 
+    public Cursor linkedCursor = null;
+
     private void Start()
     {
         characterSize = new Vector2(8, 18);

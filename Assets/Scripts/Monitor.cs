@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using TMPro;
@@ -172,6 +173,21 @@ public class TextGrid
         grid[index] = MakeRow(columnAmount, ' ');
     }
 
+    /// <summary>
+    /// Fills the current grid with a specific character.
+    /// </summary>
+    /// <param name="character">The character to fill the grid with.</param>
+    public void Fill(char character)
+    {
+        for (int y = 0; y < grid.Count(); y++)
+        {
+            for (int x = 0; x < grid[y].Length; x++)
+            {
+                grid[y][x] = character;
+            }
+        }
+    }
+
     // Operators
     /// <summary>
     /// Returns the character in the grid at the given location.
@@ -203,10 +219,11 @@ public class TextGrid
 public class Monitor : MonoBehaviour
 {
     public TextMeshProUGUI textMesh;
+    private List<List<Vector2>> textMeshCharacterPositions;
 
     private const int RowAmount = 24;
     private const int ColumnAmount = 80;
-    private TextGrid textGrid;
+    public TextGrid textGrid;
 
     private Cursor defaultCursor;
     public Cursor selectedCursor;
@@ -224,11 +241,52 @@ public class Monitor : MonoBehaviour
         cursors.Add(defaultCursor);
 
         ResetMonitor();
+
+        CalibrateTextMesh();
     }
 
     private void Update()
     {
         RenderMonitorText();
+        if (uiCursor.linkedCursor != null) UpdateUICursorPosition();
+    }
+
+    /// <summary>
+    /// Calibrate the character positions to use with the UI cursor.
+    /// </summary>
+    /// <remarks>
+    /// Text mesh does not really render spaces in its mesh.
+    /// This and other factors have created the need of this function.
+    /// </remarks>
+    private void CalibrateTextMesh()
+    {
+        // Fill text grid with data
+        textGrid.Fill('*');
+
+        // Render data to text mesh
+        RenderMonitorText();
+        textMesh.ForceMeshUpdate();
+
+        // Calculate character center positions
+        textMeshCharacterPositions = new List<List<Vector2>>();
+        for (int row = 0; row < textMesh.textInfo.lineCount; row++)
+        {
+            List<Vector2> rowPositions = new List<Vector2>();
+
+            int firstCharacterIndex = textMesh.textInfo.lineInfo[row].firstCharacterIndex;
+            for (int column = 0; column < textMesh.textInfo.lineInfo[row].characterCount; column++)
+            {
+                TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[firstCharacterIndex + column];
+                Vector2 characterCenter = ((characterInfo.topLeft + characterInfo.bottomRight) / 2) + textMesh.transform.position;
+
+                rowPositions.Add(characterCenter);
+            }
+
+            textMeshCharacterPositions.Add(rowPositions);
+        }
+
+        // Empty monitor
+        ResetMonitor();
     }
 
     // Cursor
@@ -299,7 +357,7 @@ public class Monitor : MonoBehaviour
     /// Write a single character to the monitor and move the cursor accordingly.
     /// </summary>
     /// <param name="letter"></param>
-    private void WriteCharacter(char letter)
+    public void WriteCharacter(char letter)
     {
         NullCoalesceSelectedCursor();
         textGrid[selectedCursor.y, selectedCursor.x] = letter;
@@ -469,25 +527,14 @@ public class Monitor : MonoBehaviour
 
     // UI Cursor
     /// <summary>
-    /// Move the selection of the UI cursor one to the right.
-    /// </summary>
-    public void moveUICursorRight()
-    {
-        TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
-        Vector2 newPosition = (characterInfo.topLeft + characterInfo.bottomRight) / 2;
-        Vector2 meshPosition = textMesh.transform.position;
-        uiCursor.SetPositionCenter(newPosition + meshPosition);
-    }
-
-    /// <summary>
     /// Select a row on the monitor iusing the UI cursor.
     /// </summary>
     /// <param name="row">The index of the row to be selected</param>
     public void SelectRow(int row)
     {
-        // Mesh info is probably only loaded if the text is renedered in an update.
-        // I need this info, so I'll wat one frame before actually drawing.
-        if (textMesh.textInfo.characterCount == 0) return;
+        // Mesh info is probably only loaded at the text end of the frame.
+        // So now we force an update so we can use the mmesh data.
+        textMesh.ForceMeshUpdate();
 
         // Retrieve character data
         TMP_LineInfo lineInfo = textMesh.textInfo.lineInfo[row];
@@ -500,5 +547,16 @@ public class Monitor : MonoBehaviour
 
         uiCursor.SetSize(newSize);
         uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
+    }
+
+    /// <summary>
+    /// Update the UI cursor position to its linked cursor.
+    /// </summary>
+    private void UpdateUICursorPosition()
+    {
+        uiCursor.ResetSize();
+
+        Vector2 newPosition = textMeshCharacterPositions[selectedCursor.y][selectedCursor.x];
+        uiCursor.SetPositionCenter(newPosition);
     }
 }

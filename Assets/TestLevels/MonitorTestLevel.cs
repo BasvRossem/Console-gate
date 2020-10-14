@@ -1,15 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MonitorTestLevel : MonoBehaviour
 {
     public Monitor monitor;
 
-    // Start is called before the first frame update
+    public string testString = "The cursor should now follow this line";
+    private int characterIndex;
+
+    private float time;
+    private float delayAmount = 0.25f;
+
     private void Start()
     {
         monitor.uiCursor.Show(true);
+        monitor.uiCursor.Blink(false);
+        monitor.uiCursor.linkedCursor = monitor.selectedCursor;
 
         monitor.ResetMonitor();
 
@@ -33,10 +41,20 @@ public class MonitorTestLevel : MonoBehaviour
         monitor.AddMonitorTextLine("Hello World");
 
         monitor.SelectRow(2);
+
+        //monitor.textGrid.Fill('*');
     }
 
     // Update is called once per frame
     private void Update()
     {
+        time += Time.deltaTime;
+        if (time >= delayAmount)
+        {
+            time = 0f;
+            monitor.WriteCharacter(testString[characterIndex]);
+            characterIndex++;
+        }
+        if (characterIndex >= testString.Count()) monitor.uiCursor.Blink(true);
     }
 }
