@@ -215,7 +215,7 @@ public class Monitor : MonoBehaviour
 
     private string text;
 
-    private void Start()
+    private void Awake()
     {
         defaultCursor = new Cursor();
         selectedCursor = defaultCursor;

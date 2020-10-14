@@ -10,11 +10,7 @@ public class MonitorTestLevel : MonoBehaviour
     private void Start()
     {
         monitor.uiCursor.Show(true);
-    }
 
-    // Update is called once per frame
-    private void Update()
-    {
         monitor.ResetMonitor();
 
         monitor.DrawRectangle(0, 0, 23, 79);
@@ -29,8 +25,15 @@ public class MonitorTestLevel : MonoBehaviour
         monitor.AddMonitorTextLine("Im fine!");
         monitor.AddMonitorTextLine(System.DateTime.Now.ToString());
 
-        monitor.RenderMonitorText();
+        monitor.AddCursor("Eraser");
+        monitor.SelectCursor("Eraser");
+        monitor.AddMonitorTextLine("Hello World");
 
         monitor.SelectRow(2);
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
     }
 }
