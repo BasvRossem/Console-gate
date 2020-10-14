@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// This class is a cursor which the monitor class uses to write to the text grid.
+/// </summary>
 public class Cursor
 {
     public Vector2Int Left = new Vector2Int(-1, 0);
@@ -20,6 +19,11 @@ public class Cursor
     public int x;
     public int y;
 
+    /// <summary>
+    /// Initialize a cursor at he specified location.
+    /// </summary>
+    /// <param name="x">The x coordinate in comparison to the text grid. Default of 0.</param>
+    /// <param name="y">The y coordinate in comparison to the text grid. Default of 0.</param>
     public Cursor(int x = 0, int y = 0)
     {
         SetPosition(x, y);
@@ -27,23 +31,47 @@ public class Cursor
         UpdateXY();
     }
 
-    private void UpdateXY()
-    {
-        x = position.x;
-        y = position.y;
-    }
-
-    public void SetPosition(int x = 0, int y = 0)
-    {
-        position = new Vector2Int(x, y);
-    }
-
+    /// <summary>
+    /// Set the bounds in which the cursor can write.
+    /// </summary>
+    /// <param name="min_x">Minimal x value.</param>
+    /// <param name="max_x">Maximal x value.</param>
+    /// <param name="min_y">Minimal y value.</param>
+    /// <param name="max_y">Maximal y value.</param>
     public void SetBounds(int min_x = 0, int max_x = int.MaxValue, int min_y = 0, int max_y = int.MaxValue)
     {
         min_bounds = new Vector2Int(min_x, min_y);
         max_bounds = new Vector2Int(max_x, max_y);
     }
 
+    // Positioning
+    /// <summary>
+    /// Update the public x and y positioning.
+    /// </summary>
+    private void UpdateXY()
+    {
+        x = position.x;
+        y = position.y;
+    }
+
+    /// <summary>
+    /// Set a new position of the cursor.
+    /// </summary>
+    /// <param name="x">New x position. Default of 0.</param>
+    /// <param name="y">New y position. Default of 0.</param>
+    public void SetPosition(int x = 0, int y = 0)
+    {
+        position = new Vector2Int(x, y);
+    }
+
+    /// <summary>
+    /// Move the cursor in a specified direction.
+    /// </summary>
+    /// <param name="direction">The direction wanted.</param>
+    /// <remarks>
+    /// These directions are specified with the cursor.
+    /// These are up, down, left, and right.
+    /// </remarks>
     public void Move(Vector2Int direction)
     {
         position += direction;
@@ -58,12 +86,19 @@ public class Cursor
         UpdateXY();
     }
 
-    public void Reset()
+    /// <summary>
+    /// Move the Cursor to the top left within its bounds.
+    /// </summary>
+    public void ResetPosition()
     {
         Move(new Vector2Int(int.MinValue, int.MinValue));
     }
 }
 
+/// <summary>
+/// This class is to function as a buffer between the interface and actually rendering the text.
+/// It is used to make text editing easier within the monitor class.
+/// </summary>
 public class TextGrid
 {
     private int columnAmount;
@@ -71,6 +106,26 @@ public class TextGrid
 
     private List<char[]> grid;
 
+    /// <summary>
+    /// Initialize a text grid.
+    /// </summary>
+    /// <param name="RowAmount">Amount of rows the text grid should have.</param>
+    /// <param name="ColumnAmount">Amount of columns the text grid should have.</param>
+    public TextGrid(int RowAmount, int ColumnAmount)
+    {
+        rowAmount = RowAmount;
+        columnAmount = ColumnAmount;
+
+        grid = new List<char[]>(rowAmount);
+        for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+    }
+
+    /// <summary>
+    /// Generates a row of characters.
+    /// </summary>
+    /// <param name="length">Length of the array.</param>
+    /// <param name="character">Character to fill the array with.</param>
+    /// <returns>An array of specified length wfilled with the specified character.</returns>
     private char[] MakeRow(int length, char character)
     {
         char[] arr = new char[length];
@@ -81,38 +136,52 @@ public class TextGrid
         return arr;
     }
 
-    public TextGrid(int RowAmount, int ColumnAmount)
+    /// <summary>
+    /// Get the size of the text grid.
+    /// </summary>
+    /// <returns>A Vector2int withthe size of the tecxt grid.</returns>
+    public Vector2Int GetSize()
     {
-        rowAmount = RowAmount;
-        columnAmount = ColumnAmount;
-
-        grid = new List<char[]>(rowAmount);
-        for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+        return new Vector2Int(grid.Count, grid[0].Length);
     }
 
+    /// <summary>
+    /// Clears a row at the specified index.
+    /// </summary>
+    /// <param name="index">The index of the row to be cleared.</param>
+    public void ClearRow(int index)
+    {
+        grid[index] = MakeRow(columnAmount, ' ');
+    }
+
+    // Operators
+    /// <summary>
+    /// Returns the character in the grid at the given location.
+    /// </summary>
+    /// <param name="index_row">Index of the wanted row.</param>
+    /// <param name="index_column">Index of th wanted column.</param>
+    /// <returns>A character at the place that is specified.</returns>
     public char this[int index_row, int index_column]
     {
         get => grid[index_row][index_column];
         set => grid[index_row][index_column] = value;
     }
 
+    /// <summary>
+    /// Returns the characters of the selected row.
+    /// </summary>
+    /// <param name="index_row">The index of the wanted row.</param>
+    /// <returns>Returns an aray of all characters in the selected row.</returns>
     public char[] this[int index_row]
     {
         get => grid[index_row];
         set => grid[index_row] = value;
     }
-
-    public Vector2Int GetSize()
-    {
-        return new Vector2Int(grid.Count, grid[0].Length);
-    }
-
-    public void Clear(int index)
-    {
-        grid[index] = MakeRow(columnAmount, ' ');
-    }
 }
 
+/// <summary>
+/// This class is used to show text on the screen.
+/// </summary>
 public class Monitor : MonoBehaviour
 {
     public TextMeshProUGUI textMesh;
@@ -128,6 +197,7 @@ public class Monitor : MonoBehaviour
 
     private void Start()
     {
+        cursor = new Cursor();
         ResetMonitor();
     }
 
@@ -136,13 +206,21 @@ public class Monitor : MonoBehaviour
         RenderMonitorText();
     }
 
-    public void WriteCharacter(char letter)
+    // Writing to the monitor
+    /// <summary>
+    /// Write a single character to the monitor and move the cursor accordingly.
+    /// </summary>
+    /// <param name="letter"></param>
+    private void WriteCharacter(char letter)
     {
         textGrid[cursor.y, cursor.x] = letter;
         cursor.Move(cursor.Right);
     }
 
-    public void AssembleText()
+    /// <summary>
+    /// Turn the text grid into strings to write to the monitor.
+    /// </summary>
+    private void AssembleText()
     {
         text = "";
 
@@ -153,23 +231,40 @@ public class Monitor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Show the text to the screen.
+    /// </summary>
     public void RenderMonitorText()
     {
         AssembleText();
         textMesh.SetText(text);
     }
 
+    /// <summary>
+    /// Remove all text from the monitor.
+    /// </summary>
     public void ResetMonitor()
     {
         textGrid = new TextGrid(RowAmount, ColumnAmount);
     }
 
+    /// <summary>
+    /// Clears the screen and sets the monitor text.
+    /// </summary>
+    /// <param name="newText">Text to write to the monitor.</param>
     public void SetMonitorText(string newText)
     {
         ResetMonitor();
         AddMonitorTextLine(newText);
     }
 
+    /// <summary>
+    /// Add text at the current place of the cursor.
+    /// </summary>
+    /// <note>
+    /// This moves the cursor one line down automatically when the line is written.
+    /// </note>
+    /// <param name="newTextLine">Text to place.</param>
     public void AddMonitorTextLine(string newTextLine)
     {
         foreach (char character in newTextLine)
@@ -181,14 +276,25 @@ public class Monitor : MonoBehaviour
         cursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
     }
 
+    /// <summary>
+    /// Remove a line from the text.
+    /// </summary>
+    /// <param name="index">The index of the line to remove.</param>
     public void RemoveMonitorTextLineAtPosition(int index)
     {
-        if (CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
-        if (CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
+        if (Tools.CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
+        if (Tools.CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the monitor.", index))) return;
 
-        textGrid.Clear(index);
+        textGrid.ClearRow(index);
     }
 
+    // Drawing shapes to the monitor
+    /// <summary>
+    /// Draw a horizontal line.
+    /// </summary>
+    /// <param name="row">The index of the row where the line should be.</param>
+    /// <param name="startColumn">The index of the column where the line should start.</param>
+    /// <param name="endColumn">The index of the column there the line should end.</param>
     public void DrawLineHorizontal(int row, int startColumn, int endColumn)
     {
         for (int column = startColumn; column < endColumn; column++)
@@ -197,6 +303,12 @@ public class Monitor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draw a vertical line.
+    /// </summary>
+    /// <param name="column">The index of the column where the line should be.</param>
+    /// <param name="startRow">The index of the row where the line should start.</param>
+    /// <param name="endRow">The index of the row where the line should end.</param>
     public void DrawLineVertical(int column, int startRow, int endRow)
     {
         for (int row = startRow; row < endRow; row++)
@@ -205,6 +317,13 @@ public class Monitor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draw a rectangle using the rows and column indexes.
+    /// </summary>
+    /// <param name="startRow">Index of the row where the box should start.</param>
+    /// <param name="startColumn">Index of the column where the box should start.</param>
+    /// <param name="endRow">Index of the row where the box should end.</param>
+    /// <param name="endColumn">Index of the column where the box should end.</param>
     public void DrawRectangle(int startRow, int startColumn, int endRow, int endColumn)
     {
         // Draw lines
@@ -220,35 +339,29 @@ public class Monitor : MonoBehaviour
         textGrid[endRow, endColumn] = '*';
     }
 
+    // Monitor information
+    /// <summary>
+    /// Get the amount of characters the monitor is high.
+    /// </summary>
+    /// <returns></returns>
     public int GetRowAmount()
     {
         return RowAmount;
     }
 
+    /// <summary>
+    /// Get the amount of characters the monitor is wide.
+    /// </summary>
+    /// <returns></returns>
     public int GetColumnAmount()
     {
         return ColumnAmount;
     }
 
-    private bool CheckError(bool condition, string errorMessage)
-    {
-        if (condition)
-        {
-            Debug.LogError(errorMessage);
-        }
-        return condition;
-    }
-
-    public void ShowUICursor(bool onOff)
-    {
-        uiCursor.SetVisible(onOff);
-    }
-
-    public void SetUiCursorBlinking(bool onOff)
-    {
-        uiCursor.SetBlinking(onOff);
-    }
-
+    // UI Cursor
+    /// <summary>
+    /// Move the selection of the UI cursor one to the right.
+    /// </summary>
     public void moveUICursorRight()
     {
         TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[0];
@@ -257,6 +370,10 @@ public class Monitor : MonoBehaviour
         uiCursor.SetPositionCenter(newPosition + meshPosition);
     }
 
+    /// <summary>
+    /// Select a row on the monitor iusing the UI cursor.
+    /// </summary>
+    /// <param name="row">The index of the row to be selected</param>
     public void SelectRow(int row)
     {
         // Retrieve character data
@@ -264,19 +381,10 @@ public class Monitor : MonoBehaviour
         TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
         TMP_CharacterInfo characterInfoFinal = textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
 
-        // Debug.Log(characterInfoBegin.character);
-        // Debug.Log(characterInfoFinal.character);
-
-
-        // Debug.Log(characterInfoBegin.topLeft.ToString() + ", " + characterInfoFinal.bottomRight.ToString());
         Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + textMesh.transform.position;
         Vector2 newPositionOffset = new Vector2(-1, -1);
-        // Debug.Log(newPositionCenter);
         Vector2 newSize = new Vector2(uiCursor.characterSize.x * ColumnAmount, uiCursor.characterSize.y);
-        // newSize.x = characterInfoFinal.bottomRight.x - characterInfoBegin.topLeft.x;
-        // newSize.y = characterInfoBegin.topLeft.y - characterInfoFinal.bottomRight.y;
 
-        // TODO: Fix Position
         uiCursor.SetSize(newSize);
         uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
     }
