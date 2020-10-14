@@ -58,7 +58,7 @@ public class Keylistener : MonoBehaviour
     private List<KeyCode> _keysDown;
 
 
-    public void Start()
+    public void Awake()
     {
         customComparer = new KeyCodeComparer();
         subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);

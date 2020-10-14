@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Scripts/UserInput.cs.meta
-guid: c6ad49ce0e07dce498e1449dccd6c0e9
-=======
-guid: 902f8b37a2f75944aaa22120cadffb48
->>>>>>> dev:Assets/Scripts/Option.cs.meta
+guid: 559ae2334841f9f4288b227c25f0d62c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

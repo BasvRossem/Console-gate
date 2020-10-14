@@ -9,7 +9,7 @@ public class UserInput : MonoBehaviour
 {
     public Keylistener listener;
     public Monitor monitor;
-    private Cursor userInputCursor;
+    private const string cursorName = "UserInput";
 
     public int bottomLine;
     public string textBuffer;
@@ -18,11 +18,7 @@ public class UserInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //TODO: After Monitor merge, fix cursor
-        userInputCursor = new Cursor();
-        userInputCursor.SetBounds(4, monitor.GetColumnAmount() - 1, 2, monitor.GetRowAmount() - 1);
-        monitor.cursor = userInputCursor;
-        monitor.ShowUICursor(true);
+        monitor.AddCursor(cursorName);
 
         listener.addOption(KeyBoardOptions.Alphabetical, addCharacter);
         listener.addKey(new List<KeyCode> { KeyCode.Space }, addSpace);
@@ -90,20 +86,9 @@ public class UserInput : MonoBehaviour
     /// </summary>
     private void processTextBuffer()
     {
-        // TODO: fix refreshing and writing after Monitor update
-        //Cursor previousCursor = monitor.cursor;
-        monitor.ResetMonitor();
-
-        monitor.cursor.Reset();
-        //monitor.cursor.SetPosition(4, 4);
-
-        //monitor.cursor = userInputCursor;
+        monitor.SelectCursor(cursorName);
+        monitor.selectedCursor.SetPosition(4, bottomLine);
+        monitor.RemoveMonitorTextLineAtPosition(bottomLine);
         monitor.AddMonitorTextLine(textBuffer);
-        monitor.RenderMonitorText();
-
-
-
-        //monitor.cursor = previousCursor;
-
     }
 }
