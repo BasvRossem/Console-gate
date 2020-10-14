@@ -27,6 +27,9 @@ public class MonitorTestLevel : MonoBehaviour
 
         monitor.AddCursor("Eraser");
         monitor.SelectCursor("Eraser");
+        monitor.ClearArea(4, 4, 10, 10);
+        monitor.SelectCursor(Cursor.DefaultName);
+
         monitor.AddMonitorTextLine("Hello World");
 
         monitor.SelectRow(2);

@@ -378,6 +378,25 @@ public class Monitor : MonoBehaviour
         textGrid.ClearRow(index);
     }
 
+    /// <summary>
+    /// Remove characters in a ceratin area.
+    /// </summary>
+    /// <param name="startRow">Start row.</param>
+    /// <param name="startColumn">Start column.</param>
+    /// <param name="endRow">End row.</param>
+    /// <param name="endColumn">End column.</param>
+    public void ClearArea(int startRow, int startColumn, int endRow, int endColumn)
+    {
+        for (int x = startColumn; x <= endColumn; x++)
+        {
+            for (int y = startRow; y <= endRow; y++)
+            {
+                selectedCursor.SetPosition(x, y);
+                WriteCharacter(' ');
+            }
+        }
+    }
+
     // Drawing shapes to the monitor
     /// <summary>
     /// Draw a horizontal line.
