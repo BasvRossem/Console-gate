@@ -228,6 +228,9 @@ public class Monitor : MonoBehaviour
     }
 
     // Writing to the monitor
+    /// <summary>
+    /// Select the deafult cursor if no cursor is selected.
+    /// </summary>
     private void NullCoalesceSelectedCursor()
     {
         selectedCursor = selectedCursor ?? defaultCursor;
