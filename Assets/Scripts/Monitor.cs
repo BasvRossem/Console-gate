@@ -19,16 +19,31 @@ public class Cursor
     public int x;
     public int y;
 
+    private string name;
+
     /// <summary>
     /// Initialize a cursor at he specified location.
+    /// The cursor has a name so it can be specified when using multiple cursors in the monitor.
     /// </summary>
     /// <param name="x">The x coordinate in comparison to the text grid. Default of 0.</param>
     /// <param name="y">The y coordinate in comparison to the text grid. Default of 0.</param>
-    public Cursor(int x = 0, int y = 0)
+    /// <param name="cursorName">The name of the cursor. Default of "Default".</param>
+    public Cursor(int x = 0, int y = 0, string cursorName = "Default")
     {
         SetPosition(x, y);
         SetBounds();
         UpdateXY();
+
+        name = cursorName;
+    }
+
+    /// <summary>
+    /// Get the name of the cursor.
+    /// </summary>
+    /// <returns>Cursor name.</returns>
+    public string GetName()
+    {
+        return name;
     }
 
     /// <summary>
