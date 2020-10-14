@@ -466,6 +466,10 @@ public class Monitor : MonoBehaviour
     /// <param name="row">The index of the row to be selected</param>
     public void SelectRow(int row)
     {
+        // Mesh info is probably only loaded if the text is renedered in an update.
+        // I need this info, so I'll wat one frame before actually drawing.
+        if (textMesh.textInfo.characterCount == 0) return;
+
         // Retrieve character data
         TMP_LineInfo lineInfo = textMesh.textInfo.lineInfo[row];
         TMP_CharacterInfo characterInfoBegin = textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];

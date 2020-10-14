@@ -239,7 +239,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324021594}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9b560d4ef9892644b735b8befa2958c, type: 3}
   m_Name: 
@@ -258,7 +258,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &531301594
 GameObject:
@@ -299,7 +299,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 592551632}
-  - component: {fileID: 592551631}
   - component: {fileID: 592551633}
   m_Layer: 0
   m_Name: TestLevels
@@ -308,19 +307,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &592551631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592551630}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e8ff545b4a9344782de45332a615c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menu: {fileID: 324021595}
 --- !u!4 &592551632
 Transform:
   m_ObjectHideFlags: 0
@@ -512,7 +498,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1034700467
 MonoBehaviour:
@@ -666,20 +652,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Insanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. "
+  m_text: "Insanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 13b3f6e019280c74a9c57c3d4ab1060d, type: 2}
   m_sharedMaterial: {fileID: -18503998073365850, guid: 13b3f6e019280c74a9c57c3d4ab1060d, type: 2}
