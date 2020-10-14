@@ -23,6 +23,8 @@ public class Menu : MonoBehaviour
         monitor.uiCursor.Blink(false);
 
         optionNumber = 0;
+
+        options = new List<Option>();
     }
 
     private void Update()

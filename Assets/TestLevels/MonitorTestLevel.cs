@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonitorTest : MonoBehaviour
+public class MonitorTestLevel : MonoBehaviour
 {
     public Monitor monitor;
 
