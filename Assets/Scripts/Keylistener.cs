@@ -12,17 +12,31 @@ public enum KeyBoardOptions
     Alphabetical,
     Numerical,
     Function,
-    Interpunction
+    Interpunction,
+    Any
 }
 
-
+/// <summary>
+/// Custom comparer for lists of KeyCodes
+/// </summary>
 class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
 {
+    /// <summary>
+    /// Checks that all occurances are equal in both lists, rather than checking reference locations
+    /// </summary>
+    /// <param name="x">LHS list of keycodes</param>
+    /// <param name="y">RHS list of keycodes</param>
+    /// <returns>Bool to return</returns>
     public bool Equals(List<KeyCode> x, List<KeyCode> y)
     {
         return x.All(y.Contains);
     }
 
+    /// <summary>
+    /// Makes a hashcode generated from the contents
+    /// </summary>
+    /// <param name="obj">list of keycodes</param>
+    /// <returns>int hashcode</returns>
     public int GetHashCode(List<KeyCode> obj)
     {
         int hCode = obj.Sum(x => (int)x);
@@ -40,48 +54,38 @@ public class Keylistener : MonoBehaviour
         .ToArray();
 
     private KeyCodeComparer customComparer;
-    private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedEvents;
+    private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedKeyEvents;
     private List<KeyCode> _keysDown;
 
 
-    public void Start()
+    public void Awake()
     {
         customComparer = new KeyCodeComparer();
-        subscribedEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
-        addKey(new List<KeyCode> { KeyCode.A , KeyCode.B}, ping);
-        addKey(new List<KeyCode> { KeyCode.A , KeyCode.B, KeyCode.C}, ping2);
-        addKey(KeyBoardOptions.Alphabetical, alphabetical);
+        subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
     }
-
-    public void ping(List<KeyCode> arg)
-    {
-        print("Double press!");
-    }
-
-    public void ping2(List<KeyCode> arg)
-    {
-        print("Triple press?");
-    }
-
-    public void alphabetical(List<KeyCode> arg)
-    {
-        print("You pressed an alphabetical key:");
-        print(arg);
-    }
-
-
+    /// <summary>
+    /// Resets the list of keys down
+    /// </summary>
     public void OnEnable()
     {
-        print(Enum.GetValues(typeof(KeyCode)));
         _keysDown = new List<KeyCode>();
     }
+
+    /// <summary>
+    /// Nulls the keydown list
+    /// </summary>
     public void OnDisable()
     {
         _keysDown = null;
     }
 
+    /// <summary>
+    /// Catches all pressed keys and adds them to the stored keydown list.
+    /// Catches all keypress releases and invokes the callback for all released keypresses
+    /// </summary>
     public void Update()
     {
+        // Catch all keydowns
         if (Input.anyKeyDown)
         {
             for (int i = 0; i < keyCodes.Length; i++)
@@ -94,34 +98,49 @@ public class Keylistener : MonoBehaviour
             }
         }
 
+        // Catch all keyups
         if (_keysDown.Count > 0)
         {
+            List<KeyCode> _keysUp = new List<KeyCode>();
             for (int i = 0; i < _keysDown.Count; i++)
             {
                 KeyCode kc = _keysDown[i];
                 if (Input.GetKeyUp(kc))
                 {
-                    executeKeyCallback(_keysDown);
                     _keysDown.RemoveAt(i);
                     i--;
-                    //executeKeyCallback(_keysDown);
+                    _keysUp.Add(kc);
                 }
             }
+            // Invoke callbacks with all keyups
+            executeKeyCallback(_keysUp);
         }
     }
 
+    /// <summary>
+    /// Adds a UnityAction mapped to a list of common keypresses
+    /// </summary>
+    /// <param name="key">The combination of keys pressed in order to fire the callback</param>
+    /// <param name="callback">The UnityAction to invoke after the required keys are pressed</param>
+    /// <returns>bool wether the adding is succesfull. A false indicates that the keys are already in use.</returns>
     public bool addKey(List<KeyCode> key, UnityAction<List<KeyCode>> callback)
     {
-        if (!subscribedEvents.ContainsKey(key))
+        if (!subscribedKeyEvents.ContainsKey(key))
         {
-            subscribedEvents.Add(key, new UnityEvent<List<KeyCode>>());
+            subscribedKeyEvents.Add(key, new UnityEvent<List<KeyCode>>());
         }
 
-        subscribedEvents[key].AddListener(callback);
+        subscribedKeyEvents[key].AddListener(callback);
         return true;
     }
 
-    public bool addKey(KeyBoardOptions option, UnityAction<List<KeyCode>> callback)
+    /// <summary>
+    /// Adds a number key combinations that are grouped together.
+    /// </summary>
+    /// <param name="option">The KeyBoardOption enum</param>
+    /// <param name="callback">The UnityAction to invoke after the required keys are pressed</param>
+    /// <returns></returns>
+    public bool addOption(KeyBoardOptions option, UnityAction<List<KeyCode>> callback)
     {
         List<KeyCode> keys = new List<KeyCode>();
         switch (option)
@@ -149,32 +168,103 @@ public class Keylistener : MonoBehaviour
                 keys.Add(KeyCode.Semicolon);
                 break;
 
+            case KeyBoardOptions.Any:
+                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>());
+                break;
+
             default:
                 throw new NotImplementedException();
         }
-        
+
+
+        // Check if all keys are added succesfully
+        bool returnvalue = true;
         foreach(KeyCode k in keys)
         {
-            addKey(new List<KeyCode> { k }, callback);
+            if(!addKey(new List<KeyCode> { k }, callback))
+            {
+                returnvalue = false;
+            }
         }
         
-        return true;
+        return returnvalue;
     }
 
-    public UnityEvent<List<KeyCode>> getCallback(List<KeyCode> key)
+
+    /// <summary>
+    /// Clears all actions from each key. DOT NOT USE LIGHTLY.
+    /// </summary>
+    public void clearActions()
     {
-        if (!subscribedEvents.ContainsKey(key))
+        foreach (KeyValuePair<List<KeyCode>, UnityEvent<List<KeyCode>>> entry in subscribedKeyEvents)
+        {
+            entry.Value.RemoveAllListeners();
+        }
+    }
+
+    /// <summary>
+    /// Removes a listener from each keycode list.
+    /// </summary>
+    /// <param name="listener">Listener to remove</param>
+    public void clearActions(UnityAction<List<KeyCode>> listener)
+    {
+        if(listener != null)
+        {
+            foreach (KeyValuePair<List<KeyCode>, UnityEvent<List<KeyCode>>> entry in subscribedKeyEvents)
+            {
+                entry.Value.RemoveListener(listener);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes delegated listeners.
+    /// </summary>
+    /// <param name="args">List of keycodes to match</param>
+    public void clearActions(List<KeyCode> args)
+    {
+        if(args != null)
+        {
+            subscribedKeyEvents[args].RemoveAllListeners();
+        }
+    }
+
+    /// <summary>
+    /// Removes a specific listener from a specific keycode list
+    /// </summary>
+    /// <param name="args">List of keycodes mapped to the listener</param>
+    /// <param name="listener">Listener method to remove</param>
+    public void clearActions(List<KeyCode> args, UnityAction<List<KeyCode>> listener)
+    {
+        if(args != null && listener != null)
+        {
+            subscribedKeyEvents[args].RemoveListener(listener);
+        }
+    }
+
+    /// <summary>
+    /// Returns an event matched by the keypair
+    /// </summary>
+    /// <param name="key">List of keycodes</param>
+    /// <returns></returns>
+    public UnityEvent<List<KeyCode>> getEvent(List<KeyCode> key)
+    {
+        if (!subscribedKeyEvents.ContainsKey(key))
         {
             return null;
         }
-        return subscribedEvents[key];
+        return subscribedKeyEvents[key];
     }
 
+    /// <summary>
+    /// Invokes the events and all delegates for the given list of keycodes
+    /// </summary>
+    /// <param name="key">List of keycodes</param>
     public void executeKeyCallback(List<KeyCode> key)
     {
-        if (subscribedEvents.ContainsKey(key))
+        if (subscribedKeyEvents.ContainsKey(key))
         {
-            subscribedEvents[key].Invoke(key);
+            subscribedKeyEvents[key].Invoke(key);
         }
     }
 }
