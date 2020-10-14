@@ -22,8 +22,6 @@ public class Menu : MonoBehaviour
         monitor.uiCursor.Show(true);
         monitor.uiCursor.Blink(false);
 
-        monitor.cursor = new Cursor();
-
         optionNumber = 0;
     }
 
