@@ -18,6 +18,7 @@ public class UserInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //TODO: After Monitor merge, fix cursor
         userInputCursor = new Cursor();
         userInputCursor.SetBounds(4, monitor.GetColumnAmount() - 1, 2, monitor.GetRowAmount() - 1);
         monitor.cursor = userInputCursor;
@@ -37,7 +38,11 @@ public class UserInput : MonoBehaviour
         
     }
 
-    void removeCharacter(List<KeyCode> args)
+    /// <summary>
+    /// Removes the last character from the internal textbuffer. This is a method used in conjunction with the keylistener.
+    /// </summary>
+    /// <param name="args">A list of keycodes</param>
+    private void removeCharacter(List<KeyCode> args)
     {
         if(args.Count > 0 && textBuffer.Length > 0)
         {
@@ -49,7 +54,11 @@ public class UserInput : MonoBehaviour
         processTextBuffer();
     }
 
-    void addSpace(List<KeyCode> args)
+    /// <summary>
+    /// Adds a space to the textbuffer
+    /// </summary>
+    /// <param name="args">A list of keycodes</param>
+    private void addSpace(List<KeyCode> args)
     {
         if(args.Count > 0)
         {
@@ -58,7 +67,11 @@ public class UserInput : MonoBehaviour
         processTextBuffer();
     }
 
-    void addCharacter(List<KeyCode> args)
+    /// <summary>
+    /// Casts each KeyCode given to a char and adds it to the textbuffer.
+    /// </summary>
+    /// <param name="args">List of keycodes.</param>
+    private void addCharacter(List<KeyCode> args)
     {
         if(args.Count > 0)
         {
@@ -71,8 +84,13 @@ public class UserInput : MonoBehaviour
         processTextBuffer();
     }
 
-    void processTextBuffer()
+
+    /// <summary>
+    /// Resets the monitor for display. 
+    /// </summary>
+    private void processTextBuffer()
     {
+        // TODO: fix refreshing and writing after Monitor update
         //Cursor previousCursor = monitor.cursor;
         monitor.ResetMonitor();
 
@@ -80,7 +98,7 @@ public class UserInput : MonoBehaviour
         //monitor.cursor.SetPosition(4, 4);
 
         //monitor.cursor = userInputCursor;
-        monitor.WriteString(textBuffer);
+        monitor.AddMonitorTextLine(textBuffer);
         monitor.RenderMonitorText();
 
 

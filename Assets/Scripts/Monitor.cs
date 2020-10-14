@@ -142,13 +142,6 @@ public class Monitor : MonoBehaviour
         cursor.Move(cursor.Right);
     }
 
-    public void WriteString(string word)
-    {
-       foreach(char c in word)
-        {
-            WriteCharacter(c);
-        }
-    }
 
     public void AssembleText()
     {
