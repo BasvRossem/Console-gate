@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 228854960}
   - component: {fileID: 228854962}
   m_Layer: 5
-  m_Name: CursorObject
+  m_Name: UICursorObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,6 +215,51 @@ MonoBehaviour:
   isVisible: 0
   blinking: 0
   characterSize: {x: 0, y: 0}
+--- !u!1 &324021594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 324021596}
+  - component: {fileID: 324021595}
+  m_Layer: 0
+  m_Name: ControllerStructures
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &324021595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324021594}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b560d4ef9892644b735b8befa2958c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monitor: {fileID: 2079924436}
+  listener: {fileID: 1034700467}
+--- !u!4 &324021596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324021594}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25.109344, y: 79.2744, z: -43.752716}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &531301594
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,29 +269,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 531301596}
-  - component: {fileID: 531301595}
-  - component: {fileID: 531301597}
-  - component: {fileID: 531301599}
   m_Layer: 0
-  m_Name: User
+  m_Name: User (Empty)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &531301595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531301594}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30c4a6d37d72cfb4f8edadac6f6f99ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monitor: {fileID: 2079924436}
 --- !u!4 &531301596
 Transform:
   m_ObjectHideFlags: 0
@@ -257,39 +286,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -13.228153, y: 15.193222, z: -267.9941}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 605419156}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &531301597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531301594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9b560d4ef9892644b735b8befa2958c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monitor: {fileID: 2079924436}
-  listener: {fileID: 605419155}
---- !u!114 &531301599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531301594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e8ff545b4a9344782de45332a615c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menu: {fileID: 531301597}
---- !u!1 &605419154
+--- !u!1 &592551630
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,41 +298,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 605419156}
-  - component: {fileID: 605419155}
+  - component: {fileID: 592551632}
+  - component: {fileID: 592551633}
   m_Layer: 0
-  m_Name: UserInputObject
+  m_Name: TestLevels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &605419155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605419154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27651d608ae54124e8ed46e342ec9ef4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &605419156
+--- !u!4 &592551632
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605419154}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 592551630}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25.109344, y: 79.2744, z: -43.752716}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 531301596}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &592551633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592551630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c4a6d37d72cfb4f8edadac6f6f99ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monitor: {fileID: 2079924436}
+  testString: The cursor should now follow this line
 --- !u!1 &837561048
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +348,7 @@ GameObject:
   - component: {fileID: 837561050}
   - component: {fileID: 837561049}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Monitor Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -424,7 +427,7 @@ RectTransform:
   m_Children:
   - {fileID: 2079924437}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -442,6 +445,7 @@ GameObject:
   - component: {fileID: 1034700466}
   - component: {fileID: 1034700465}
   - component: {fileID: 1034700464}
+  - component: {fileID: 1034700467}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -495,8 +499,20 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1034700467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034700463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27651d608ae54124e8ed46e342ec9ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1403631324
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +594,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420281657
 GameObject:
@@ -637,20 +653,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Insanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. \nInsanity is doing the same thing over and over again expecting different
-    results. "
+  m_text: "Insanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \nInsanity is doing the same thing again and again expecting different results.
+    \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 13b3f6e019280c74a9c57c3d4ab1060d, type: 2}
   m_sharedMaterial: {fileID: -18503998073365850, guid: 13b3f6e019280c74a9c57c3d4ab1060d, type: 2}

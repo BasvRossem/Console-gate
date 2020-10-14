@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuTest : MonoBehaviour
+public class MenuTestLevel : MonoBehaviour
 {
     public Menu menu;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         List<Option> options = new List<Option>();
         options.Add(new OptionPrint("1. Open monitor 1", "Monitor 1 is opened"));
@@ -19,8 +19,7 @@ public class MenuTest : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 }
