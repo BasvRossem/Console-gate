@@ -361,10 +361,6 @@ public class Monitor : MonoBehaviour
     public void WriteCharacter(char letter)
     {
         NullCoalesceSelectedCursor();
-        if (selectedCursor.position == new Vector2Int(0, 0))
-        {
-            Debug.Log(selectedCursor.position);
-        }
         textGrid[selectedCursor.y, selectedCursor.x] = letter;
         selectedCursor.Move(selectedCursor.Right);
     }
