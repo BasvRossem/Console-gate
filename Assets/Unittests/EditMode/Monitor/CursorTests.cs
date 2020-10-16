@@ -12,11 +12,12 @@ namespace Tests
 
         private Cursor CreateTestCursor()
         {
-            return new Cursor(5, 5, CursorName);
+            return new Cursor(0, 0, CursorName);
         }
 
+        // Varable checking
         [Test]
-        public void CursorDirections()
+        public void CheckDirections()
         {
             Cursor cursor = CreateTestCursor();
             Assert.AreEqual(new Vector2Int(-1, 0), cursor.Left);
@@ -25,11 +26,55 @@ namespace Tests
             Assert.AreEqual(new Vector2Int(0, 1), cursor.Down);
         }
 
+        // Function checking
         [Test]
-        public void Name()
+        public void GetName()
         {
             Cursor cursor = CreateTestCursor();
             Assert.AreEqual(CursorName, cursor.GetName());
+        }
+
+        [Test]
+        public void SetBoundsGetBounds()
+        {
+            Cursor cursor = CreateTestCursor();
+
+            cursor.SetBounds(5, 6, 10, 11);
+
+            Assert.AreEqual(new List<Vector2Int>() { new Vector2Int(5, 6), new Vector2Int(10, 11) }, cursor.GetBounds());
+
+            cursor.SetPosition(5, 5);
+            cursor.SetBounds(10, 10, 15, 15);
+            Assert.AreEqual(new Vector2Int(10, 10), cursor.GetPosition());
+
+            cursor.SetPosition(12, 12);
+            Assert.AreEqual(new Vector2Int(12, 12), cursor.GetPosition());
+        }
+
+        [Test]
+        public void SetPositionGetPosition()
+        {
+            Cursor cursor = CreateTestCursor();
+            cursor.SetPosition(5, 5);
+            Assert.AreEqual(new Vector2Int(5, 5), cursor.GetPosition());
+
+            cursor.SetPosition(10, 10);
+            Assert.AreEqual(new Vector2Int(10, 10), cursor.GetPosition());
+        }
+
+        [Test]
+        public void Move()
+        {
+            Cursor cursor = CreateTestCursor();
+
+            cursor.Move(cursor.Right);
+            Assert.AreEqual(new Vector2Int(1, 0), cursor.GetPosition());
+            cursor.Move(cursor.Left);
+            Assert.AreEqual(new Vector2Int(0, 0), cursor.GetPosition());
+            cursor.Move(cursor.Down);
+            Assert.AreEqual(new Vector2Int(0, 1), cursor.GetPosition());
+            cursor.Move(cursor.Up);
+            Assert.AreEqual(new Vector2Int(0, 0), cursor.GetPosition());
         }
 
         [Test]
@@ -37,7 +82,7 @@ namespace Tests
         {
             Cursor cursor = CreateTestCursor();
 
-            cursor.SetBounds(5, 10, 5, 10);
+            cursor.SetBounds(5, 5, 10, 10);
             cursor.ResetPosition();
             Assert.AreEqual(5, cursor.x);
             Assert.AreEqual(5, cursor.y);
@@ -54,6 +99,15 @@ namespace Tests
 
             Assert.AreEqual(10, cursor.x);
             Assert.AreEqual(10, cursor.y);
+        }
+    
+        [Test]
+        public void ResetPosition()
+        {
+            Cursor cursor = CreateTestCursor();
+            cursor.SetPosition(1, 10);
+            cursor.ResetPosition();
+            Assert.AreEqual(new Vector2Int(0, 0), cursor.GetPosition());
         }
     }
 }

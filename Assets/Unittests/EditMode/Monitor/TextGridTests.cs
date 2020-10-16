@@ -24,6 +24,13 @@ namespace Tests
         }
 
         [Test]
+        public void GetSize()
+        {
+            TextGrid grid = new TextGrid(10, 15);
+            Assert.AreEqual(new Vector2Int(10, 15), grid.GetSize());
+        }
+
+        [Test]
         public void Fill()
         {
             TextGrid grid = new TextGrid(10, 10);

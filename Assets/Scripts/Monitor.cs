@@ -17,7 +17,7 @@ public class Cursor
 
     private Vector2Int min_bounds;
     private Vector2Int max_bounds;
-    public Vector2Int position;
+    private Vector2Int position;
     public Vector2Int offset;
     public int x;
     public int y;
@@ -42,46 +42,59 @@ public class Cursor
     }
 
     /// <summary>
-    /// Get the name of the cursor.
+    /// Returns the name of the cursor.
     /// </summary>
-    /// <returns>Cursor name.</returns>
+    /// <returns>The name.</returns>
     public string GetName()
     {
         return name;
     }
 
+
     /// <summary>
-    /// Set the bounds in which the cursor can write.
+    /// Set the bounds in which the cursor can write. And moves cursor to within those bounds.
     /// </summary>
     /// <param name="min_x">Minimal x value.</param>
     /// <param name="max_x">Maximal x value.</param>
     /// <param name="min_y">Minimal y value.</param>
     /// <param name="max_y">Maximal y value.</param>
-    public void SetBounds(int min_x = 0, int max_x = int.MaxValue, int min_y = 0, int max_y = int.MaxValue)
+    public void SetBounds(int min_x = 0, int min_y = 0, int max_x = int.MaxValue, int max_y = int.MaxValue)
     {
         min_bounds = new Vector2Int(min_x, min_y);
         max_bounds = new Vector2Int(max_x, max_y);
+        CheckBounds();
+    }
+
+    /// <summary>
+    /// Return a list of min and max bounds.
+    /// </summary>
+    /// <returns>A list of min and max bounds.</returns>
+    public List<Vector2Int> GetBounds()
+    {
+        return new List<Vector2Int>() { min_bounds, max_bounds };
     }
 
     // Positioning
     /// <summary>
-    /// Update the public x and y positioning.
-    /// </summary>
-    private void UpdateXY()
-    {
-        x = position.x;
-        y = position.y;
-    }
-
-    /// <summary>
-    /// Set a new position of the cursor.
+    /// Set a new position of the cursor within bounds.
     /// </summary>
     /// <param name="x">New x position. Default of 0.</param>
     /// <param name="y">New y position. Default of 0.</param>
     public void SetPosition(int x = 0, int y = 0)
     {
         position = new Vector2Int(x, y);
+        CheckBounds();
+
         UpdateXY();
+    }
+
+    /// <summary>
+    /// Gets the position.
+    /// </summary>
+    /// <returns>The position.</returns>
+    public Vector2Int GetPosition()
+    {
+        return position;
     }
 
     /// <summary>
@@ -96,13 +109,7 @@ public class Cursor
     {
         position += direction;
 
-        // If the curser is out of bounds, put it in bounds
-        if (position.x < min_bounds.x) position.x = min_bounds.x;
-        if (position.x > max_bounds.x) position.x = max_bounds.x;
-
-        if (position.y < min_bounds.y) position.y = min_bounds.y;
-        if (position.y > max_bounds.y) position.y = max_bounds.y;
-
+        CheckBounds();
         UpdateXY();
     }
 
@@ -112,6 +119,27 @@ public class Cursor
     public void ResetPosition()
     {
         Move(new Vector2Int(int.MinValue, int.MinValue));
+    }
+
+    /// <summary>
+    /// Moves the cursor back in bounds if it isn't.
+    /// </summary>
+    private void CheckBounds()
+    {
+        if (position.x < min_bounds.x) position.x = min_bounds.x;
+        if (position.x > max_bounds.x) position.x = max_bounds.x;
+
+        if (position.y < min_bounds.y) position.y = min_bounds.y;
+        if (position.y > max_bounds.y) position.y = max_bounds.y;
+    }
+
+    /// <summary>
+    /// Update the public x and y positioning.
+    /// </summary>
+    private void UpdateXY()
+    {
+        x = position.x;
+        y = position.y;
     }
 }
 
