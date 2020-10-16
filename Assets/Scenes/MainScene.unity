@@ -239,7 +239,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324021594}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9b560d4ef9892644b735b8befa2958c, type: 3}
   m_Name: 
@@ -284,13 +284,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 531301594}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6ad49ce0e07dce498e1449dccd6c0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   listener: {fileID: 1034700467}
-  monitor: {fileID: 2079924436}
+  monitor: {fileID: 0}
   bottomLine: 0
   textBuffer: 
 --- !u!4 &531301596
@@ -317,6 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 592551632}
   - component: {fileID: 592551633}
+  - component: {fileID: 592551631}
   m_Layer: 0
   m_Name: TestLevels
   m_TagString: Untagged
@@ -324,6 +325,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &592551631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592551630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e8ff545b4a9344782de45332a615c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 324021595}
 --- !u!4 &592551632
 Transform:
   m_ObjectHideFlags: 0
@@ -345,7 +359,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592551630}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30c4a6d37d72cfb4f8edadac6f6f99ed, type: 3}
   m_Name: 

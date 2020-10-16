@@ -14,7 +14,7 @@ namespace ControllerStructures
 
         private int optionNumber;
 
-        public List<Option> options;
+        public List<Option> options = new List<Option>();
 
         private void Start()
         {
@@ -26,8 +26,6 @@ namespace ControllerStructures
             monitor.uiCursor.Blink(false);
 
             optionNumber = 0;
-
-            options = new List<Option>();
         }
 
         private void Update()
@@ -36,7 +34,6 @@ namespace ControllerStructures
             monitor.selectedCursor.ResetPosition();
 
             writeOptionsToMonitor();
-
             monitor.RenderMonitorText();
 
             monitor.SelectRow(optionNumber);
