@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Visuals;
 
 public class UserInput : MonoBehaviour
 {
@@ -14,9 +15,8 @@ public class UserInput : MonoBehaviour
     public int bottomLine;
     public string textBuffer;
 
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         monitor.AddCursor(cursorName);
 
@@ -29,9 +29,8 @@ public class UserInput : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 
     /// <summary>
@@ -40,9 +39,9 @@ public class UserInput : MonoBehaviour
     /// <param name="args">A list of keycodes</param>
     private void removeCharacter(List<KeyCode> args)
     {
-        if(args.Count > 0 && textBuffer.Length > 0)
+        if (args.Count > 0 && textBuffer.Length > 0)
         {
-            print(textBuffer.Length); 
+            print(textBuffer.Length);
             StringBuilder sb = new StringBuilder(textBuffer);
             sb.Remove(textBuffer.Length - 1, 1);
             textBuffer = sb.ToString();
@@ -56,7 +55,7 @@ public class UserInput : MonoBehaviour
     /// <param name="args">A list of keycodes</param>
     private void addSpace(List<KeyCode> args)
     {
-        if(args.Count > 0)
+        if (args.Count > 0)
         {
             textBuffer += " ";
         }
@@ -69,9 +68,9 @@ public class UserInput : MonoBehaviour
     /// <param name="args">List of keycodes.</param>
     private void addCharacter(List<KeyCode> args)
     {
-        if(args.Count > 0)
+        if (args.Count > 0)
         {
-            foreach(KeyCode k in args)
+            foreach (KeyCode k in args)
             {
                 print(k);
                 textBuffer += (char)k;
@@ -80,9 +79,8 @@ public class UserInput : MonoBehaviour
         processTextBuffer();
     }
 
-
     /// <summary>
-    /// Resets the monitor for display. 
+    /// Resets the monitor for display.
     /// </summary>
     private void processTextBuffer()
     {

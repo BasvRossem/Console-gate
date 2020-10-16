@@ -4,6 +4,7 @@ using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Visuals;
 
 namespace Tests
 {
@@ -25,14 +26,11 @@ namespace Tests
         [UnityTest]
         public IEnumerator WriteText()
         {
-
             Monitor monitor = CreateMonitor();
             monitor.AddMonitorTextLine("Hey how are you?");
 
             yield return null;
             Assert.AreEqual("Hey how are you?                                                                ".ToCharArray(), monitor.textGrid[0]);
         }
-
-
     }
 }

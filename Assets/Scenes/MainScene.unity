@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1e6c3fc2fefa14fa7a49a9328b9393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blinkingSpeed: 1
+  blinkingSpeed: 0.5
   isVisible: 0
   blinking: 0
   characterSize: {x: 0, y: 0}

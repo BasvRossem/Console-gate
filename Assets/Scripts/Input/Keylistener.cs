@@ -19,7 +19,7 @@ public enum KeyBoardOptions
 /// <summary>
 /// Custom comparer for lists of KeyCodes
 /// </summary>
-class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
+internal class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
 {
     /// <summary>
     /// Checks that all occurances are equal in both lists, rather than checking reference locations
@@ -44,7 +44,6 @@ class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
     }
 }
 
-
 public class Keylistener : MonoBehaviour
 {
     // All non-mouse/joystick keydowns
@@ -57,12 +56,12 @@ public class Keylistener : MonoBehaviour
     private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedKeyEvents;
     private List<KeyCode> _keysDown;
 
-
     public void Awake()
     {
         customComparer = new KeyCodeComparer();
         subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
     }
+
     /// <summary>
     /// Resets the list of keys down
     /// </summary>
@@ -176,20 +175,18 @@ public class Keylistener : MonoBehaviour
                 throw new NotImplementedException();
         }
 
-
         // Check if all keys are added succesfully
         bool returnvalue = true;
-        foreach(KeyCode k in keys)
+        foreach (KeyCode k in keys)
         {
-            if(!addKey(new List<KeyCode> { k }, callback))
+            if (!addKey(new List<KeyCode> { k }, callback))
             {
                 returnvalue = false;
             }
         }
-        
+
         return returnvalue;
     }
-
 
     /// <summary>
     /// Clears all actions from each key. DOT NOT USE LIGHTLY.
@@ -208,7 +205,7 @@ public class Keylistener : MonoBehaviour
     /// <param name="listener">Listener to remove</param>
     public void clearActions(UnityAction<List<KeyCode>> listener)
     {
-        if(listener != null)
+        if (listener != null)
         {
             foreach (KeyValuePair<List<KeyCode>, UnityEvent<List<KeyCode>>> entry in subscribedKeyEvents)
             {
@@ -223,7 +220,7 @@ public class Keylistener : MonoBehaviour
     /// <param name="args">List of keycodes to match</param>
     public void clearActions(List<KeyCode> args)
     {
-        if(args != null)
+        if (args != null)
         {
             subscribedKeyEvents[args].RemoveAllListeners();
         }
@@ -236,7 +233,7 @@ public class Keylistener : MonoBehaviour
     /// <param name="listener">Listener method to remove</param>
     public void clearActions(List<KeyCode> args, UnityAction<List<KeyCode>> listener)
     {
-        if(args != null && listener != null)
+        if (args != null && listener != null)
         {
             subscribedKeyEvents[args].RemoveListener(listener);
         }

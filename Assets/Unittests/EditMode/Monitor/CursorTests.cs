@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Visuals;
+using MonitorCursor = Visuals.MonitorCursor;
 
 namespace Tests
 {
@@ -10,16 +12,16 @@ namespace Tests
     {
         private string CursorName = "Newname";
 
-        private Cursor CreateTestCursor()
+        private Visuals.MonitorCursor CreateTestCursor()
         {
-            return new Cursor(0, 0, CursorName);
+            return new MonitorCursor(0, 0, CursorName);
         }
 
         // Varable checking
         [Test]
         public void CheckDirections()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
             Assert.AreEqual(new Vector2Int(-1, 0), cursor.Left);
             Assert.AreEqual(new Vector2Int(1, 0), cursor.Right);
             Assert.AreEqual(new Vector2Int(0, -1), cursor.Up);
@@ -30,14 +32,14 @@ namespace Tests
         [Test]
         public void GetName()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
             Assert.AreEqual(CursorName, cursor.GetName());
         }
 
         [Test]
         public void SetBoundsGetBounds()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
 
             cursor.SetBounds(5, 6, 10, 11);
 
@@ -54,7 +56,7 @@ namespace Tests
         [Test]
         public void SetPositionGetPosition()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
             cursor.SetPosition(5, 5);
             Assert.AreEqual(new Vector2Int(5, 5), cursor.GetPosition());
 
@@ -65,7 +67,7 @@ namespace Tests
         [Test]
         public void Move()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
 
             cursor.Move(cursor.Right);
             Assert.AreEqual(new Vector2Int(1, 0), cursor.GetPosition());
@@ -80,7 +82,7 @@ namespace Tests
         [Test]
         public void MoveWithinBounds()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
 
             cursor.SetBounds(5, 5, 10, 10);
             cursor.ResetPosition();
@@ -91,7 +93,7 @@ namespace Tests
             Assert.AreEqual(5, cursor.x);
             Assert.AreEqual(5, cursor.y);
 
-            for(int moves = 0; moves < 50; moves++)
+            for (int moves = 0; moves < 50; moves++)
             {
                 cursor.Move(cursor.Right);
                 cursor.Move(cursor.Down);
@@ -100,11 +102,11 @@ namespace Tests
             Assert.AreEqual(10, cursor.x);
             Assert.AreEqual(10, cursor.y);
         }
-    
+
         [Test]
         public void ResetPosition()
         {
-            Cursor cursor = CreateTestCursor();
+            MonitorCursor cursor = CreateTestCursor();
             cursor.SetPosition(1, 10);
             cursor.ResetPosition();
             Assert.AreEqual(new Vector2Int(0, 0), cursor.GetPosition());
