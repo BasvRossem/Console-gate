@@ -224,24 +224,20 @@ public class Monitor : MonoBehaviour
 
     private const int RowAmount = 24;
     private const int ColumnAmount = 80;
-    public TextGrid textGrid;
+    public TextGrid textGrid = new TextGrid(RowAmount, ColumnAmount);
 
-    private Cursor defaultCursor;
+    private Cursor defaultCursor = new Cursor();
     public Cursor selectedCursor;
-    public List<Cursor> cursors;
+    public List<Cursor> cursors = new List<Cursor>();
     public UICursor uiCursor;
 
     private string text;
 
     private void Awake()
     {
-        defaultCursor = new Cursor();
         selectedCursor = defaultCursor;
 
-        cursors = new List<Cursor>();
         cursors.Add(defaultCursor);
-
-        ResetMonitor();
 
         CalibrateTextMesh();
     }
@@ -249,7 +245,7 @@ public class Monitor : MonoBehaviour
     private void Update()
     {
         RenderMonitorText();
-        if (uiCursor.linkedCursor != null) UpdateUICursorPosition();
+        if ((uiCursor != null) && (uiCursor.linkedCursor != null)) UpdateUICursorPosition();
     }
 
     /// <summary>
@@ -319,7 +315,11 @@ public class Monitor : MonoBehaviour
     public bool SelectCursor(string name)
     {
         Cursor newSelected = FindCursor(name);
-        if (Tools.CheckError(newSelected == null, string.Format("No cursor found with name \"{0}\"", name))) return false;
+        if (Tools.CheckWarning(newSelected == null, string.Format("No cursor found with name \"{0}\". Swiched to default.", name)))
+        {
+            selectedCursor = defaultCursor;
+            return false;
+        }
 
         selectedCursor = newSelected;
         return true;
@@ -559,5 +559,15 @@ public class Monitor : MonoBehaviour
 
         Vector2 newPosition = textMeshCharacterPositions[selectedCursor.y][selectedCursor.x];
         uiCursor.SetPositionCenter(newPosition);
+    }
+}
+
+/// <summary>
+/// Testable monitor class with empty awake.
+/// </summary>
+public class MonitorTestable : Monitor
+{
+    private void Awake()
+    {
     }
 }
