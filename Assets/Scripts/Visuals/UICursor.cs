@@ -12,23 +12,23 @@ namespace Visuals
         private float lastBlinkUpdate;
 
         public bool isVisible;
-        public bool blinking;
+        public bool isBlinking;
 
         public Vector2 characterSize;
 
-        public MonitorCursor linkedCursor = null;
+        public MonitorCursor linkedCursor;
 
         private void Start()
         {
-            characterSize = new Vector2(8, 18);
             isVisible = true;
-
+            characterSize = new Vector2(8, 18);
             lastBlinkUpdate = Time.time;
+            SetSize(characterSize);
         }
 
         private void Update()
         {
-            if (isVisible && blinking && Time.time - lastBlinkUpdate > blinkingSpeed)
+            if (isVisible && isBlinking && Time.time - lastBlinkUpdate > blinkingSpeed)
             {
                 GetComponent<Image>().enabled = !GetComponent<Image>().enabled;
                 lastBlinkUpdate = Time.time;
@@ -51,7 +51,7 @@ namespace Visuals
         /// <param name="blink">If the cursor should blink.</param>
         public void Blink(bool blink)
         {
-            blinking = blink;
+            isBlinking = blink;
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace Visuals
         /// <returns>The size of the cursor.</returns>
         public Vector2 GetSize()
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
-            return new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.y);
+            Vector2 size = GetComponent<RectTransform>().sizeDelta;
+            return new Vector2(size.x, size.y);
         }
 
         /// <summary>
@@ -96,15 +96,13 @@ namespace Visuals
         /// <param name="newPosition">The new position of the top left.</param>
         public void SetPositionTopLeft(Vector2 newPosition)
         {
-            Debug.Log(newPosition);
-            var rectTransform = GetComponent<RectTransform>();
+            RectTransform rectTransform = GetComponent<RectTransform>();
             float width = rectTransform.sizeDelta.x;
             float height = rectTransform.sizeDelta.y;
             Vector3 centerOffset = new Vector3(width / 2, -height / 2, 0);
 
             transform.position = newPosition;
             transform.position += centerOffset;
-            Debug.Log(transform.position);
         }
     }
 }

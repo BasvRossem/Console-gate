@@ -255,7 +255,7 @@ namespace Visuals
         private const int ColumnAmount = 80;
         public TextGrid textGrid = new TextGrid(RowAmount, ColumnAmount);
 
-        private MonitorCursor defaultCursor = new MonitorCursor();
+        protected MonitorCursor defaultCursor = new MonitorCursor();
         public MonitorCursor selectedCursor;
         public List<MonitorCursor> cursors = new List<MonitorCursor>();
         public UICursor uiCursor;
@@ -378,6 +378,7 @@ namespace Visuals
         {
             MonitorCursor cursorToRemove = FindCursor(name);
             if (Tools.CheckError(cursorToRemove == null, string.Format("No cursor found with name \"{0}\"", name))) return false;
+            if (Tools.CheckError(cursorToRemove.GetName() == selectedCursor.GetName(), string.Format("Cannot remove selected cursor with name \"{0}\"", name))) return false;
             cursors.Remove(cursorToRemove);
             return true;
         }
@@ -411,7 +412,7 @@ namespace Visuals
         /// <summary>
         /// Show the text to the screen.
         /// </summary>
-        public void RenderMonitorText()
+        private void RenderMonitorText()
         {
             AssembleText();
             textMesh.SetText(text);
@@ -517,30 +518,39 @@ namespace Visuals
         /// <summary>
         /// Draw a rectangle using the rows and column indexes.
         /// </summary>
-        /// <param name="startRow">Index of the row where the box should start.</param>
-        /// <param name="startColumn">Index of the column where the box should start.</param>
-        /// <param name="endRow">Index of the row where the box should end.</param>
-        /// <param name="endColumn">Index of the column where the box should end.</param>
-        public void DrawRectangle(int startRow, int startColumn, int endRow, int endColumn)
+        /// <param name="startRowIndex">Index of the row where the box should start.</param>
+        /// <param name="startColumnIndex">Index of the column where the box should start.</param>
+        /// <param name="endRowIndex">Index of the row where the box should end.</param>
+        /// <param name="endColumnIndex">Index of the column where the box should end.</param>
+        /// <remarks>
+        /// Calling the function <c>Monitor.DrawRectangle(0, 0, 5, 5)</c> would create:
+        /// *----*
+        /// |    |
+        /// |    |
+        /// |    |
+        /// |    |
+        /// *----*
+        /// </remarks>
+        public void DrawRectangle(int startRowIndex, int startColumnIndex, int endRowIndex, int endColumnIndex)
         {
             // Draw lines
-            DrawLineHorizontal(startRow, startColumn + 1, endColumn);
-            DrawLineHorizontal(endRow, startColumn + 1, endColumn);
-            DrawLineVertical(startColumn, startRow + 1, endRow);
-            DrawLineVertical(endColumn, startRow + 1, endRow);
+            DrawLineHorizontal(startRowIndex, startColumnIndex + 1, endColumnIndex);
+            DrawLineHorizontal(endRowIndex, startColumnIndex + 1, endColumnIndex);
+            DrawLineVertical(startColumnIndex, startRowIndex + 1, endRowIndex);
+            DrawLineVertical(endColumnIndex, startRowIndex + 1, endRowIndex);
 
             // Draw Corners
-            textGrid[startRow, startColumn] = '*';
-            textGrid[startRow, endColumn] = '*';
-            textGrid[endRow, startColumn] = '*';
-            textGrid[endRow, endColumn] = '*';
+            textGrid[startRowIndex, startColumnIndex] = '*';
+            textGrid[startRowIndex, endColumnIndex] = '*';
+            textGrid[endRowIndex, startColumnIndex] = '*';
+            textGrid[endRowIndex, endColumnIndex] = '*';
         }
 
         // Monitor information
         /// <summary>
         /// Get the amount of characters the monitor is high.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The amount of rows.</returns>
         public int GetRowAmount()
         {
             return RowAmount;
@@ -549,7 +559,7 @@ namespace Visuals
         /// <summary>
         /// Get the amount of characters the monitor is wide.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The amount of columns.</returns>
         public int GetColumnAmount()
         {
             return ColumnAmount;
@@ -563,8 +573,11 @@ namespace Visuals
         public void SelectRow(int row)
         {
             // Mesh info is probably only loaded at the text end of the frame.
-            // So now we force an update so we can use the mmesh data.
+            // So now we force an update so we can use the mesh data.
+            RenderMonitorText();
             textMesh.ForceMeshUpdate();
+
+            if (Tools.CheckError((row >= textMesh.textInfo.lineCount), string.Format("Cannot acces row with index {0}, there are {1} lines.", row, textMesh.textInfo.lineCount))) return;
 
             // Retrieve character data
             TMP_LineInfo lineInfo = textMesh.textInfo.lineInfo[row];
@@ -577,6 +590,7 @@ namespace Visuals
 
             uiCursor.SetSize(newSize);
             uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
+            Debug.LogWarning("Here");
         }
 
         /// <summary>
@@ -598,6 +612,9 @@ namespace Visuals
     {
         private void Awake()
         {
+            selectedCursor = defaultCursor;
+
+            cursors.Add(defaultCursor);
         }
     }
 }

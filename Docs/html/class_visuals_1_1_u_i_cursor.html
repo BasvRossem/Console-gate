@@ -86,11 +86,11 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a37778f6dfd648b512d54b8722e30373b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1407e9ce3b010bfd0abd736ad6698e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#ad1407e9ce3b010bfd0abd736ad6698e5">isVisible</a></td></tr>
 <tr class="separator:ad1407e9ce3b010bfd0abd736ad6698e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adabd7f16bd16f7cbd0315367589f8835"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#adabd7f16bd16f7cbd0315367589f8835">blinking</a></td></tr>
-<tr class="separator:adabd7f16bd16f7cbd0315367589f8835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac14ebf4ffc4bcc3021a5af7d1336196a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#ac14ebf4ffc4bcc3021a5af7d1336196a">isBlinking</a></td></tr>
+<tr class="separator:ac14ebf4ffc4bcc3021a5af7d1336196a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49ec8cc1cd47c54f52e52aabefc9562a"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#a49ec8cc1cd47c54f52e52aabefc9562a">characterSize</a></td></tr>
 <tr class="separator:a49ec8cc1cd47c54f52e52aabefc9562a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac07a51a910910ce5f8cf2e8de344cb18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_visuals_1_1_monitor_cursor.html">MonitorCursor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#ac07a51a910910ce5f8cf2e8de344cb18">linkedCursor</a> = null</td></tr>
+<tr class="memitem:ac07a51a910910ce5f8cf2e8de344cb18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_visuals_1_1_monitor_cursor.html">MonitorCursor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_visuals_1_1_u_i_cursor.html#ac07a51a910910ce5f8cf2e8de344cb18">linkedCursor</a></td></tr>
 <tr class="separator:ac07a51a910910ce5f8cf2e8de344cb18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -266,20 +266,6 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="adabd7f16bd16f7cbd0315367589f8835"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adabd7f16bd16f7cbd0315367589f8835">&#9670;&nbsp;</a></span>blinking</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Visuals.UICursor.blinking</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a37778f6dfd648b512d54b8722e30373b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37778f6dfd648b512d54b8722e30373b">&#9670;&nbsp;</a></span>blinkingSpeed</h2>
 
@@ -308,6 +294,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac14ebf4ffc4bcc3021a5af7d1336196a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac14ebf4ffc4bcc3021a5af7d1336196a">&#9670;&nbsp;</a></span>isBlinking</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visuals.UICursor.isBlinking</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad1407e9ce3b010bfd0abd736ad6698e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1407e9ce3b010bfd0abd736ad6698e5">&#9670;&nbsp;</a></span>isVisible</h2>
 
@@ -329,7 +329,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_visuals_1_1_monitor_cursor.html">MonitorCursor</a> Visuals.UICursor.linkedCursor = null</td>
+          <td class="memname"><a class="el" href="class_visuals_1_1_monitor_cursor.html">MonitorCursor</a> Visuals.UICursor.linkedCursor</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -342,7 +342,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2020 23:45:06 for Console-gate by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
+Generated on Sun Oct 18 2020 22:30:33 for Console-gate by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
 </small></address>
 </body>
 </html>

@@ -34,7 +34,6 @@ namespace ControllerStructures
             monitor.selectedCursor.ResetPosition();
 
             writeOptionsToMonitor();
-            monitor.RenderMonitorText();
 
             monitor.SelectRow(optionNumber);
         }
