@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
+using Visuals;
+using MonitorCursor = Visuals.MonitorCursor;
 
 public class MonitorTestLevel : MonoBehaviour
 {
@@ -11,7 +14,7 @@ public class MonitorTestLevel : MonoBehaviour
     private int characterIndex;
 
     private float time;
-    private float delayAmount = 0.25f;
+    private float delayAmount = 0.15f;
 
     private void Start()
     {
@@ -24,7 +27,8 @@ public class MonitorTestLevel : MonoBehaviour
         monitor.DrawRectangle(0, 0, 23, 79);
         monitor.DrawRectangle(1, 2, 6, 25);
 
-        monitor.selectedCursor.SetBounds(4, monitor.GetColumnAmount() - 1, 2, monitor.GetRowAmount() - 1);
+        monitor.SelectCursor(MonitorCursor.DefaultName);
+        monitor.selectedCursor.SetBounds(4, 2, monitor.GetColumnAmount() - 1, monitor.GetRowAmount() - 1);
 
         monitor.selectedCursor.ResetPosition();
 
@@ -33,28 +37,28 @@ public class MonitorTestLevel : MonoBehaviour
         monitor.AddMonitorTextLine("Im fine!");
         monitor.AddMonitorTextLine(System.DateTime.Now.ToString());
 
+        Debug.Log(monitor.selectedCursor.GetName());
+
         monitor.AddCursor("Eraser");
         monitor.SelectCursor("Eraser");
         monitor.ClearArea(4, 4, 10, 10);
-        monitor.SelectCursor(Cursor.DefaultName);
 
+        monitor.SelectCursor(MonitorCursor.DefaultName);
         monitor.AddMonitorTextLine("Hello World");
 
         monitor.SelectRow(2);
-
-        //monitor.textGrid.Fill('*');
     }
 
     // Update is called once per frame
     private void Update()
     {
-        time += Time.deltaTime;
-        if (time >= delayAmount)
-        {
-            time = 0f;
-            monitor.WriteCharacter(testString[characterIndex]);
-            characterIndex++;
-        }
-        if (characterIndex >= testString.Count()) monitor.uiCursor.Blink(true);
+        //time += Time.deltaTime;
+        //if ((time >= delayAmount) && (characterIndex < testString.Count()))
+        //{
+        //    time = 0f;
+        //    monitor.WriteCharacter(testString[characterIndex]);
+        //    characterIndex++;
+        //}
+        //if (characterIndex >= testString.Count()) monitor.uiCursor.Blink(true);
     }
 }
