@@ -19,7 +19,7 @@ public enum KeyBoardOptions
 /// <summary>
 /// Custom comparer for lists of KeyCodes
 /// </summary>
-class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
+public class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
 {
     /// <summary>
     /// Checks that all occurances are equal in both lists, rather than checking reference locations
@@ -29,7 +29,7 @@ class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
     /// <returns>Bool to return</returns>
     public bool Equals(List<KeyCode> x, List<KeyCode> y)
     {
-        return x.All(y.Contains);
+        return x.All(y.Contains) && y.All(x.Contains);
     }
 
     /// <summary>
@@ -60,9 +60,14 @@ public class Keylistener : MonoBehaviour
 
     public void Awake()
     {
-        customComparer = new KeyCodeComparer();
-        subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
+        initSubscribedKeyEvents();
     }
+
+    public void Start()
+    {
+        initSubscribedKeyEvents();
+    }
+
     /// <summary>
     /// Resets the list of keys down
     /// </summary>
@@ -117,6 +122,14 @@ public class Keylistener : MonoBehaviour
         }
     }
 
+
+    private void initSubscribedKeyEvents()
+    {
+        customComparer = new KeyCodeComparer();
+        subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
+    }
+
+
     /// <summary>
     /// Adds a UnityAction mapped to a list of common keypresses
     /// </summary>
@@ -125,6 +138,16 @@ public class Keylistener : MonoBehaviour
     /// <returns>bool wether the adding is succesfull. A false indicates that the keys are already in use.</returns>
     public bool addKey(List<KeyCode> key, UnityAction<List<KeyCode>> callback)
     {
+        if (key.Count() == 0 || callback == null)
+        {
+            return false;
+        }
+
+        if(subscribedKeyEvents == null)
+        {
+            initSubscribedKeyEvents();
+        }
+
         if (!subscribedKeyEvents.ContainsKey(key))
         {
             subscribedKeyEvents.Add(key, new UnityEvent<List<KeyCode>>());
@@ -133,6 +156,7 @@ public class Keylistener : MonoBehaviour
         subscribedKeyEvents[key].AddListener(callback);
         return true;
     }
+
 
     /// <summary>
     /// Adds a number key combinations that are grouped together.
