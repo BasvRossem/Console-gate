@@ -64,6 +64,7 @@ namespace Visuals
             min_bounds = new Vector2Int(min_x, min_y);
             max_bounds = new Vector2Int(max_x, max_y);
             CheckBounds();
+            UpdateXY();
         }
 
         /// <summary>
@@ -391,6 +392,7 @@ namespace Visuals
         public void WriteCharacter(char letter)
         {
             NullCoalesceSelectedCursor();
+            if (selectedCursor.x >= textGrid.GetSize().y || selectedCursor.y >= textGrid.GetSize().x) return;
             textGrid[selectedCursor.y, selectedCursor.x] = letter;
             selectedCursor.Move(selectedCursor.Right);
         }
@@ -432,6 +434,7 @@ namespace Visuals
         /// <param name="newText">Text to write to the monitor.</param>
         public void SetMonitorText(string newText)
         {
+            selectedCursor.ResetPosition();
             ResetMonitor();
             AddMonitorTextLine(newText);
         }
@@ -445,14 +448,16 @@ namespace Visuals
         /// <param name="newTextLine">Text to place.</param>
         public void AddMonitorTextLine(string newTextLine)
         {
-            foreach (char character in newTextLine)
-            {
-                WriteCharacter(character);
-            }
-
             NullCoalesceSelectedCursor();
-            selectedCursor.Move(selectedCursor.Down);
-            selectedCursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+            foreach (var line in newTextLine.Split('\n'))
+            {
+                foreach (char character in line)
+                {
+                    WriteCharacter(character);
+                }
+                selectedCursor.Move(selectedCursor.Down);
+                selectedCursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+            }
         }
 
         /// <summary>
