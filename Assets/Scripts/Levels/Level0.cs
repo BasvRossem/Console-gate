@@ -17,7 +17,7 @@ public class Level0 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        text.Add("Welcome to console gate!\nThis game is created by Jens Bouman and bas van Rossem.");
+        text.Add("Welcome to console gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
         text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in findinig him.");
         text.Add("The game is on.");
 
