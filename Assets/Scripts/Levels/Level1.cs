@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using Visuals;
 
@@ -14,12 +16,20 @@ public class Level1 : MonoBehaviour
 
     private int currentView = 0;
 
+    private string command = "";
+
     // Start is called before the first frame update
     private void Start()
     {
         keylistener.addKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.addKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, GotoNextScene);
+
+        keylistener.addOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
+        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
+        keylistener.addKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
+        keylistener.addKey(new List<KeyCode> { KeyCode.LeftShift, KeyCode.Alpha2 }, UpdateTerminal);
+        keylistener.addKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
+        keylistener.addKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
 
         screenCursor = monitor.AddCursor("ScreenCursor");
         terminalCursor = monitor.AddCursor("TermminalCursor");
@@ -49,7 +59,7 @@ public class Level1 : MonoBehaviour
         monitor.ClearArea(22 + monitor.verticalViewOffset, 0, 23 + monitor.verticalViewOffset, 79);
         monitor.selectedCursor.SetBounds(min_y: 23 + monitor.verticalViewOffset, max_y: 23 + monitor.verticalViewOffset);
         monitor.selectedCursor.ResetPosition();
-        monitor.WriteLine("terminal cursor");
+        monitor.WriteLine(command);
     }
 
     private void LoadChatlog()
@@ -193,7 +203,40 @@ Integer egestas quam et diam bibendum lobortis.");
         else if (args[0] == KeyCode.UpArrow) monitor.MoveView(-1);
     }
 
-    public void GotoNextScene(List<KeyCode> args)
+    public void UpdateTerminal(List<KeyCode> args)
+    {
+        if (args.Count <= 0) return;
+        if (args[0] == KeyCode.LeftShift && args[1] == KeyCode.Alpha2)
+        {
+            command += "@";
+        }
+
+        foreach (KeyCode k in args)
+        {
+            command += (char)k;
+        }
+    }
+
+    public void RemoveLastTerminalCharacter(List<KeyCode> args)
+    {
+        if (args.Count <= 0) return;
+        if (command.Length <= 0) return;
+
+        print(command.Length);
+        StringBuilder sb = new StringBuilder(command);
+        sb.Remove(command.Length - 1, 1);
+        command = sb.ToString();
+    }
+
+    public void SendCommand(List<KeyCode> args)
+    {
+        if (args.Count <= 0) return;
+
+        if (command == "ssh user@52.232.56.79") GotoNextScene();
+        command = "";
+    }
+
+    public void GotoNextScene()
     {
         currentView = 1;
     }
