@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -27,9 +28,9 @@ public class Level1 : MonoBehaviour
         keylistener.addOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.LeftShift, KeyCode.Alpha2 }, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
         keylistener.addKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
+        keylistener.addKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
 
         screenCursor = monitor.AddCursor("ScreenCursor");
         terminalCursor = monitor.AddCursor("TermminalCursor");
@@ -217,12 +218,20 @@ Integer egestas quam et diam bibendum lobortis.");
         }
     }
 
+    public void UpdateTerminal(Tuple<List<KeyCode>, KeyCode> args)
+    {
+        if (args == null) return;
+        if (args.Item1[0] == KeyCode.LeftShift && args.Item2 == KeyCode.Alpha2)
+        {
+            command += "@";
+        }
+    }
+
     public void RemoveLastTerminalCharacter(List<KeyCode> args)
     {
         if (args.Count <= 0) return;
         if (command.Length <= 0) return;
 
-        print(command.Length);
         StringBuilder sb = new StringBuilder(command);
         sb.Remove(command.Length - 1, 1);
         command = sb.ToString();
