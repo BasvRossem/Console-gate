@@ -129,10 +129,10 @@ namespace Visuals
         private void CheckBounds()
         {
             if (position.x < min_bounds.x) position.x = min_bounds.x;
-            if (position.x > max_bounds.x) position.x = max_bounds.x;
+            if (position.x >= max_bounds.x) position.x = max_bounds.x;
 
             if (position.y < min_bounds.y) position.y = min_bounds.y;
-            if (position.y > max_bounds.y) position.y = max_bounds.y;
+            if (position.y >= max_bounds.y) position.y = max_bounds.y;
         }
 
         /// <summary>
@@ -446,17 +446,21 @@ namespace Visuals
         /// This moves the cursor one line down automatically when the line is written.
         /// </note>
         /// <param name="newTextLine">Text to place.</param>
-        public void AddMonitorTextLine(string newTextLine)
+        public void AddMonitorTextLine(string newTextLine, bool automaticReturn = true)
         {
             NullCoalesceSelectedCursor();
-            foreach (var line in newTextLine.Split('\n'))
+            var lines = newTextLine.Split('\n');
+            for (int i = 0; i < lines.Length; i++)
             {
-                foreach (char character in line)
+                foreach (char character in lines[i])
                 {
                     WriteCharacter(character);
                 }
-                selectedCursor.Move(selectedCursor.Down);
-                selectedCursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+                if (i != lines.Length - 1 || (i == lines.Length - 1 && automaticReturn))
+                {
+                    selectedCursor.Move(selectedCursor.Down);
+                    selectedCursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+                }
             }
         }
 
