@@ -617,7 +617,9 @@ namespace Visuals
         /// </summary>
         private void UpdateUICursorPosition()
         {
-            uiCursor.ResetSize();
+            if (selectedCursor.y < 0 || selectedCursor.x < 0) return;
+            // The - 1 on the x vale is to make sure it stops at the right edge.
+            if (selectedCursor.y >= textMeshCharacterPositions.Count || selectedCursor.x >= textMeshCharacterPositions[0].Count - 1) return;
 
             Vector2 newPosition = textMeshCharacterPositions[selectedCursor.y][selectedCursor.x];
             uiCursor.SetPositionCenter(newPosition);

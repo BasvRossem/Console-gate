@@ -26,6 +26,7 @@ public class Level1 : MonoBehaviour
         keylistener.addKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
 
         keylistener.addOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
+        keylistener.addOption(KeyBoardOptions.Numerical, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
         keylistener.addKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
@@ -36,6 +37,8 @@ public class Level1 : MonoBehaviour
         terminalCursor = monitor.AddCursor("TermminalCursor");
         monitor.SelectCursor(terminalCursor);
         monitor.selectedCursor.SetBounds(min_y: 23, max_y: 23);
+        monitor.uiCursor.linkedCursor = monitor.selectedCursor;
+        monitor.uiCursor.Blink(true);
 
         monitor.SelectCursor(screenCursor);
         monitor.selectedCursor.ResetPosition();
@@ -56,11 +59,11 @@ public class Level1 : MonoBehaviour
         }
 
         monitor.SelectCursor(terminalCursor);
-        monitor.selectedCursor.SetBounds(min_y: 23, max_y: 23);
+
         monitor.ClearArea(22 + monitor.verticalViewOffset, 0, 23 + monitor.verticalViewOffset, 79);
         monitor.selectedCursor.SetBounds(min_y: 23 + monitor.verticalViewOffset, max_y: 23 + monitor.verticalViewOffset);
         monitor.selectedCursor.ResetPosition();
-        monitor.WriteLine(command);
+        monitor.WriteLine(command, false);
     }
 
     private void LoadChatlog()
@@ -241,7 +244,8 @@ Integer egestas quam et diam bibendum lobortis.");
     {
         if (args.Count <= 0) return;
 
-        if (command == "ssh user@52.232.56.79") GotoNextScene();
+        if (command == "ssh user52.232.56.79") LoadNextLevel();
+        if (command == "cat appendix a.txt") GotoNextScene();
         command = "";
     }
 
