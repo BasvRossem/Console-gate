@@ -6,8 +6,8 @@ using Visuals;
 
 public class Level0 : MonoBehaviour
 {
-    [SerializeField] private Monitor monitor;
-    [SerializeField] private Keylistener keylistener;
+    [SerializeField] private Monitor monitor = null;
+    [SerializeField] private Keylistener keylistener = null;
 
     private List<string> text = new List<string>();
     private int textIndex = 0;
@@ -17,16 +17,18 @@ public class Level0 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        text.Add("Welcome to console gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
-        text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in findinig him.");
+        text.Add("Welcome to Console Gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
+        text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
         text.Add("The game is on.");
 
         Debug.Log(keylistener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext));
-        keylistener.addKey(new List<KeyCode> { KeyCode.A }, LoadNext);
 
         nextCursor = monitor.AddCursor("NextCursor");
         monitor.SelectCursor(nextCursor);
         monitor.selectedCursor.SetBounds(0, 23);
+
+        monitor.uiCursor.linkedCursor = monitor.selectedCursor;
+        monitor.uiCursor.Blink(true);
 
         writeText(text[0]);
     }
@@ -42,7 +44,8 @@ public class Level0 : MonoBehaviour
         monitor.SetMonitorText(monitorText);
 
         monitor.SelectCursor(nextCursor);
-        monitor.AddMonitorTextLine("Press [space] to continue...");
+        monitor.selectedCursor.ResetPosition();
+        monitor.AddMonitorTextLine("Press [space] to continue...", false);
     }
 
     public void LoadNext(List<KeyCode> args)
