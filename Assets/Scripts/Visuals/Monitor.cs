@@ -268,7 +268,7 @@ namespace Visuals
 
         private string text;
 
-        private int verticalViewOffset = 0;
+        public int verticalViewOffset = 0;
 
         private void Awake()
         {
@@ -501,8 +501,7 @@ namespace Visuals
             {
                 for (int y = startRow; y <= endRow; y++)
                 {
-                    selectedCursor.SetPosition(x, y);
-                    WriteCharacter(' ');
+                    textGrid[y, x] = ' ';
                 }
             }
         }

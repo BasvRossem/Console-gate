@@ -12,18 +12,22 @@ public class Level1 : MonoBehaviour
     private string screenCursor;
     private string terminalCursor;
 
+    private int currentView = 0;
+
     // Start is called before the first frame update
     private void Start()
     {
         keylistener.addKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.addKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, LoadFile);
+        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, GotoNextScene);
 
         screenCursor = monitor.AddCursor("ScreenCursor");
+        terminalCursor = monitor.AddCursor("TermminalCursor");
+        monitor.SelectCursor(terminalCursor);
+        monitor.selectedCursor.SetBounds(min_y: 23, max_y: 23);
+
         monitor.SelectCursor(screenCursor);
         monitor.selectedCursor.ResetPosition();
-        Debug.Log(monitor.selectedCursor.GetPosition());
-        terminalCursor = monitor.AddCursor("TermminalCursor");
 
         LoadChatlog();
     }
@@ -31,6 +35,21 @@ public class Level1 : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (currentView == 0)
+        {
+            LoadChatlog();
+        }
+        if (currentView == 1)
+        {
+            LoadFile();
+        }
+
+        monitor.SelectCursor(terminalCursor);
+        monitor.selectedCursor.SetBounds(min_y: 23, max_y: 23);
+        monitor.ClearArea(22 + monitor.verticalViewOffset, 0, 23 + monitor.verticalViewOffset, 79);
+        monitor.selectedCursor.SetBounds(min_y: 23 + monitor.verticalViewOffset, max_y: 23 + monitor.verticalViewOffset);
+        monitor.selectedCursor.ResetPosition();
+        monitor.WriteLine("terminal cursor");
     }
 
     private void LoadChatlog()
@@ -70,7 +89,7 @@ Chatlog 25 - 10 - 2020
 Succesfully downloaded ""Appendix A.txt""");
     }
 
-    public void LoadFile(List<KeyCode> args)
+    public void LoadFile()
     {
         monitor.SelectCursor(screenCursor);
         monitor.selectedCursor.ResetPosition();
@@ -172,5 +191,10 @@ Integer egestas quam et diam bibendum lobortis.");
 
         if (args[0] == KeyCode.DownArrow) monitor.MoveView(1);
         else if (args[0] == KeyCode.UpArrow) monitor.MoveView(-1);
+    }
+
+    public void GotoNextScene(List<KeyCode> args)
+    {
+        currentView = 1;
     }
 }
