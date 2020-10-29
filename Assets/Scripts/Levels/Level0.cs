@@ -21,8 +21,6 @@ public class Level0 : MonoBehaviour
         text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
         text.Add("The game is on.");
 
-        Debug.Log(keylistener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext));
-
         nextCursor = monitor.AddCursor("NextCursor");
         monitor.SelectCursor(nextCursor);
         monitor.selectedCursor.SetBounds(0, 23);
