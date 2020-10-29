@@ -3,7 +3,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Visuals"
+        "Visuals",
+        "Input"
     ],
     "includePlatforms": [
         "Editor"

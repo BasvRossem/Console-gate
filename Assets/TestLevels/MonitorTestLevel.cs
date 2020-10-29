@@ -52,13 +52,13 @@ public class MonitorTestLevel : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //time += Time.deltaTime;
-        //if ((time >= delayAmount) && (characterIndex < testString.Count()))
-        //{
-        //    time = 0f;
-        //    monitor.WriteCharacter(testString[characterIndex]);
-        //    characterIndex++;
-        //}
-        //if (characterIndex >= testString.Count()) monitor.uiCursor.Blink(true);
+        time += Time.deltaTime;
+        if ((time >= delayAmount) && (characterIndex < testString.Count()))
+        {
+            time = 0f;
+            monitor.WriteCharacter(testString[characterIndex]);
+            characterIndex++;
+        }
+        if (characterIndex >= testString.Count()) monitor.uiCursor.Blink(true);
     }
 }

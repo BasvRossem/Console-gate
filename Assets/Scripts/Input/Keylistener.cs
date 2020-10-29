@@ -120,13 +120,17 @@ public class Keylistener : MonoBehaviour
         }
     }
 
-
     private void initSubscribedKeyEvents()
     {
-        customComparer = new KeyCodeComparer();
-        subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
+        if (customComparer == null)
+        {
+            customComparer = new KeyCodeComparer();
+        }
+        if (subscribedKeyEvents == null)
+        {
+            subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
+        }
     }
-
 
     /// <summary>
     /// Adds a UnityAction mapped to a list of common keypresses
@@ -141,7 +145,7 @@ public class Keylistener : MonoBehaviour
             return false;
         }
 
-        if(subscribedKeyEvents == null)
+        if (subscribedKeyEvents == null)
         {
             initSubscribedKeyEvents();
         }
@@ -154,7 +158,6 @@ public class Keylistener : MonoBehaviour
         subscribedKeyEvents[key].AddListener(callback);
         return true;
     }
-
 
     /// <summary>
     /// Adds a number key combinations that are grouped together.
