@@ -141,9 +141,12 @@ public class Keylistener : MonoBehaviour
                     _keysUp.Add(kc);
                 }
             }
-            foreach(KeyCode _keyUp in _keysUp)
+            for(int i = 0; i < _keysUp.Count; i++)
             {
-                executeKeyCombinationCallback(_keysDown, _keyUp);
+                if(executeKeyCombinationCallback(_keysDown, _keysUp[i]))
+                {
+                    _keysUp.RemoveAt(i);
+                }
             }
             // Invoke callbacks with all keyups
             executeKeyCallback(_keysUp);
@@ -325,23 +328,27 @@ public class Keylistener : MonoBehaviour
     /// Invokes the events and all delegates for the given list of keycodes
     /// </summary>
     /// <param name="key">List of keycodes</param>
-    public void executeKeyCallback(List<KeyCode> key)
+    public bool executeKeyCallback(List<KeyCode> key)
     {
         if (subscribedKeyEvents.ContainsKey(key))
         {
             subscribedKeyEvents[key].Invoke(key);
+            return true;
         }
+        return false;
     }
 
-    public void executeKeyCombinationCallback(List<KeyCode> pressed, KeyCode release)
+    public bool executeKeyCombinationCallback(List<KeyCode> pressed, KeyCode release)
     {
-        if (pressed == null) return;
+        if (pressed == null) return false;
 
         Tuple<List<KeyCode>, KeyCode> key = new Tuple<List<KeyCode>, KeyCode>(pressed, release);
         if (subscribedKeyCombinationEvents.ContainsKey(key))
         {
             subscribedKeyCombinationEvents[key].Invoke(key);
+            return true;
         }
+        return false;
 
     }
 }
