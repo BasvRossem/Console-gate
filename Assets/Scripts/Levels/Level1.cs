@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -15,9 +17,9 @@ public class Level1 : MonoBehaviour
     private string screenCursor;
     private string terminalCursor;
 
-    private int currentView = 0;
-
     private string command = "";
+    private delegate void monitorWriter();
+    private monitorWriter myMonitorWriter;
 
     // Start is called before the first frame update
     private void Start()
@@ -43,20 +45,13 @@ public class Level1 : MonoBehaviour
         monitor.SelectCursor(screenCursor);
         monitor.selectedCursor.ResetPosition();
 
-        LoadChatlog();
+        myMonitorWriter = LoadChatlog;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (currentView == 0)
-        {
-            LoadChatlog();
-        }
-        if (currentView == 1)
-        {
-            LoadFile();
-        }
+        myMonitorWriter();
 
         monitor.SelectCursor(terminalCursor);
 
@@ -100,7 +95,7 @@ Chatlog 24 - 10 - 2020
 Chatlog 25 - 10 - 2020
 ------------------ -
 25 - 10 - 2020 20:48, SYSTEM:
-Succesfully downloaded ""Appendix A.txt""");
+Succesfully downloaded ""appendix.txt""");
     }
 
     public void LoadFile()
@@ -108,9 +103,9 @@ Succesfully downloaded ""Appendix A.txt""");
         monitor.SelectCursor(screenCursor);
         monitor.selectedCursor.ResetPosition();
         monitor.ResetMonitor();
-        monitor.WriteLine(@"Filename: Appendix A
+        monitor.WriteLine(@"Filename: appendix
 File extension: .txt
-Path to file: / Downloads / Appendix A
+Path to file: / Downloads / apendix
 
 Date created: 20 - 03 - 2014
 Size: 12381 bytes
@@ -243,14 +238,89 @@ Integer egestas quam et diam bibendum lobortis.");
     public void SendCommand(List<KeyCode> args)
     {
         if (args.Count <= 0) return;
+        var splitCommand = command.Split(' ');
 
-        if (command == "ssh user52.232.56.79") LoadNextLevel();
-        if (command == "cat appendix a.txt") GotoNextScene();
+        switch (splitCommand[0])
+        {
+            case "ssh":
+                sshCall(command);
+                break;
+
+            case "cat":
+                catCall(command);
+                break;
+
+            case "dir":
+                dirCall(command);
+                break;
+
+            default:
+                break;
+        }
         command = "";
     }
 
-    public void GotoNextScene()
+    private void sshCall(string command)
     {
-        currentView = 1;
+        if (command == "ssh user@52.232.56.79")
+        {
+            myMonitorWriter = LoadNextLevel;
+        }
+        else
+        {
+            myMonitorWriter = sshWriter;
+        }
+    }
+
+    private void sshWriter()
+    {
+        monitor.SelectCursor(screenCursor);
+        monitor.selectedCursor.ResetPosition();
+        monitor.ResetMonitor();
+        monitor.WriteLine("That IP-address can't be connected to");
+    }
+
+    private void catCall(string command)
+    {
+        if (command == null) return;
+        if (command == "cat appendix.txt")
+        {
+            myMonitorWriter = LoadFile;
+        }
+        else if(command == "cat chatlog.txt")
+        {
+            myMonitorWriter = LoadChatlog;
+        }
+        else
+        {
+            myMonitorWriter = catWriter;
+        }
+    }
+
+    private void catWriter()
+    {
+        monitor.SelectCursor(screenCursor);
+        monitor.selectedCursor.ResetPosition();
+        monitor.ResetMonitor();
+        monitor.WriteLine("Can't find that file, try searching recently downloaded files.\n(cat chatlog.txt might contain useful info)");
+    }
+
+    private void dirCall(string command)
+    {
+        Debug.Log("dirCall is called");
+        if (command == null) return;
+        if (command == "dir")
+        {
+            Debug.Log("dirWriter is being set");
+            myMonitorWriter = dirWriter;
+        }
+    }
+    private void dirWriter()
+    {
+        monitor.SelectCursor(screenCursor);
+        monitor.selectedCursor.ResetPosition();
+        monitor.ResetMonitor();
+        monitor.WriteLine("/:\n\tchatlog.txt\n\tappendix.txt");
+
     }
 }
