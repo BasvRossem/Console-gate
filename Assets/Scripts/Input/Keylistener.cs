@@ -139,14 +139,11 @@ public class Keylistener : MonoBehaviour
                     _keysDown.RemoveAt(i);
                     i--;
                     _keysUp.Add(kc);
-
-                    // Invoke callbacks on key combination
                 }
             }
             foreach(KeyCode _keyUp in _keysUp)
             {
                 executeKeyCombinationCallback(_keysDown, _keyUp);
-
             }
             // Invoke callbacks with all keyups
             executeKeyCallback(_keysUp);
