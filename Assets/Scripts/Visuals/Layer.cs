@@ -35,7 +35,7 @@ namespace Visuals
         /// <param name="letter"></param>
         public void WriteCharacter(char letter)
         {
-            if (cursor.x >= textGrid.GetSize().y || cursor.y >= textGrid.GetSize().x) return;
+            if (Tools.CheckWarning(cursor.x >= textGrid.GetSize().y || cursor.y >= textGrid.GetSize().x, "Cursor is out of bounds. Ignoring character.")) return;
 
             textGrid[cursor.y, cursor.x] = letter;
             cursor.Move(Cursor.Right);
@@ -85,10 +85,10 @@ namespace Visuals
         /// Remove a line from the text.
         /// </summary>
         /// <param name="index">The index of the line to remove.</param>
-        public void RemoveLayerTextLineAtPosition(int index)
+        public void ClearLine(int index)
         {
-            if (Tools.CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
-            if (Tools.CheckError(index > _size.rows - 1, string.Format("Index {0} is higher than lines on the Layer.", index))) return;
+            if (Tools.CheckError(index < 0, $"Index [{index}] cannot be negative.")) return;
+            if (Tools.CheckError(index > _size.rows - 1, $"Index [{index}] is higher than lines on the layer.")) return;
 
             textGrid.ClearRow(index);
             Change();
@@ -97,18 +97,17 @@ namespace Visuals
         /// <summary>
         /// Remove characters in a ceratin area.
         /// </summary>
-        /// <param name="startRow">Start row.</param>
-        /// <param name="startColumn">Start column.</param>
-        /// <param name="endRow">End row.</param>
-        /// <param name="endColumn">End column.</param>
-        public void ClearArea(int startRow, int startColumn, int endRow, int endColumn)
+        /// <param name="startRowIndex">Start row.</param>
+        /// <param name="startColumnIndex">Start column.</param>
+        /// <param name="endRowIndex">End row.</param>
+        /// <param name="endColumnIndex">End column.</param>
+        public void ClearArea(int startRowIndex, int startColumnIndex, int endRowIndex, int endColumnIndex)
         {
-            for (int x = startColumn; x <= endColumn; x++)
+            for (int x = startColumnIndex; x <= endColumnIndex; x++)
             {
-                for (int y = startRow; y <= endRow; y++)
+                for (int y = startRowIndex; y <= endRowIndex; y++)
                 {
-                    cursor.SetPosition(x, y);
-                    WriteCharacter(' ');
+                    textGrid[y, x] = ' ';
                 }
             }
             Change();
