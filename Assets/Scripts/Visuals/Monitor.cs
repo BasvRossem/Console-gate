@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -7,34 +8,30 @@ namespace Visuals
 {
     public class Monitor : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _textMesh;
+        [SerializeField] private TextMeshProUGUI _textMesh = null;
 
         public static readonly GridSize Size = new GridSize(24, 80);
 
         private Layer _mainLayer;
         private List<Layer> _layers;
-        private List<List<Vector2>> _textMeshCharacterPositions;
 
         private TextGrid _textGrid;
         private string _text = "";
 
         public UICursor uiCursor;
+        private List<List<Vector2>> _textMeshCharacterPositions;
 
         private void Awake()
         {
+            if (Tools.CheckError(_textMesh == null, "No TextMeshPro object has been added")) return;
+
             _mainLayer = new Layer(Size);
             _layers = new List<Layer>();
             _textMeshCharacterPositions = new List<List<Vector2>>();
 
             _textGrid = new TextGrid(Size);
 
-            _textMesh = _textMesh ?? new TextMeshProUGUI();
-
             CalibrateTextMesh();
-        }
-
-        private void Start()
-        {
         }
 
         private void Update()
@@ -89,9 +86,17 @@ namespace Visuals
         // Render functions
         private void Render()
         {
+            if (!LayersHaveChanged()) return;
+
             CombineLayers();
             AssembleGridIntoText();
             RenderTextToMesh();
+        }
+
+        private bool LayersHaveChanged()
+        {
+            List<bool> changed = _layers.Select(layer => layer.isChanged).ToList();
+            return changed.Contains(true);
         }
 
         private void CombineLayers()
@@ -108,6 +113,8 @@ namespace Visuals
                         _textGrid[view.monitorPosition.row + row, view.monitorPosition.column + column] = view.textGrid[row, column];
                     }
                 }
+
+                layer.Change(false);
             }
         }
 

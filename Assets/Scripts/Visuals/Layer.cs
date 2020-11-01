@@ -25,7 +25,7 @@ namespace Visuals
             view = new View(_size);
             zIndex = z;
 
-            isChanged = true;
+            Change();
         }
 
         // Writing to the layer
@@ -39,6 +39,7 @@ namespace Visuals
 
             textGrid[cursor.y, cursor.x] = letter;
             cursor.Move(Cursor.Right);
+            Change();
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace Visuals
                 cursor.Move(Cursor.Down);
                 cursor.Move(new Vector2Int(-1 * _size.columns, 0));
             }
+            Change();
         }
 
         /// <summary>
@@ -75,6 +77,7 @@ namespace Visuals
             cursor.ResetPosition();
             textGrid.Reset();
             WriteLine(newText);
+            Change();
         }
 
         // Clearing
@@ -88,6 +91,7 @@ namespace Visuals
             if (Tools.CheckError(index > _size.rows - 1, string.Format("Index {0} is higher than lines on the Layer.", index))) return;
 
             textGrid.ClearRow(index);
+            Change();
         }
 
         /// <summary>
@@ -107,6 +111,7 @@ namespace Visuals
                     WriteCharacter(' ');
                 }
             }
+            Change();
         }
 
         // Drawing shapes to the Layer
@@ -122,6 +127,7 @@ namespace Visuals
             {
                 textGrid[row][column] = '-';
             }
+            Change();
         }
 
         /// <summary>
@@ -136,6 +142,7 @@ namespace Visuals
             {
                 textGrid[row][column] = '|';
             }
+            Change();
         }
 
         /// <summary>
@@ -167,6 +174,8 @@ namespace Visuals
             textGrid[startRowIndex, endColumnIndex] = '*';
             textGrid[endRowIndex, startColumnIndex] = '*';
             textGrid[endRowIndex, endColumnIndex] = '*';
+
+            Change();
         }
 
         // Rendering
@@ -174,6 +183,12 @@ namespace Visuals
         {
             view.SetText(textGrid);
             return view;
+        }
+
+        // Change
+        public void Change(bool changed = true)
+        {
+            isChanged = changed;
         }
     }
 }
