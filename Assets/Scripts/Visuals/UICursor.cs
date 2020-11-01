@@ -24,9 +24,14 @@ namespace Visuals
         public Layer linkedLayer;
 
         public List<List<Vector2>> textMeshCharacterPositions;
+        private Image _image;
+        private RectTransform _rectTransform;
 
         private void Awake()
         {
+            _image = GetComponent<Image>();
+            _rectTransform = GetComponent<RectTransform>();
+            
             textMeshCharacterPositions = new List<List<Vector2>>();
         }
 
@@ -69,7 +74,7 @@ namespace Visuals
         {
             if (!isBlinking) return;
             if (!(Time.time - _lastBlinkUpdate > blinkingSpeed)) return;
-            GetComponent<Image>().enabled = !GetComponent<Image>().enabled;
+            _image.enabled = !_image.enabled;
             _lastBlinkUpdate = Time.time;
         }
 
@@ -89,7 +94,7 @@ namespace Visuals
         /// <param name="newSize">New size of the cursor.</param>
         public void SetSize(Vector2 newSize)
         {
-            GetComponent<RectTransform>().sizeDelta = newSize;
+            _rectTransform.sizeDelta = newSize;
         }
 
         /// <summary>
@@ -115,13 +120,10 @@ namespace Visuals
         /// <param name="newPosition">The new position of the top left.</param>
         public void SetPositionTopLeft(Vector2 newPosition)
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
-            float width = rectTransform.sizeDelta.x;
-            float height = rectTransform.sizeDelta.y;
-            Vector3 centerOffset = new Vector3(width / 2, -height / 2, 0);
+            Vector2 size = _rectTransform.sizeDelta / 2;
+            Vector2 centerOffset = size;
 
-            transform.position = newPosition;
-            transform.position += centerOffset;
+            transform.position = newPosition + centerOffset;
         }
 
         /// <summary>
