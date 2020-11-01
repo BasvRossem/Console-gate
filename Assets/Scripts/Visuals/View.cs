@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Visuals
+﻿namespace Visuals
 {
     public class View
     {
@@ -81,6 +77,7 @@ namespace Visuals
                     textGrid[textRow, textColumn] = character;
                 }
             }
+
             Change();
         }
 
