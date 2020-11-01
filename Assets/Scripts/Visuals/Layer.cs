@@ -5,14 +5,18 @@ using UnityEngine;
 
 namespace Visuals
 {
+    /// <summary>
+    /// Layer that can be edited using a cursor, and a view.
+    /// Has to be created and rendered by the monitor object.
+    /// </summary>
     public class Layer
     {
-        public TextGrid textGrid;
-        public Cursor cursor;
-        public View view;
-        public int zIndex;
+        public readonly TextGrid textGrid;
+        public readonly Cursor cursor;
+        public readonly View view;
+        public readonly int zIndex;
 
-        public bool isChanged;
+        private bool _isChanged;
 
         private GridSize _size;
 
@@ -32,10 +36,13 @@ namespace Visuals
         /// <summary>
         /// Write a single character to the Layer and move the cursor accordingly.
         /// </summary>
-        /// <param name="letter"></param>
+        /// <param name="letter">Letter to write</param>
         public void WriteCharacter(char letter)
         {
-            if (Tools.CheckWarning(cursor.position.column >= textGrid.GetSize().columns || cursor.position.row >= textGrid.GetSize().rows, "Cursor is out of bounds. Ignoring character.")) return;
+            bool rowOutOfBounds = cursor.position.row >= textGrid.GetSize().rows;
+            bool columnOutOfBounds = cursor.position.column >= textGrid.GetSize().columns;
+            bool cursorOutOfBounds = rowOutOfBounds || columnOutOfBounds;
+            if (Tools.CheckWarning(cursorOutOfBounds , "Cursor is out of bounds. Ignoring character.")) return;
 
             textGrid[cursor.position.row, cursor.position.column] = letter;
             cursor.Move(Cursor.Right);
@@ -49,7 +56,7 @@ namespace Visuals
         /// This moves the cursor one line down automatically when the line is written.
         /// </note>
         /// <param name="newTextLine">Text to place.</param>
-        /// <param name="automaticReturn"></param>
+        /// <param name="automaticReturn">Whether to go to the next line after writing.</param>
         public void WriteLine(string newTextLine, bool automaticReturn = true)
         {
             string[] lines = newTextLine.Split('\n');
@@ -96,7 +103,7 @@ namespace Visuals
         }
 
         /// <summary>
-        /// Remove characters in a ceratin area.
+        /// Remove characters in a certain area.
         /// </summary>
         /// <param name="startRowIndex">Start row.</param>
         /// <param name="startColumnIndex">Start column.</param>
@@ -179,6 +186,10 @@ namespace Visuals
         }
 
         // Rendering
+        /// <summary>
+        /// Set the text to the view and return the view.
+        /// </summary>
+        /// <returns>View with rendered text.</returns>
         public View RenderView()
         {
             view.SetText(textGrid);
@@ -186,14 +197,22 @@ namespace Visuals
         }
 
         // Change
+        /// <summary>
+        /// Change the isChanged variable.
+        /// </summary>
+        /// <param name="changed">A boolean value to set the isChanged variable to.</param>
         public void Change(bool changed = true)
         {
-            isChanged = changed;
+            _isChanged = changed;
         }
 
+        /// <summary>
+        /// Returns if the view of anything on this layer has changed.
+        /// </summary>
+        /// <returns>If the view of anything on this layer has changed.</returns>
         public bool HasChanged()
         {
-            return (isChanged || view.HasChanged());
+            return (_isChanged || view.HasChanged());
         }
     }
 }
