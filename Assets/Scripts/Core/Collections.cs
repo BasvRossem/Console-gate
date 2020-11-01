@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+/// <summary>
+/// Used to improve the readability of the code concerning the amount of rows and columns.
+/// </summary>
 public struct GridSize
 {
     public int rows { get; set; }
@@ -20,6 +23,9 @@ public struct GridSize
     }
 }
 
+/// <summary>
+/// Used to improve the readability of the code concerning the position in regards to a row and column.
+/// </summary>
 public struct GridPosition
 {
     public int row { get; set; }
