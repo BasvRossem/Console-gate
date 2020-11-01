@@ -16,7 +16,7 @@ namespace Visuals
 
         public Vector2 characterSize;
 
-        public MonitorCursor linkedCursor;
+        public Layer linkedLayer;
 
         private void Start()
         {
