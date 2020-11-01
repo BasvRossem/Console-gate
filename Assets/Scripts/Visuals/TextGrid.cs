@@ -12,7 +12,7 @@ namespace Visuals
     {
         private GridSize _size;
 
-        private List<char[]> grid;
+        private List<char[]> _grid;
 
         /// <summary>
         /// Initialize a text grid.
@@ -48,7 +48,7 @@ namespace Visuals
         /// <returns>A Vector2int withthe size of the tecxt grid.</returns>
         public Vector2Int GetSize()
         {
-            return new Vector2Int(grid.Count, grid[0].Length);
+            return new Vector2Int(_grid.Count, _grid[0].Length);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Visuals
         /// <param name="index">The index of the row to be cleared.</param>
         public void ClearRow(int index)
         {
-            grid[index] = MakeRow(_size.columns, ' ');
+            _grid[index] = MakeRow(_size.columns, ' ');
         }
 
         /// <summary>
@@ -66,19 +66,19 @@ namespace Visuals
         /// <param name="character">The character to fill the grid with.</param>
         public void Fill(char character)
         {
-            for (int y = 0; y < grid.Count; y++)
+            for (int y = 0; y < _grid.Count; y++)
             {
-                for (int x = 0; x < grid[y].Length; x++)
+                for (int x = 0; x < _grid[y].Length; x++)
                 {
-                    grid[y][x] = character;
+                    _grid[y][x] = character;
                 }
             }
         }
 
         public void Reset()
         {
-            grid = new List<char[]>(_size.rows);
-            for (int row = 0; row < _size.rows; row++) grid.Add(MakeRow(_size.columns, ' '));
+            _grid = new List<char[]>(_size.rows);
+            for (int row = 0; row < _size.rows; row++) _grid.Add(MakeRow(_size.columns, ' '));
         }
 
         // Operators
@@ -90,8 +90,8 @@ namespace Visuals
         /// <returns>A character at the place that is specified.</returns>
         public char this[int index_row, int index_column]
         {
-            get => grid[index_row][index_column];
-            set => grid[index_row][index_column] = value;
+            get => _grid[index_row][index_column];
+            set => _grid[index_row][index_column] = value;
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Visuals
         /// <returns>Returns an aray of all characters in the selected row.</returns>
         public char[] this[int index_row]
         {
-            get => grid[index_row];
-            set => grid[index_row] = value;
+            get => _grid[index_row];
+            set => _grid[index_row] = value;
         }
     }
 }
