@@ -29,7 +29,7 @@ namespace VisualsTests
         [Test]
         public void GetSize()
         {
-            Assert.AreEqual(new Vector2Int(10, 10), _grid.GetSize());
+            Assert.AreEqual(new GridSize(10, 10), _grid.GetSize());
         }
 
         [Test]
@@ -37,10 +37,10 @@ namespace VisualsTests
         {
             _grid.Fill('H');
 
-            Vector2Int size = _grid.GetSize();
+            GridSize size = _grid.GetSize();
 
-            for (var row = 0; row < size.y; row++)
-            for (var column = 0; column < size.x; column++)
+            for (var row = 0; row < size.rows; row++)
+            for (var column = 0; column < size.columns; column++)
                 Assert.AreEqual('H', _grid[row][column]);
         }
 

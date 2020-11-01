@@ -40,9 +40,9 @@ namespace Visuals
         /// Get the size of the text grid.
         /// </summary>
         /// <returns>A Vector2int with the size of the text grid.</returns>
-        public Vector2Int GetSize()
+        public GridSize GetSize()
         {
-            return new Vector2Int(_grid.Count, _grid[0].Length);
+            return _size;
         }
 
         /// <summary>

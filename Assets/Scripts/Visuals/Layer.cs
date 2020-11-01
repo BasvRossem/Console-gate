@@ -35,7 +35,7 @@ namespace Visuals
         /// <param name="letter"></param>
         public void WriteCharacter(char letter)
         {
-            if (Tools.CheckWarning(cursor.x >= textGrid.GetSize().y || cursor.y >= textGrid.GetSize().x, "Cursor is out of bounds. Ignoring character.")) return;
+            if (Tools.CheckWarning(cursor.x >= textGrid.GetSize().columns || cursor.y >= textGrid.GetSize().rows, "Cursor is out of bounds. Ignoring character.")) return;
 
             textGrid[cursor.y, cursor.x] = letter;
             cursor.Move(Cursor.Right);
