@@ -8,63 +8,65 @@ namespace Visuals
     {
         public TextGrid textGrid;
 
-        public Vector2Int size;
-        public Vector2Int monitorPosition;
+        public GridSize size;
+        public GridPosition monitorPosition;
+        public GridPosition startPosition;
 
-        public int startRow;
-        public int startColumn;
-
-        public View(int width, int height, int startX = 0, int startY = 0, int positionX = 0, int positionY = 0)
+        public View(GridSize size, GridPosition startPosition = new GridPosition(), GridPosition monitorPosition = new GridPosition())
         {
-            size = new Vector2Int(width, height);
-            startRow = startX;
-            startColumn = startY;
-            monitorPosition = new Vector2Int(positionX, positionY);
+            this.size = size;
+            this.startPosition = startPosition;
+            this.monitorPosition = monitorPosition;
         }
 
         // Size
         public void SetSize(int rows, int columns)
         {
-            size = new Vector2Int(columns, rows);
+            size = new GridSize(rows, columns);
         }
 
         public void Grow(int up = 0, int down = 0, int left = 0, int right = 0)
         {
-            monitorPosition.y -= up;
-            monitorPosition.x -= left;
+            monitorPosition.row -= up;
+            monitorPosition.column -= left;
 
-            size.y += down + up;
-            size.x += left + right;
+            size.rows += down + up;
+            size.columns += left + right;
         }
 
         // Positioning
-        public void SetPosition(int row, int column)
+        public void SetStartPosition(int row, int column)
         {
-            monitorPosition = new Vector2Int(column, row);
+            startPosition = new GridPosition(row, column);
+        }
+
+        public void SetMonitorPosition(int row, int column)
+        {
+            monitorPosition = new GridPosition(row, column);
         }
 
         public void Move(int up = 0, int down = 0, int left = 0, int right = 0)
         {
-            monitorPosition.y += up + down;
-            monitorPosition.x += left + right;
+            monitorPosition.row += up + down;
+            monitorPosition.column += left + right;
         }
 
         // Rendering
         public void SetText(TextGrid externalTextGrid)
         {
-            textGrid = new TextGrid(size.y, size.x);
+            textGrid = new TextGrid(size);
 
-            int endRow = startRow + size.y - 1;
-            int endColumn = startColumn + size.x - 1;
+            int endRow = startPosition.row + size.rows - 1;
+            int endColumn = startPosition.column + size.columns - 1;
 
-            for (int row = startRow; row <= endRow; row++)
+            for (int row = startPosition.row; row <= endRow; row++)
             {
-                for (int column = startColumn; column <= endColumn; column++)
+                for (int column = startPosition.column; column <= endColumn; column++)
                 {
                     var character = externalTextGrid[row, column];
 
-                    var textRow = row - startRow;
-                    var textColumn = column - startColumn;
+                    var textRow = row - startPosition.row;
+                    var textColumn = column - startPosition.column;
 
                     textGrid[textRow, textColumn] = character;
                 }

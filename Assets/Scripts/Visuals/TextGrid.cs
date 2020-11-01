@@ -10,8 +10,7 @@ namespace Visuals
     /// </summary>
     public class TextGrid
     {
-        private int columnAmount;
-        private int rowAmount;
+        private GridSize _size;
 
         private List<char[]> grid;
 
@@ -20,10 +19,9 @@ namespace Visuals
         /// </summary>
         /// <param name="rowAmount">Amount of rows the text grid should have.</param>
         /// <param name="columnAmount">Amount of columns the text grid should have.</param>
-        public TextGrid(int rowAmount, int columnAmount)
+        public TextGrid(GridSize size)
         {
-            this.rowAmount = rowAmount;
-            this.columnAmount = columnAmount;
+            _size = size;
 
             Reset();
         }
@@ -59,7 +57,7 @@ namespace Visuals
         /// <param name="index">The index of the row to be cleared.</param>
         public void ClearRow(int index)
         {
-            grid[index] = MakeRow(columnAmount, ' ');
+            grid[index] = MakeRow(_size.columns, ' ');
         }
 
         /// <summary>
@@ -79,8 +77,8 @@ namespace Visuals
 
         public void Reset()
         {
-            grid = new List<char[]>(rowAmount);
-            for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+            grid = new List<char[]>(_size.rows);
+            for (int row = 0; row < _size.rows; row++) grid.Add(MakeRow(_size.columns, ' '));
         }
 
         // Operators

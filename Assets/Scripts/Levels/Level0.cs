@@ -12,13 +12,15 @@ public class Level0 : MonoBehaviour
     private readonly List<string> _text = new List<string>();
     private int _textIndex = 0;
 
-    private string _nextCursor;
     private Layer _textLayer;
     private Layer _continueLayer;
 
     // Start is called before the first frame update
     private void Start()
     {
+        _monitor = _monitor ?? new Monitor();
+        _keyListener = _keyListener ?? new Keylistener();
+
         _text.Add("Welcome to Console Gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
         _text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
         _text.Add("The game is on.");
@@ -26,11 +28,11 @@ public class Level0 : MonoBehaviour
         Debug.Log(_keyListener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext));
 
         _textLayer = _monitor.NewLayer();
-        _textLayer.view.SetSize(22, Monitor.ColumnAmount);
+        _textLayer.view.SetSize(22, Monitor.Size.columns);
 
         _continueLayer = _monitor.NewLayer();
-        _continueLayer.view.SetSize(1, Monitor.ColumnAmount);
-        _continueLayer.view.SetPosition(23, 0);
+        _continueLayer.view.SetSize(1, Monitor.Size.columns);
+        _continueLayer.view.SetMonitorPosition(23, 0);
 
         _monitor.uiCursor.linkedLayer = _continueLayer;
         _monitor.uiCursor.Blink(true);

@@ -9,28 +9,28 @@ namespace Visuals
     {
         [SerializeField] private TextMeshProUGUI _textMesh;
 
-        public static int RowAmount = 24;
-        public static int ColumnAmount = 80;
+        public static readonly GridSize Size = new GridSize(24, 80);
 
         private Layer _mainLayer;
         private List<Layer> _layers;
         private List<List<Vector2>> _textMeshCharacterPositions;
 
         private TextGrid _textGrid;
-
         private string _text = "";
 
         public UICursor uiCursor;
 
         private void Awake()
         {
-            _mainLayer = new Layer(RowAmount, ColumnAmount);
+            _mainLayer = new Layer(Size);
             _layers = new List<Layer>();
             _textMeshCharacterPositions = new List<List<Vector2>>();
 
-            _textGrid = new TextGrid(RowAmount, ColumnAmount);
+            _textGrid = new TextGrid(Size);
 
             _textMesh = _textMesh ?? new TextMeshProUGUI();
+
+            CalibrateTextMesh();
         }
 
         private void Start()
@@ -76,7 +76,7 @@ namespace Visuals
         // Layer functions
         public Layer NewLayer()
         {
-            Layer newLayer = new Layer(RowAmount, ColumnAmount);
+            Layer newLayer = new Layer(Size);
             _layers.Add(newLayer);
             return newLayer;
         }
@@ -101,11 +101,11 @@ namespace Visuals
             {
                 View view = layer.RenderView();
 
-                for (int row = 0; row < view.size.y; row++)
+                for (int row = 0; row < view.size.rows; row++)
                 {
-                    for (int column = 0; column < view.size.x; column++)
+                    for (int column = 0; column < view.size.columns; column++)
                     {
-                        _textGrid[view.monitorPosition.y + row, view.monitorPosition.x + column] = view.textGrid[row, column];
+                        _textGrid[view.monitorPosition.row + row, view.monitorPosition.column + column] = view.textGrid[row, column];
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace Visuals
         {
             _text = "";
 
-            for (int y = 0; y < RowAmount; y++)
+            for (int y = 0; y < Size.rows; y++)
             {
                 _text += new string(_textGrid[y]);
                 _text += "\n";
@@ -139,7 +139,7 @@ namespace Visuals
             Render();
             _textMesh.ForceMeshUpdate();
 
-            if (Tools.CheckError((row >= _textMesh.textInfo.lineCount), string.Format("Cannot acces row with index {0}, there are {1} lines.", row, _textMesh.textInfo.lineCount))) return;
+            if (Tools.CheckError((row >= _textMesh.textInfo.lineCount), $"Cannot access row with index {row}, there are {_textMesh.textInfo.lineCount} lines.")) return;
 
             // Retrieve character data
             TMP_LineInfo lineInfo = _textMesh.textInfo.lineInfo[row];
@@ -148,7 +148,7 @@ namespace Visuals
 
             Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + _textMesh.transform.position;
             Vector2 newPositionOffset = new Vector2(-1, -1);
-            Vector2 newSize = new Vector2(uiCursor.characterSize.x * ColumnAmount, uiCursor.characterSize.y);
+            Vector2 newSize = new Vector2(uiCursor.characterSize.x * Size.columns, uiCursor.characterSize.y);
 
             uiCursor.SetSize(newSize);
             uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);

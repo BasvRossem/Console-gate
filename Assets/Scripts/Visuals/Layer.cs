@@ -14,17 +14,15 @@ namespace Visuals
 
         public bool isChanged;
 
-        private int RowAmount { get; }
-        private int ColumnAmount { get; }
+        private GridSize _size;
 
-        public Layer(int rows, int columns, int z = 0)
+        public Layer(GridSize size, int z = 0)
         {
-            RowAmount = rows;
-            ColumnAmount = columns;
+            _size = size;
 
-            textGrid = new TextGrid(rows, columns);
+            textGrid = new TextGrid(_size);
             cursor = new Cursor();
-            view = new View(ColumnAmount, RowAmount);
+            view = new View(_size);
             zIndex = z;
 
             isChanged = true;
@@ -64,7 +62,7 @@ namespace Visuals
                 if (i == lines.Length - 1 && (i != lines.Length - 1 || !automaticReturn)) continue;
 
                 cursor.Move(Cursor.Down);
-                cursor.Move(new Vector2Int(-1 * ColumnAmount, 0));
+                cursor.Move(new Vector2Int(-1 * _size.columns, 0));
             }
         }
 
@@ -87,7 +85,7 @@ namespace Visuals
         public void RemoveLayerTextLineAtPosition(int index)
         {
             if (Tools.CheckError(index < 0, string.Format("Index {0} cannot be negative.", index))) return;
-            if (Tools.CheckError(index > RowAmount - 1, string.Format("Index {0} is higher than lines on the Layer.", index))) return;
+            if (Tools.CheckError(index > _size.rows - 1, string.Format("Index {0} is higher than lines on the Layer.", index))) return;
 
             textGrid.ClearRow(index);
         }
