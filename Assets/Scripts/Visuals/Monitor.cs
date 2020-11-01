@@ -111,8 +111,8 @@ namespace Visuals
                 {
                     for (var column = 0; column < view.size.columns; column++)
                     {
-                        int monitorPositionRow = view.monitorPosition.row + row;
-                        int monitorPositionColumn = view.monitorPosition.column + column;
+                        int monitorPositionRow = view.externalPosition.row + row;
+                        int monitorPositionColumn = view.externalPosition.column + column;
 
                         _textGrid[monitorPositionRow, monitorPositionColumn] = view.textGrid[row, column];
                     }
