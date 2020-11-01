@@ -35,4 +35,9 @@ public struct GridPosition
     {
         return $"{row}, {column}";
     }
+
+    public static GridPosition operator +(GridPosition left, GridPosition right)
+    {
+        return new GridPosition(left.row + right.row, left.column + right.column);
+    }
 }

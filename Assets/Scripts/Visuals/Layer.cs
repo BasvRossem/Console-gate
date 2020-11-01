@@ -35,9 +35,9 @@ namespace Visuals
         /// <param name="letter"></param>
         public void WriteCharacter(char letter)
         {
-            if (Tools.CheckWarning(cursor.x >= textGrid.GetSize().columns || cursor.y >= textGrid.GetSize().rows, "Cursor is out of bounds. Ignoring character.")) return;
+            if (Tools.CheckWarning(cursor.position.column >= textGrid.GetSize().columns || cursor.position.row >= textGrid.GetSize().rows, "Cursor is out of bounds. Ignoring character.")) return;
 
-            textGrid[cursor.y, cursor.x] = letter;
+            textGrid[cursor.position.row, cursor.position.column] = letter;
             cursor.Move(Cursor.Right);
             Change();
         }
@@ -63,7 +63,7 @@ namespace Visuals
                 if (i == lines.Length - 1 && (i != lines.Length - 1 || !automaticReturn)) continue;
 
                 cursor.Move(Cursor.Down);
-                cursor.Move(new Vector2Int(-1 * _size.columns, 0));
+                cursor.Move(new GridPosition(0, -1 * _size.columns));
             }
             Change();
         }
@@ -72,6 +72,7 @@ namespace Visuals
         /// Clears the screen and sets the Layer text.
         /// </summary>
         /// <param name="newText">Text to write to the Layer.</param>
+        /// <param name="automaticReturn">Whether to go to the next line after writing. Default of true.</param>
         public void WriteText(string newText, bool automaticReturn = true)
         {
             cursor.ResetPosition();

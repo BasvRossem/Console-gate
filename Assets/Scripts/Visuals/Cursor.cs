@@ -9,17 +9,16 @@ namespace Visuals
     /// </summary>
     public class Cursor
     {
-        public static readonly Vector2Int Left = new Vector2Int(-1, 0);
-        public static readonly Vector2Int Right = new Vector2Int(1, 0);
-        public static readonly Vector2Int Up = new Vector2Int(0, -1);
-        public static readonly Vector2Int Down = new Vector2Int(0, 1);
+        public static readonly GridPosition Up = new GridPosition(-1, 0);
+        public static readonly GridPosition Down = new GridPosition(1, 0);
+        public static readonly GridPosition Left = new GridPosition(0, -1);
+        public static readonly GridPosition Right = new GridPosition(0, 1);
 
-        private Vector2Int _minBounds;
-        private Vector2Int _maxBounds;
-        private Vector2Int _position;
-        public Vector2Int offset;
-        public int x;
-        public int y;
+        private GridPosition _minBounds;
+        private GridPosition _maxBounds;
+        
+        public GridPosition position;
+        public GridPosition offset;
 
         /// <summary>
         /// Initialize a cursor at he specified location.
@@ -27,12 +26,10 @@ namespace Visuals
         /// </summary>
         /// <param name="x">The x coordinate in comparison to the text grid. Default of 0.</param>
         /// <param name="y">The y coordinate in comparison to the text grid. Default of 0.</param>
-        /// <param name="cursorName">The name of the cursor. Default of "Default".</param>
-        public Cursor(int x = 0, int y = 0)
+        public Cursor(int row = 0, int column = 0)
         {
-            SetPosition(x, y);
-            SetBounds();
-            UpdateXY();
+            SetPosition(new GridPosition(row, column));
+            SetBounds(new GridPosition(0, 0), new GridPosition(int.MaxValue, int.MaxValue));
         }
 
         /// <summary>
@@ -42,44 +39,40 @@ namespace Visuals
         /// <param name="maxX">Maximal x value.</param>
         /// <param name="minY">Minimal y value.</param>
         /// <param name="maxY">Maximal y value.</param>
-        public void SetBounds(int minX = 0, int minY = 0, int maxX = int.MaxValue, int maxY = int.MaxValue)
+        public void SetBounds(GridPosition minPosition, GridPosition maxPosition)
         {
-            _minBounds = new Vector2Int(minX, minY);
-            _maxBounds = new Vector2Int(maxX, maxY);
+            _minBounds = minPosition;
+            _maxBounds = maxPosition;
             CheckBounds();
-            UpdateXY();
         }
 
         /// <summary>
         /// Return a list of min and max bounds.
         /// </summary>
         /// <returns>A list of min and max bounds.</returns>
-        public List<Vector2Int> GetBounds()
+        public List<GridPosition> GetBounds()
         {
-            return new List<Vector2Int>() { _minBounds, _maxBounds };
+            return new List<GridPosition>() { _minBounds, _maxBounds };
         }
 
         // Positioning
         /// <summary>
         /// Set a new monitorPosition of the cursor within bounds.
         /// </summary>
-        /// <param name="newX">New x monitorPosition. Default of 0.</param>
-        /// <param name="newY">New y monitorPosition. Default of 0.</param>
-        public void SetPosition(int newX = 0, int newY = 0)
+        /// <param name="newPosition">New position on the layer.</param>
+        public void SetPosition(GridPosition newPosition)
         {
-            _position = new Vector2Int(newX, newY);
+            position = newPosition;
             CheckBounds();
-
-            UpdateXY();
         }
 
         /// <summary>
         /// Gets the monitorPosition.
         /// </summary>
         /// <returns>The monitorPosition.</returns>
-        public Vector2Int GetPosition()
+        public GridPosition GetPosition()
         {
-            return _position;
+            return position;
         }
 
         /// <summary>
@@ -90,12 +83,11 @@ namespace Visuals
         /// These directions are specified with the cursor.
         /// These are up, down, left, and right.
         /// </remarks>
-        public void Move(Vector2Int direction)
+        public void Move(GridPosition direction)
         {
-            _position += direction;
+            position += direction;
 
             CheckBounds();
-            UpdateXY();
         }
 
         /// <summary>
@@ -103,7 +95,7 @@ namespace Visuals
         /// </summary>
         public void ResetPosition()
         {
-            Move(new Vector2Int(int.MinValue, int.MinValue));
+            Move(new GridPosition(int.MinValue, int.MinValue));
         }
 
         /// <summary>
@@ -111,20 +103,11 @@ namespace Visuals
         /// </summary>
         private void CheckBounds()
         {
-            if (_position.x < _minBounds.x) _position.x = _minBounds.x;
-            if (_position.x >= _maxBounds.x) _position.x = _maxBounds.x;
+            if (position.column < _minBounds.column) position.column = _minBounds.column;
+            if (position.column > _maxBounds.column) position.column = _maxBounds.column;
 
-            if (_position.y < _minBounds.y) _position.y = _minBounds.y;
-            if (_position.y >= _maxBounds.y) _position.y = _maxBounds.y;
-        }
-
-        /// <summary>
-        /// Update the public x and y positioning.
-        /// </summary>
-        private void UpdateXY()
-        {
-            x = _position.x;
-            y = _position.y;
+            if (position.row < _minBounds.row) position.row = _minBounds.row;
+            if (position.row > _maxBounds.row) position.row = _maxBounds.row;
         }
     }
 }

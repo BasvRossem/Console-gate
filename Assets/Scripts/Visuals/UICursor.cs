@@ -139,8 +139,8 @@ namespace Visuals
             ResetSize();
             GridPosition viewPosition = linkedLayer.view.externalPosition;
 
-            int characterRow = linkedLayer.cursor.y + viewPosition.row;
-            int characterColumn = linkedLayer.cursor.x + viewPosition.column;
+            int characterRow = linkedLayer.cursor.position.row + viewPosition.row;
+            int characterColumn = linkedLayer.cursor.position.column + viewPosition.column;
 
             if (characterRow >= textMeshCharacterPositions.Count) return;
             if (characterColumn >= textMeshCharacterPositions[characterRow].Count) return;
