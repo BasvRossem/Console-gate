@@ -5,55 +5,65 @@
         public TextGrid textGrid;
 
         public GridSize size;
-        public GridPosition monitorPosition;
-        public GridPosition startPosition;
+        public GridPosition externalPosition;
+        public GridPosition internalPosition;
 
         private bool _isChanged;
 
-        public View(GridSize size, GridPosition startPosition = new GridPosition(), GridPosition monitorPosition = new GridPosition())
+        public View(GridSize size, GridPosition internalPosition = new GridPosition(), GridPosition externalPosition = new GridPosition())
         {
-            this.size = size;
-            this.startPosition = startPosition;
-            this.monitorPosition = monitorPosition;
+            SetSize(size);
+            SetInternalPosition(internalPosition);
+            SetExternalPosition(externalPosition);
 
             Change();
         }
 
         // Size
-        public void SetSize(int rows, int columns)
+        public void SetSize(GridSize newSize)
         {
-            size = new GridSize(rows, columns);
+            if (Tools.CheckError((newSize.rows <= 0) || (newSize.columns <= 0), "Size cannot be negative or zero.")) return;
+            size = newSize;
             Change();
         }
 
         public void Grow(int up = 0, int down = 0, int left = 0, int right = 0)
         {
-            monitorPosition.row -= up;
-            monitorPosition.column -= left;
+            internalPosition.row -= up;
+            internalPosition.column -= left;
 
-            size.rows += down + up;
+            size.rows += up + down;
             size.columns += left + right;
             Change();
         }
 
         // Positioning
-        public void SetStartPosition(int row, int column)
+        public void SetInternalPosition(GridPosition newInternalPosition)
         {
-            startPosition = new GridPosition(row, column);
+            if (Tools.CheckError(newInternalPosition.row < 0 || newInternalPosition.column < 0, "Internal position cannot be negative.")) return;
+            
+            internalPosition = newInternalPosition;
             Change();
         }
 
-        public void SetMonitorPosition(int row, int column)
+        public void SetExternalPosition(GridPosition newMonitorPosition)
         {
-            monitorPosition = new GridPosition(row, column);
+            if (Tools.CheckError(newMonitorPosition.row < 0 || newMonitorPosition.column < 0, "External position cannot be negative.")) return;
+            
+            externalPosition = newMonitorPosition;
             Change();
         }
 
-        public void Move(int up = 0, int down = 0, int left = 0, int right = 0)
+        public void MoveInternalPosition(int up = 0, int down = 0, int left = 0, int right = 0)
         {
-            monitorPosition.row += up + down;
-            monitorPosition.column += left + right;
+            if (Tools.CheckError((up < 0 || down < 0 || left < 0 || right < 0), "Cannot move in a negative direction.")) return;
+            
+            internalPosition.row += down - up;
+            internalPosition.column += right - left;
 
+            if (Tools.CheckWarning(internalPosition.row < 0, "New view internal position row cannot be negative. Set to 0.")) internalPosition.row = 0;
+            if (Tools.CheckWarning(internalPosition.column < 0, "New view internal position column cannot be negative. Set to 0.")) internalPosition.column = 0;
+            
             Change();
         }
 
@@ -62,17 +72,17 @@
         {
             textGrid = new TextGrid(size);
 
-            int endRow = startPosition.row + size.rows - 1;
-            int endColumn = startPosition.column + size.columns - 1;
+            int endRow = internalPosition.row + size.rows - 1;
+            int endColumn = internalPosition.column + size.columns - 1;
 
-            for (int row = startPosition.row; row <= endRow; row++)
+            for (int row = internalPosition.row; row <= endRow; row++)
             {
-                for (int column = startPosition.column; column <= endColumn; column++)
+                for (int column = internalPosition.column; column <= endColumn; column++)
                 {
                     char character = externalTextGrid[row, column];
 
-                    int textRow = row - startPosition.row;
-                    int textColumn = column - startPosition.column;
+                    int textRow = row - internalPosition.row;
+                    int textColumn = column - internalPosition.column;
 
                     textGrid[textRow, textColumn] = character;
                 }
