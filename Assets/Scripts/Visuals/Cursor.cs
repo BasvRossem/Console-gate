@@ -9,10 +9,10 @@ namespace Visuals
     /// </summary>
     public class Cursor
     {
-        public static Vector2Int Left = new Vector2Int(-1, 0);
-        public static Vector2Int Right = new Vector2Int(1, 0);
-        public static Vector2Int Up = new Vector2Int(0, -1);
-        public static Vector2Int Down = new Vector2Int(0, 1);
+        public static readonly Vector2Int Left = new Vector2Int(-1, 0);
+        public static readonly Vector2Int Right = new Vector2Int(1, 0);
+        public static readonly Vector2Int Up = new Vector2Int(0, -1);
+        public static readonly Vector2Int Down = new Vector2Int(0, 1);
 
         private Vector2Int _minBounds;
         private Vector2Int _maxBounds;
@@ -21,9 +21,6 @@ namespace Visuals
         public int x;
         public int y;
 
-        private readonly string _name;
-        public const string DefaultName = "Default";
-
         /// <summary>
         /// Initialize a cursor at he specified location.
         /// The cursor has a name so it can be specified when using multiple cursors in the monitor.
@@ -31,22 +28,11 @@ namespace Visuals
         /// <param name="x">The x coordinate in comparison to the text grid. Default of 0.</param>
         /// <param name="y">The y coordinate in comparison to the text grid. Default of 0.</param>
         /// <param name="cursorName">The name of the cursor. Default of "Default".</param>
-        public Cursor(int x = 0, int y = 0, string cursorName = Cursor.DefaultName)
+        public Cursor(int x = 0, int y = 0)
         {
             SetPosition(x, y);
             SetBounds();
             UpdateXY();
-
-            _name = cursorName;
-        }
-
-        /// <summary>
-        /// Returns the name of the cursor.
-        /// </summary>
-        /// <returns>The name.</returns>
-        public string GetName()
-        {
-            return _name;
         }
 
         /// <summary>
