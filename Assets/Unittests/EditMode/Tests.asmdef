@@ -4,7 +4,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Visuals",
-        "Input"
+        "Input",
+        "Core"
     ],
     "includePlatforms": [
         "Editor"
