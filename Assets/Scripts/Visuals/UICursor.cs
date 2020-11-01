@@ -132,7 +132,7 @@ namespace Visuals
             if (linkedLayer == null) return;
 
             ResetSize();
-            GridPosition viewPosition = linkedLayer.view.monitorPosition;
+            GridPosition viewPosition = linkedLayer.view.externalPosition;
 
             int characterRow = linkedLayer.cursor.y + viewPosition.row;
             int characterColumn = linkedLayer.cursor.x + viewPosition.column;
