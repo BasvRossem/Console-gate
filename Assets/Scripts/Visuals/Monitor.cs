@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Visuals
 {
+    /// <summary>
+    /// Monitor object which renders its layers to the text mesh.
+    /// </summary>
     public class Monitor : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _textMesh = null;
@@ -35,6 +38,9 @@ namespace Visuals
             Render();
         }
 
+        /// <summary>
+        /// Calibrate the positions of the characters of the text mesh to be used by the UICursor.
+        /// </summary>
         private void CalibrateTextMesh()
         {
             // Fill text grid with data
@@ -72,6 +78,10 @@ namespace Visuals
         }
 
         // Layer functions
+        /// <summary>
+        /// Create a new layer to be rendered.
+        /// </summary>
+        /// <returns>The newly created layer.</returns>
         public Layer NewLayer()
         {
             var newLayer = new Layer(Size);
@@ -79,12 +89,21 @@ namespace Visuals
             return newLayer;
         }
 
+        /// <summary>
+        /// Delete the layer from the list of layers to be rendered.
+        /// </summary>
+        /// <remarks>The user of the layer is responsible for deleting the layer from the memory by not using it.</remarks>
+        /// <param name="layer">The layer to remove.</param>
         public void DeleteLayer(Layer layer)
         {
             _layers.Remove(layer);
         }
 
+        
         // Render functions
+        /// <summary>
+        /// Render the layers if they have changed.
+        /// </summary>
         private void Render()
         {
             if (!LayersHaveChanged()) return;
@@ -94,12 +113,19 @@ namespace Visuals
             RenderTextToMesh();
         }
 
+        /// <summary>
+        /// Check if any of the layers have changed.
+        /// </summary>
+        /// <returns>A boolean value indicating if any of the layers have changed.</returns>
         private bool LayersHaveChanged()
         {
             var changed = _layers.Select(layer => layer.HasChanged()).ToList();
             return changed.Contains(true);
         }
 
+        /// <summary>
+        /// Combines the layers using their views onto its own TextGrid.
+        /// </summary>
         private void CombineLayers()
         {
             var sortedLayers = _layers.OrderBy(layer => layer.zIndex).ToList();
@@ -123,6 +149,9 @@ namespace Visuals
             }
         }
 
+        /// <summary>
+        /// Assemble the text grid into a string.
+        /// </summary>
         private void AssembleGridIntoText()
         {
             _text = "";
@@ -134,6 +163,9 @@ namespace Visuals
             }
         }
 
+        /// <summary>
+        /// Render the assembled text to the text mesh.
+        /// </summary>
         private void RenderTextToMesh()
         {
             _textMesh.SetText(_text);
