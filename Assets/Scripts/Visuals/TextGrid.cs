@@ -6,7 +6,7 @@ namespace Visuals
 {
     /// <summary>
     /// This class is to function as a buffer between the interface and actually rendering the text.
-    /// It is used to make text editing easier within the monitor class.
+    /// It is used to make text editing and writing easier.
     /// </summary>
     public class TextGrid
     {
@@ -14,15 +14,9 @@ namespace Visuals
 
         private List<char[]> _grid;
 
-        /// <summary>
-        /// Initialize a text grid.
-        /// </summary>
-        /// <param name="rowAmount">Amount of rows the text grid should have.</param>
-        /// <param name="columnAmount">Amount of columns the text grid should have.</param>
         public TextGrid(GridSize size)
         {
             _size = size;
-
             Reset();
         }
 
@@ -31,11 +25,11 @@ namespace Visuals
         /// </summary>
         /// <param name="length">Length of the array.</param>
         /// <param name="character">Character to fill the array with.</param>
-        /// <returns>An array of specified length wfilled with the specified character.</returns>
-        private char[] MakeRow(int length, char character)
+        /// <returns>An array of specified length, filled with the specified character.</returns>
+        private static char[] MakeRow(int length, char character)
         {
-            char[] arr = new char[length];
-            for (int i = 0; i < length; i++)
+            var arr = new char[length];
+            for (var i = 0; i < length; i++)
             {
                 arr[i] = character;
             }
@@ -45,7 +39,7 @@ namespace Visuals
         /// <summary>
         /// Get the size of the text grid.
         /// </summary>
-        /// <returns>A Vector2int withthe size of the tecxt grid.</returns>
+        /// <returns>A Vector2int with the size of the text grid.</returns>
         public Vector2Int GetSize()
         {
             return new Vector2Int(_grid.Count, _grid[0].Length);
@@ -66,43 +60,46 @@ namespace Visuals
         /// <param name="character">The character to fill the grid with.</param>
         public void Fill(char character)
         {
-            for (int y = 0; y < _grid.Count; y++)
+            foreach (var characterRow in _grid)
             {
-                for (int x = 0; x < _grid[y].Length; x++)
+                for (var x = 0; x < characterRow.Length; x++)
                 {
-                    _grid[y][x] = character;
+                    characterRow[x] = character;
                 }
             }
         }
 
+        /// <summary>
+        /// Resize the grid to its starting size and clear the grid.
+        /// </summary>
         public void Reset()
         {
             _grid = new List<char[]>(_size.rows);
-            for (int row = 0; row < _size.rows; row++) _grid.Add(MakeRow(_size.columns, ' '));
+            for (var row = 0; row < _size.rows; row++) _grid.Add(MakeRow(_size.columns, ' '));
         }
 
         // Operators
         /// <summary>
         /// Returns the character in the grid at the given location.
         /// </summary>
-        /// <param name="index_row">Index of the wanted row.</param>
-        /// <param name="index_column">Index of th wanted column.</param>
+        /// <param name="indexRow">Index of the wanted row.</param>
+        /// <param name="indexColumn">Index of th wanted column.</param>
         /// <returns>A character at the place that is specified.</returns>
-        public char this[int index_row, int index_column]
+        public char this[int indexRow, int indexColumn]
         {
-            get => _grid[index_row][index_column];
-            set => _grid[index_row][index_column] = value;
+            get => _grid[indexRow][indexColumn];
+            set => _grid[indexRow][indexColumn] = value;
         }
 
         /// <summary>
         /// Returns the characters of the selected row.
         /// </summary>
-        /// <param name="index_row">The index of the wanted row.</param>
-        /// <returns>Returns an aray of all characters in the selected row.</returns>
-        public char[] this[int index_row]
+        /// <param name="indexRow">The index of the wanted row.</param>
+        /// <returns>Returns an array of all characters in the selected row.</returns>
+        public char[] this[int indexRow]
         {
-            get => _grid[index_row];
-            set => _grid[index_row] = value;
+            get => _grid[indexRow];
+            set => _grid[indexRow] = value;
         }
     }
 }
