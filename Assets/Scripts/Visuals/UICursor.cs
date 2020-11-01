@@ -70,6 +70,9 @@ namespace Visuals
             isBlinking = blink;
         }
 
+        /// <summary>
+        /// Render the blinking effect.
+        /// </summary>
         private void RenderBlink()
         {
             if (!isBlinking) return;
@@ -98,7 +101,7 @@ namespace Visuals
         }
 
         /// <summary>
-        /// Reset the size of the cursor to its inital size.
+        /// Reset the size of the cursor to its initial size.
         /// </summary>
         public void ResetSize()
         {
