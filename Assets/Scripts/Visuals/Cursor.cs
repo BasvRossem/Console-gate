@@ -67,15 +67,6 @@ namespace Visuals
         }
 
         /// <summary>
-        /// Gets the monitorPosition.
-        /// </summary>
-        /// <returns>The monitorPosition.</returns>
-        public GridPosition GetPosition()
-        {
-            return position;
-        }
-
-        /// <summary>
         /// Move the cursor in a specified direction.
         /// </summary>
         /// <param name="direction">The direction wanted.</param>
@@ -99,7 +90,7 @@ namespace Visuals
         }
 
         /// <summary>
-        /// Moves the cursor back in bounds if it isn't.
+        /// Moves the cursor back in bounds if it is not.
         /// </summary>
         private void CheckBounds()
         {

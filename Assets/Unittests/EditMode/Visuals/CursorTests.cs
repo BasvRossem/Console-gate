@@ -33,33 +33,33 @@ namespace VisualsTests
 
             _cursor.SetPosition(new GridPosition(5, 5));
             _cursor.SetBounds(new GridPosition(10, 10), new GridPosition(15, 15));
-            Assert.AreEqual(new GridPosition(10, 10), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(10, 10), _cursor.position);
 
             _cursor.SetPosition(new GridPosition(12, 12));
-            Assert.AreEqual(new GridPosition(12, 12), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(12, 12), _cursor.position);
         }
 
         [Test]
         public void SetPositionGetPosition()
         {
             _cursor.SetPosition(new GridPosition(5, 5));
-            Assert.AreEqual(new GridPosition(5, 5), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(5, 5), _cursor.position);
 
             _cursor.SetPosition(new GridPosition(10, 10));
-            Assert.AreEqual(new GridPosition(10, 10), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(10, 10), _cursor.position);
         }
 
         [Test]
         public void Move()
         {
             _cursor.Move(Cursor.Right);
-            Assert.AreEqual(new GridPosition(0, 1), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(0, 1), _cursor.position);
             _cursor.Move(Cursor.Left);
-            Assert.AreEqual(new GridPosition(0, 0), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(0, 0), _cursor.position);
             _cursor.Move(Cursor.Down);
-            Assert.AreEqual(new GridPosition(1, 0), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(1, 0), _cursor.position);
             _cursor.Move(Cursor.Up);
-            Assert.AreEqual(new GridPosition(0, 0), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(0, 0), _cursor.position);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace VisualsTests
         {
             _cursor.SetPosition(new GridPosition(1, 10));
             _cursor.ResetPosition();
-            Assert.AreEqual(new GridPosition(0, 0), _cursor.GetPosition());
+            Assert.AreEqual(new GridPosition(0, 0), _cursor.position);
         }
     }
 }
