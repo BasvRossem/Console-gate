@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class Tools
 {
-    public Tools()
-    {
-    }
-
     /// <summary>
     /// Check the condition and throw an error with a custom message if the condition is true.
     /// </summary>
