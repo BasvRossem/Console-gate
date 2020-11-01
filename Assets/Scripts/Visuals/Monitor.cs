@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
@@ -19,7 +20,6 @@ namespace Visuals
         private string _text = "";
 
         public UICursor uiCursor;
-        private List<List<Vector2>> _textMeshCharacterPositions;
 
         private void Awake()
         {
@@ -27,7 +27,6 @@ namespace Visuals
 
             _mainLayer = new Layer(Size);
             _layers = new List<Layer>();
-            _textMeshCharacterPositions = new List<List<Vector2>>();
 
             _textGrid = new TextGrid(Size);
 
@@ -49,7 +48,8 @@ namespace Visuals
             _textMesh.ForceMeshUpdate();
 
             // Calculate character center positions
-            _textMeshCharacterPositions = new List<List<Vector2>>();
+            List<List<Vector2>> _textMeshCharacterPositions = new List<List<Vector2>>();
+
             for (int row = 0; row < _textMesh.textInfo.lineCount; row++)
             {
                 List<Vector2> rowPositions = new List<Vector2>();
@@ -65,6 +65,8 @@ namespace Visuals
 
                 _textMeshCharacterPositions.Add(rowPositions);
             }
+
+            uiCursor.textMeshCharacterPositions = _textMeshCharacterPositions;
 
             // Empty monitor
             _mainLayer.textGrid.Reset();
@@ -95,7 +97,7 @@ namespace Visuals
 
         private bool LayersHaveChanged()
         {
-            List<bool> changed = _layers.Select(layer => layer.isChanged).ToList();
+            List<bool> changed = _layers.Select(layer => layer.HasChanged()).ToList();
             return changed.Contains(true);
         }
 
@@ -115,6 +117,7 @@ namespace Visuals
                 }
 
                 layer.Change(false);
+                layer.view.Change(false);
             }
         }
 
@@ -132,45 +135,6 @@ namespace Visuals
         private void RenderTextToMesh()
         {
             _textMesh.SetText(_text);
-        }
-
-        // UI Cursor
-        /// <summary>
-        /// Select a row on the Layer using the UI cursor.
-        /// </summary>
-        /// <param name="row">The index of the row to be selected</param>
-        public void SelectRow(int row)
-        {
-            // Mesh info is probably only loaded at the text end of the frame.
-            // So now we force an update so we can use the mesh data.
-            Render();
-            _textMesh.ForceMeshUpdate();
-
-            if (Tools.CheckError((row >= _textMesh.textInfo.lineCount), $"Cannot access row with index {row}, there are {_textMesh.textInfo.lineCount} lines.")) return;
-
-            // Retrieve character data
-            TMP_LineInfo lineInfo = _textMesh.textInfo.lineInfo[row];
-            TMP_CharacterInfo characterInfoBegin = _textMesh.textInfo.characterInfo[lineInfo.firstCharacterIndex];
-            TMP_CharacterInfo characterInfoFinal = _textMesh.textInfo.characterInfo[lineInfo.lastCharacterIndex];
-
-            Vector2 newPositionCenter = ((characterInfoBegin.topLeft + characterInfoFinal.bottomRight) / 2) + _textMesh.transform.position;
-            Vector2 newPositionOffset = new Vector2(-1, -1);
-            Vector2 newSize = new Vector2(uiCursor.characterSize.x * Size.columns, uiCursor.characterSize.y);
-
-            uiCursor.SetSize(newSize);
-            uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
-            Debug.LogWarning("Here");
-        }
-
-        /// <summary>
-        /// Update the UI cursor position to its linked cursor.
-        /// </summary>
-        private void UpdateUICursorPosition()
-        {
-            uiCursor.ResetSize();
-            Cursor linkedCursor = uiCursor.linkedLayer.cursor;
-            Vector2 newPosition = _textMeshCharacterPositions[linkedCursor.y][linkedCursor.x];
-            uiCursor.SetPositionCenter(newPosition);
         }
     }
 }

@@ -72,11 +72,11 @@ namespace Visuals
         /// Clears the screen and sets the Layer text.
         /// </summary>
         /// <param name="newText">Text to write to the Layer.</param>
-        public void WriteText(string newText)
+        public void WriteText(string newText, bool automaticReturn = true)
         {
             cursor.ResetPosition();
             textGrid.Reset();
-            WriteLine(newText);
+            WriteLine(newText, automaticReturn);
             Change();
         }
 
@@ -189,6 +189,11 @@ namespace Visuals
         public void Change(bool changed = true)
         {
             isChanged = changed;
+        }
+
+        public bool HasChanged()
+        {
+            return (isChanged || view.HasChanged());
         }
     }
 }
