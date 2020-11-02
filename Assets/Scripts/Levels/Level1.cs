@@ -58,8 +58,9 @@ public class Level1 : MonoBehaviour
     }
 
     private void LoadChatlog()
-    {
-       _textLayer.WriteText(@"-------------------
+    { 
+        _textLayer.view.MakeStatic(false); 
+        _textLayer.WriteText(@"-------------------
 Chatlog 23 - 10 - 2020
 ------------------ -
 23 - 10 - 2020 16:03, Docent:
@@ -122,13 +123,23 @@ Maecenas scelerisque semper venenatis.
 Suspendisse vel dolor velit.
 Nunc imperdiet cursus velit eget porta.
 In eget ex purus.
-Vivamus pellentesque quam in arcu ultrices varius.");
+Vivamus pellentesque quam in arcu ultrices varius.
+
+Nunc egestas pellentesque pulvinar. 
+Nulla euismod, nulla non consequat dapibus, nisi neque lacinia sapien, 
+eget sodales quam ante a lacus. 
+Etiam rhoncus, ipsum ut maximus gravida, ligula nulla congue magna, 
+nec blandit sapien risus iaculis ligula. Morbi pulvinar lorem 
+gravida mi eleifend convallis. Nunc lacinia fringilla gravida. 
+Donec molestie arcu id ex ullamcorper sagittis.
+Pellentesque tincidunt urna sit amet ex cursus suscipit.");
         _textLayer.view.SetBounds(_textLayer.textGrid.GetSize());
     }
 
     private void LoadNextLevel()
     {
-        SceneManager.LoadScene("Level 2");
+        _textLayer.WriteText("You completed level 1. Level two is still coming...");
+        //SceneManager.LoadScene("Level 2");
     }
 
     public void MoveView(List<KeyCode> args)
@@ -224,6 +235,7 @@ Vivamus pellentesque quam in arcu ultrices varius.");
     private void sshWriter()
     {
         _textLayer.WriteText("That IP-address can't be connected to");
+        _textLayer.view.MakeStatic(true); 
     }
 
     private void catCall(string command)
@@ -246,6 +258,7 @@ Vivamus pellentesque quam in arcu ultrices varius.");
     private void catWriter()
     {
         _textLayer.WriteText("Can't find that file, try searching recently downloaded files.\n(cat chatlog.txt might contain useful info)");
+        _textLayer.view.MakeStatic(true);
     }
 
     private void dirCall(string command)
@@ -261,5 +274,6 @@ Vivamus pellentesque quam in arcu ultrices varius.");
     private void dirWriter()
     {
         _textLayer.WriteText("/:\n\tchatlog.txt\n\tappendix.txt");
+        _textLayer.view.MakeStatic(true);
     }
 }
