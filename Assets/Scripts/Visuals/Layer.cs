@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
+using UnityEngine.Windows.WebCam;
 
 namespace Visuals
 {
@@ -83,6 +84,7 @@ namespace Visuals
         public void WriteText(string newText, bool automaticReturn = true)
         {
             cursor.ResetPosition();
+            view.SetInternalPosition(new GridPosition(0,0));
             textGrid.Reset();
             WriteLine(newText, automaticReturn);
             Change();

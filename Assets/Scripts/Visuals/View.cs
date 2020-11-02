@@ -23,7 +23,7 @@ namespace Visuals
             SetSize(size);
             SetInternalPosition(internalPosition);
             SetExternalPosition(externalPosition);
-            StayInBounds(false);
+            StayInBounds(true);
             
             Change();
         }

@@ -112,7 +112,7 @@ namespace Visuals
         {
             if (_layers.Count <= 0) return;
             if (!LayersHaveChanged()) return;
-
+            
             CombineLayers();
             AssembleGridIntoText();
             RenderTextToMesh();
