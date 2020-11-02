@@ -2,6 +2,7 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Visuals
 {
@@ -10,7 +11,7 @@ namespace Visuals
     /// </summary>
     public class Monitor : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _textMesh = null;
+        [SerializeField] private TextMeshProUGUI textMesh = null;
         public static readonly GridSize Size = new GridSize(24, 80);
 
         public UICursor uiCursor;
@@ -23,7 +24,7 @@ namespace Visuals
 
         private void Awake()
         {
-            if (Tools.CheckError(_textMesh == null, "No TextMeshPro object has been added")) return;
+            if (Tools.CheckError(textMesh == null, "No TextMeshPro object has been added")) return;
 
             _mainLayer = new Layer(Size);
             _layers = new List<Layer>();
@@ -44,28 +45,32 @@ namespace Visuals
         private void CalibrateTextMesh()
         {
             // Fill text grid with data
-            _mainLayer.textGrid.Fill('*');
+            _textGrid.Fill('*');
 
             // Render data to text mesh
-            Render();
-            _textMesh.ForceMeshUpdate();
-
+            AssembleGridIntoText();
+            RenderTextToMesh();
+            
+            textMesh.ForceMeshUpdate();
+            
             // Calculate character center positions
             var textMeshCharacterPositions = new List<List<Vector2>>();
 
-            for (var row = 0; row < _textMesh.textInfo.lineCount; row++)
+            for (var row = 0; row < textMesh.textInfo.lineCount; row++)
             {
                 var rowPositions = new List<Vector2>();
 
-                int firstCharacterIndex = _textMesh.textInfo.lineInfo[row].firstCharacterIndex;
-                for (var column = 0; column < _textMesh.textInfo.lineInfo[row].characterCount; column++)
+                int firstCharacterIndex = textMesh.textInfo.lineInfo[row].firstCharacterIndex;
+                for (var column = 0; column < textMesh.textInfo.lineInfo[row].characterCount; column++)
                 {
-                    TMP_CharacterInfo characterInfo = _textMesh.textInfo.characterInfo[firstCharacterIndex + column];
-                    Vector2 offset = _textMesh.transform.position;
+                    TMP_CharacterInfo characterInfo = textMesh.textInfo.characterInfo[firstCharacterIndex + column];
+                    Vector2 offset = textMesh.transform.position;
                     Vector2 characterCenter = (characterInfo.topLeft + characterInfo.bottomRight) / 2;
                     characterCenter += offset;
 
                     rowPositions.Add(characterCenter);
+                    
+                    Debug.Log(characterCenter.y);
                 }
 
                 textMeshCharacterPositions.Add(rowPositions);
@@ -74,7 +79,7 @@ namespace Visuals
             uiCursor.textMeshCharacterPositions = textMeshCharacterPositions;
 
             // Empty monitor
-            _mainLayer.textGrid.Reset();
+            _textGrid.Reset();
         }
 
         // Layer functions
@@ -168,7 +173,7 @@ namespace Visuals
         /// </summary>
         private void RenderTextToMesh()
         {
-            _textMesh.SetText(_text);
+            textMesh.SetText(_text);
         }
     }
 }

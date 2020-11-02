@@ -61,11 +61,11 @@ namespace Visuals
         /// <param name="character">The character to fill the grid with.</param>
         public void Fill(char character)
         {
-            foreach (var characterRow in _grid)
+            for (var row = 0; row < _size.rows; row++)
             {
-                for (var x = 0; x < characterRow.Length; x++)
+                for (var column = 0; column < _size.columns; column++)
                 {
-                    characterRow[x] = character;
+                    _grid[row][column] = character;
                 }
             }
         }

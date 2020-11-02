@@ -18,9 +18,6 @@ public class Level1 : MonoBehaviour
     private Layer _textLayer;
     private Layer _userInputLayer;
 
-    private string _screenCursor;
-    private string _terminalCursor;
-
     private string _command = "";
     
     private delegate void MonitorWriter();
@@ -52,7 +49,7 @@ public class Level1 : MonoBehaviour
         monitor.uiCursor.Blink(true);
 
         _myMonitorWriter = LoadChatlog;
-        LoadChatlog();
+        _myMonitorWriter();
     }
 
     // Update is called once per frame
@@ -97,7 +94,7 @@ Succesfully downloaded ""appendix.txt""");
 
     public void LoadFile()
     {
-        _textLayer.WriteLine(@"Filename: appendix
+        _textLayer.WriteText(@"Filename: appendix
 File extension: .txt
 Path to file: / Downloads / apendix
 
@@ -154,6 +151,8 @@ Vivamus pellentesque quam in arcu ultrices varius.");
         {
             _command += (char)k;
         }
+
+        UpdateTerminalLayer();
     }
 
     public void UpdateTerminal(Tuple<List<KeyCode>, KeyCode> args)
@@ -163,6 +162,8 @@ Vivamus pellentesque quam in arcu ultrices varius.");
         {
             _command += "@";
         }
+
+        UpdateTerminalLayer();
     }
 
     public void RemoveLastTerminalCharacter(List<KeyCode> args)
@@ -173,6 +174,12 @@ Vivamus pellentesque quam in arcu ultrices varius.");
         StringBuilder sb = new StringBuilder(_command);
         sb.Remove(_command.Length - 1, 1);
         _command = sb.ToString();
+        UpdateTerminalLayer();
+    }
+
+    private void UpdateTerminalLayer()
+    {
+        _userInputLayer.WriteText(_command, false);
     }
 
     public void SendCommand(List<KeyCode> args)
@@ -198,6 +205,8 @@ Vivamus pellentesque quam in arcu ultrices varius.");
                 break;
         }
         _command = "";
+        _myMonitorWriter();
+        UpdateTerminalLayer();
     }
 
     private void sshCall(string command)
