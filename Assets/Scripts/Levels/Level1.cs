@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.SceneManagement;
 using Visuals;
-using Cursor = Visuals.Cursor;
 
 public class Level1 : MonoBehaviour
 {
@@ -104,7 +98,7 @@ Size: 12381 bytes
 Author: Docent
 IP - adress owner: 52.232.56.79");
         _textLayer.DrawLineHorizontal(8, 0, Monitor.Size.columns);
-        _textLayer.cursor.Move(Cursor.Down);
+        _textLayer.cursor.Move(Visuals.Cursor.Down);
         _textLayer.WriteLine(@"Content:
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.

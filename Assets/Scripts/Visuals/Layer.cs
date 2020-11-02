@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using UnityEngine;
-using UnityEngine.Windows.WebCam;
-
-namespace Visuals
+﻿namespace Visuals
 {
     /// <summary>
     /// Layer that can be edited using a cursor, and a view.
