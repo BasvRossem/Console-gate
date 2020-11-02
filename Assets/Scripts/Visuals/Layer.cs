@@ -39,10 +39,10 @@ namespace Visuals
         /// <param name="letter">Letter to write</param>
         public void WriteCharacter(char letter)
         {
-            bool rowOutOfBounds = cursor.position.row >= textGrid.GetSize().rows;
+            while (cursor.position.row >= textGrid.GetSize().rows) textGrid.AddRow();
+            
             bool columnOutOfBounds = cursor.position.column >= textGrid.GetSize().columns;
-            bool cursorOutOfBounds = rowOutOfBounds || columnOutOfBounds;
-            if (Tools.CheckWarning(cursorOutOfBounds , "Cursor is out of bounds. Ignoring character.")) return;
+            if (Tools.CheckWarning(columnOutOfBounds , "Cursor is out of bounds. Ignoring character.")) return;
 
             textGrid[cursor.position.row, cursor.position.column] = letter;
             cursor.Move(Cursor.Right);

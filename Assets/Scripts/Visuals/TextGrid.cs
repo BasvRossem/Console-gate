@@ -39,9 +39,10 @@ namespace Visuals
         /// <summary>
         /// Get the size of the text grid.
         /// </summary>
-        /// <returns>A Vector2int with the size of the text grid.</returns>
+        /// <returns>A GrisSize with the size of the text grid.</returns>
         public GridSize GetSize()
         {
+            _size = new GridSize(_grid.Count, _grid[0].Length);
             return _size;
         }
 
@@ -78,6 +79,13 @@ namespace Visuals
             for (var row = 0; row < _size.rows; row++) _grid.Add(MakeRow(_size.columns, ' '));
         }
 
+        /// <summary>
+        /// Adds an empty row ro the grid.
+        /// </summary>
+        public void AddRow()
+        {
+            _grid.Add(MakeRow(_size.columns, ' '));
+        }
         // Operators
         /// <summary>
         /// Returns the character in the grid at the given location.
