@@ -1,17 +1,18 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UserInput;
 
 public class KeyHandlerTests
 {
     private GameObject go;
-    private Keylistener k;
+    private KeyListener k;
 
     [SetUp]
     public void SetUp()
     {
         go = new GameObject();
-        k = go.AddComponent(typeof(Keylistener)) as Keylistener;
+        k = go.AddComponent(typeof(KeyListener)) as KeyListener;
     }
 
     [TearDown]
@@ -28,14 +29,14 @@ public class KeyHandlerTests
     [Test]
     public void AddKeyLambda()
     {
-        Assert.IsTrue(k.addKey(new List<KeyCode> { KeyCode.A }, (args) => { Debug.Log("Printed"); }));
+        Assert.IsTrue(k.AddKey(new List<KeyCode> { KeyCode.A }, (args) => { Debug.Log("Printed"); }));
     }
 
 
     [Test]
     public void AddKeyMethod()
     {
-        Assert.IsTrue(k.addKey(new List<KeyCode> { KeyCode.A }, keyEvent));
+        Assert.IsTrue(k.AddKey(new List<KeyCode> { KeyCode.A }, keyEvent));
     }
 
 
@@ -43,13 +44,13 @@ public class KeyHandlerTests
     [Test]
     public void AddKeyEmptyList()
     {
-        Assert.IsFalse(k.addKey(new List<KeyCode> { }, keyEvent));
+        Assert.IsFalse(k.AddKey(new List<KeyCode> { }, keyEvent));
     }
 
     [Test]
     public void AddKeyEmptyCallback()
     {
-        Assert.IsFalse(k.addKey(new List<KeyCode> { }, null));
+        Assert.IsFalse(k.AddKey(new List<KeyCode> { }, null));
     }
 
 
@@ -57,18 +58,18 @@ public class KeyHandlerTests
     [Test]
     public void AddOptionLambda()
     {
-        Assert.IsTrue(k.addOption(KeyBoardOptions.Alphabetical, (args) => { Debug.Log("Printed"); }));
+        Assert.IsTrue(k.AddOption(KeyBoardOptions.Alphabetical, (args) => { Debug.Log("Printed"); }));
     }
 
     [Test]
     public void AddOptionMethod()
     {
-        Assert.IsTrue(k.addOption(KeyBoardOptions.Alphabetical, keyEvent));
+        Assert.IsTrue(k.AddOption(KeyBoardOptions.Alphabetical, keyEvent));
     }
 
     public void AddOptionEmptyCallback()
     {
-        Assert.IsTrue(k.addOption(KeyBoardOptions.Alphabetical, null));
+        Assert.IsTrue(k.AddOption(KeyBoardOptions.Alphabetical, null));
 
     }
 

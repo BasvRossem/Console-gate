@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Visuals;
+using UserInput;
 
 public class Level0 : MonoBehaviour
 {
     [SerializeField] private Monitor monitor = null;
-    [SerializeField] private Keylistener keylistener = null;
+    [SerializeField] private KeyListener keylistener = null;
 
     private List<string> text = new List<string>();
     private int textIndex = 0;
@@ -21,7 +22,7 @@ public class Level0 : MonoBehaviour
         text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
         text.Add("The game is on.");
 
-        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
 
         nextCursor = monitor.AddCursor("NextCursor");
         monitor.SelectCursor(nextCursor);
