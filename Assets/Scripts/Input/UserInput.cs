@@ -87,6 +87,6 @@ public class UserInput : MonoBehaviour
         monitor.SelectCursor(cursorName);
         monitor.selectedCursor.SetPosition(4, bottomLine);
         monitor.RemoveMonitorTextLineAtPosition(bottomLine);
-        monitor.AddMonitorTextLine(textBuffer);
+        monitor.WriteLine(textBuffer);
     }
 }

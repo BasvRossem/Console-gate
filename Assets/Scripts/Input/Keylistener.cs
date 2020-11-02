@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using UnityEngine.XR.WSA.Input;
 
 public enum KeyBoardOptions
 {
@@ -44,6 +45,21 @@ public class KeyCodeComparer : IEqualityComparer<List<KeyCode>>
     }
 }
 
+
+public class KeyCodeCombinationComparer : IEqualityComparer<Tuple<List<KeyCode>, KeyCode>>
+{
+    public bool Equals(Tuple<List<KeyCode>, KeyCode> x, Tuple<List<KeyCode>, KeyCode> y)
+    {
+        return (x.Item1.All(y.Item1.Contains) && y.Item1.All(x.Item1.Contains)) && (x.Item2 == y.Item2);
+    }
+
+    public int GetHashCode(Tuple<List<KeyCode>, KeyCode> obj)
+    {
+        int hCode = obj.Item1.Sum(x => (int)x) + (int)obj.Item2;
+        return hCode.GetHashCode();
+    }
+}
+
 public class Keylistener : MonoBehaviour
 {
     // All non-mouse/joystick keydowns
@@ -53,17 +69,25 @@ public class Keylistener : MonoBehaviour
         .ToArray();
 
     private KeyCodeComparer customComparer;
+    private KeyCodeCombinationComparer customCombinationComparer;
     private Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>> subscribedKeyEvents;
+    private Dictionary<Tuple<List<KeyCode>, KeyCode>, UnityEvent<Tuple<List<KeyCode>, KeyCode>>> subscribedKeyCombinationEvents;
+
     private List<KeyCode> _keysDown;
+    private List<KeyCode> _keysUp;
 
     public void Awake()
     {
         initSubscribedKeyEvents();
+        initSubscribedKeyCombinationEvents();
     }
 
     public void Start()
     {
         initSubscribedKeyEvents();
+        initSubscribedKeyCombinationEvents();
+        Tuple<List<KeyCode>, KeyCode> keyA = new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2);
+        Tuple<List<KeyCode>, KeyCode> keyB = new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2);
     }
 
     /// <summary>
@@ -72,6 +96,7 @@ public class Keylistener : MonoBehaviour
     public void OnEnable()
     {
         _keysDown = new List<KeyCode>();
+        _keysUp = new List<KeyCode>();
     }
 
     /// <summary>
@@ -80,6 +105,7 @@ public class Keylistener : MonoBehaviour
     public void OnDisable()
     {
         _keysDown = null;
+        _keysUp = null;
     }
 
     /// <summary>
@@ -115,6 +141,13 @@ public class Keylistener : MonoBehaviour
                     _keysUp.Add(kc);
                 }
             }
+            for(int i = 0; i < _keysUp.Count; i++)
+            {
+                if(executeKeyCombinationCallback(_keysDown, _keysUp[i]))
+                {
+                    _keysUp.RemoveAt(i);
+                }
+            }
             // Invoke callbacks with all keyups
             executeKeyCallback(_keysUp);
         }
@@ -131,6 +164,17 @@ public class Keylistener : MonoBehaviour
             subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(customComparer);
         }
     }
+    private void initSubscribedKeyCombinationEvents()
+    {
+        if (customCombinationComparer == null)
+        {
+            customCombinationComparer = new KeyCodeCombinationComparer();
+        }
+        if (subscribedKeyCombinationEvents == null)
+        {
+            subscribedKeyCombinationEvents = new Dictionary<Tuple<List<KeyCode>, KeyCode>, UnityEvent<Tuple<List<KeyCode>, KeyCode>>>(customCombinationComparer);
+        }
+    }
 
     /// <summary>
     /// Adds a UnityAction mapped to a list of common keypresses
@@ -140,24 +184,25 @@ public class Keylistener : MonoBehaviour
     /// <returns>bool wether the adding is succesfull. A false indicates that the keys are already in use.</returns>
     public bool addKey(List<KeyCode> key, UnityAction<List<KeyCode>> callback)
     {
-        if (key.Count() == 0 || callback == null)
-        {
-            return false;
-        }
-
-        if (subscribedKeyEvents == null)
-        {
-            initSubscribedKeyEvents();
-        }
-
-        if (!subscribedKeyEvents.ContainsKey(key))
-        {
-            subscribedKeyEvents.Add(key, new UnityEvent<List<KeyCode>>());
-        }
+        if (key.Count() == 0 || callback == null) return false;
+        if (subscribedKeyEvents == null) initSubscribedKeyEvents();
+        if (!subscribedKeyEvents.ContainsKey(key)) subscribedKeyEvents.Add(key, new UnityEvent<List<KeyCode>>());
 
         subscribedKeyEvents[key].AddListener(callback);
         return true;
     }
+
+    public bool addKeyCombination(Tuple<List<KeyCode>, KeyCode> combination, UnityAction<Tuple<List<KeyCode>, KeyCode>> callback)
+    {
+        if (combination.Item1 == null || callback == null) return false;
+        if (subscribedKeyCombinationEvents == null) initSubscribedKeyCombinationEvents();
+        if (!subscribedKeyCombinationEvents.ContainsKey(combination)) subscribedKeyCombinationEvents.Add(combination, new UnityEvent<Tuple<List<KeyCode>, KeyCode>>());
+
+        subscribedKeyCombinationEvents[combination].AddListener(callback);
+        return true;
+    }
+
+
 
     /// <summary>
     /// Adds a number key combinations that are grouped together.
@@ -175,8 +220,8 @@ public class Keylistener : MonoBehaviour
                 break;
 
             case KeyBoardOptions.Numerical:
+                // No keypad numericals because they don't cast to the right ascii values.
                 keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.Alpha0 && (int)k <= (int)KeyCode.Alpha9).ToArray());
-                keys.AddRange(Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(k => (int)k >= (int)KeyCode.Keypad0 && (int)k <= (int)KeyCode.Keypad9).ToArray());
                 break;
 
             case KeyBoardOptions.Function:
@@ -283,11 +328,27 @@ public class Keylistener : MonoBehaviour
     /// Invokes the events and all delegates for the given list of keycodes
     /// </summary>
     /// <param name="key">List of keycodes</param>
-    public void executeKeyCallback(List<KeyCode> key)
+    public bool executeKeyCallback(List<KeyCode> key)
     {
         if (subscribedKeyEvents.ContainsKey(key))
         {
             subscribedKeyEvents[key].Invoke(key);
+            return true;
         }
+        return false;
+    }
+
+    public bool executeKeyCombinationCallback(List<KeyCode> pressed, KeyCode release)
+    {
+        if (pressed == null) return false;
+
+        Tuple<List<KeyCode>, KeyCode> key = new Tuple<List<KeyCode>, KeyCode>(pressed, release);
+        if (subscribedKeyCombinationEvents.ContainsKey(key))
+        {
+            subscribedKeyCombinationEvents[key].Invoke(key);
+            return true;
+        }
+        return false;
+
     }
 }

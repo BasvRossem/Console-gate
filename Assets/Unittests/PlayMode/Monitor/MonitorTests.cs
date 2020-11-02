@@ -94,7 +94,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator WriteText()
         {
-            monitor.AddMonitorTextLine("Hey how are you?");
+            monitor.WriteLine("Hey how are you?");
 
             char[] expected = "Hey how are you?                                                                ".ToCharArray();
             char[] actual = monitor.textGrid[0];

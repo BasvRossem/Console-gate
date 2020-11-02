@@ -167,7 +167,7 @@ namespace Visuals
             columnAmount = ColumnAmount;
 
             grid = new List<char[]>(rowAmount);
-            for (int row = 0; row < rowAmount; row++) grid.Add(MakeRow(columnAmount, ' '));
+            for (int row = 0; row < rowAmount; row++) AddExtraRow();
         }
 
         /// <summary>
@@ -242,6 +242,11 @@ namespace Visuals
             get => grid[index_row];
             set => grid[index_row] = value;
         }
+
+        public void AddExtraRow()
+        {
+            grid.Add(MakeRow(columnAmount, ' '));
+        }
     }
 
     /// <summary>
@@ -262,6 +267,8 @@ namespace Visuals
         public UICursor uiCursor;
 
         private string text;
+
+        public int verticalViewOffset = 0;
 
         private void Awake()
         {
@@ -392,7 +399,13 @@ namespace Visuals
         public void WriteCharacter(char letter)
         {
             NullCoalesceSelectedCursor();
-            if (selectedCursor.x >= textGrid.GetSize().y || selectedCursor.y >= textGrid.GetSize().x) return;
+            if (selectedCursor.x >= textGrid.GetSize().y) return;
+
+            while (selectedCursor.GetPosition().y >= textGrid.GetSize().x)
+            {
+                textGrid.AddExtraRow();
+            }
+
             textGrid[selectedCursor.y, selectedCursor.x] = letter;
             selectedCursor.Move(selectedCursor.Right);
         }
@@ -403,8 +416,7 @@ namespace Visuals
         private void AssembleText()
         {
             text = "";
-
-            for (int y = 0; y < RowAmount; y++)
+            for (int y = verticalViewOffset; y < verticalViewOffset + RowAmount; y++)
             {
                 text += new string(textGrid[y]);
                 text += "\n";
@@ -436,7 +448,7 @@ namespace Visuals
         {
             selectedCursor.ResetPosition();
             ResetMonitor();
-            AddMonitorTextLine(newText);
+            WriteLine(newText);
         }
 
         /// <summary>
@@ -446,7 +458,7 @@ namespace Visuals
         /// This moves the cursor one line down automatically when the line is written.
         /// </note>
         /// <param name="newTextLine">Text to place.</param>
-        public void AddMonitorTextLine(string newTextLine, bool automaticReturn = true)
+        public void WriteLine(string newTextLine, bool automaticReturn = true)
         {
             NullCoalesceSelectedCursor();
             var lines = newTextLine.Split('\n');
@@ -489,8 +501,7 @@ namespace Visuals
             {
                 for (int y = startRow; y <= endRow; y++)
                 {
-                    selectedCursor.SetPosition(x, y);
-                    WriteCharacter(' ');
+                    textGrid[y, x] = ' ';
                 }
             }
         }
@@ -599,7 +610,6 @@ namespace Visuals
 
             uiCursor.SetSize(newSize);
             uiCursor.SetPositionCenter(newPositionCenter + newPositionOffset);
-            Debug.LogWarning("Here");
         }
 
         /// <summary>
@@ -607,10 +617,28 @@ namespace Visuals
         /// </summary>
         private void UpdateUICursorPosition()
         {
-            uiCursor.ResetSize();
+            if (selectedCursor.y < 0 || selectedCursor.x < 0) return;
+            // The - 1 on the x vale is to make sure it stops at the right edge.
+            if (selectedCursor.y >= textMeshCharacterPositions.Count || selectedCursor.x >= textMeshCharacterPositions[0].Count - 1) return;
 
             Vector2 newPosition = textMeshCharacterPositions[selectedCursor.y][selectedCursor.x];
             uiCursor.SetPositionCenter(newPosition);
+        }
+
+        public void MoveView(int rows)
+        {
+            //int min_x = selectedCursor.GetBounds()[0].x;
+            //int min_y = selectedCursor.GetBounds()[0].y;
+            //int max_x = selectedCursor.GetBounds()[1].x;
+            //int max_y = selectedCursor.GetBounds()[1].y;
+
+            //if (min_y + rows < 0) min_y = 0;
+            //if (max_y >= textGrid.GetSize().x) max_y = textGrid.GetSize().x - 1;
+
+            //selectedCursor.SetBounds(min_y: min_y + rows, max_y: max_y + rows);
+            verticalViewOffset += rows;
+            if (verticalViewOffset < 0) verticalViewOffset = 0;
+            if (verticalViewOffset >= textGrid.GetSize().x - RowAmount) verticalViewOffset = textGrid.GetSize().x - RowAmount;
         }
     }
 
