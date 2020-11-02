@@ -47,12 +47,23 @@ namespace UserInput
 
     public class KeyCodeCombinationComparer : IEqualityComparer<Tuple<List<KeyCode>, KeyCode>>
     {
+        /// <summary>
+        /// Checks equality of contents of both objects, rather than reference pointers
+        /// </summary>
+        /// <param name="x">LHS Tuple of keydown list and release trigger</param>
+        /// <param name="y">RHS Tuple of keydown list and release trigger</param>
+        /// <returns>Bool</returns>
         public bool Equals(Tuple<List<KeyCode>, KeyCode> x, Tuple<List<KeyCode>, KeyCode> y)
         {
             if (x == null || y == null) return false;
             return (x.Item1.All(y.Item1.Contains) && y.Item1.All(x.Item1.Contains)) && (x.Item2 == y.Item2);
         }
 
+        /// <summary>
+        /// Makes a hashcode generated from the contents
+        /// </summary>
+        /// <param name="obj">Tuple of keydown list and release trigger</param>
+        /// <returns></returns>
         public int GetHashCode(Tuple<List<KeyCode>, KeyCode> obj)
         {
             int hCode = obj.Item1.Sum(x => (int)x) + (int)obj.Item2;
@@ -76,12 +87,18 @@ namespace UserInput
         private List<KeyCode> _keysDown;
         private List<KeyCode> _keysUp;
 
+        /// <summary>
+        /// Initializes the key-combination and key events
+        /// </summary>
         public void Awake()
         {
             InitSubscribedKeyEvents();
             InitSubscribedKeyCombinationEvents();
         }
-
+        
+        /// <summary>
+        /// Initializes the key-combination and key events
+        /// </summary>
         public void Start()
         {
             InitSubscribedKeyEvents();
@@ -89,7 +106,7 @@ namespace UserInput
         }
 
         /// <summary>
-        /// Resets the list of keys down
+        /// Resets the list of keydown and keyup
         /// </summary>
         public void OnEnable()
         {
@@ -98,7 +115,7 @@ namespace UserInput
         }
 
         /// <summary>
-        /// Nulls the keydown list
+        /// Nulls the keydown and keyup list
         /// </summary>
         public void OnDisable()
         {
@@ -117,6 +134,18 @@ namespace UserInput
 
             // Catch all keyups
             ProcessKeyDowns();
+        }
+
+        private void CatchKeyDowns()
+        {
+            if (!Input.anyKeyDown) return;
+            foreach (var kc in keyCodes)
+            {
+                if (Input.GetKeyDown(kc))
+                {
+                    _keysDown.Add(kc);
+                }
+            }
         }
 
         private void ProcessKeyDowns()
@@ -147,40 +176,16 @@ namespace UserInput
             ExecuteKeyCallback(_keysUp);
         }
 
-        private void CatchKeyDowns()
-        {
-            if (!Input.anyKeyDown) return;
-            foreach (var kc in keyCodes)
-            {
-                if (Input.GetKeyDown(kc))
-                {
-                    _keysDown.Add(kc);
-                }
-            }
-        }
-
 
         private void InitSubscribedKeyEvents()
         {
-            if (_customComparer == null)
-            {
-                _customComparer = new KeyCodeComparer();
-            }
-            if (_subscribedKeyEvents == null)
-            {
-                _subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(_customComparer);
-            }
+            if (_customComparer == null) _customComparer = new KeyCodeComparer();
+            if (_subscribedKeyEvents == null) _subscribedKeyEvents = new Dictionary<List<KeyCode>, UnityEvent<List<KeyCode>>>(_customComparer);
         }
         private void InitSubscribedKeyCombinationEvents()
         {
-            if (_customCombinationComparer == null)
-            {
-                _customCombinationComparer = new KeyCodeCombinationComparer();
-            }
-            if (_subscribedKeyCombinationEvents == null)
-            {
-                _subscribedKeyCombinationEvents = new Dictionary<Tuple<List<KeyCode>, KeyCode>, UnityEvent<Tuple<List<KeyCode>, KeyCode>>>(_customCombinationComparer);
-            }
+            if (_customCombinationComparer == null) _customCombinationComparer = new KeyCodeCombinationComparer();
+            if (_subscribedKeyCombinationEvents == null) _subscribedKeyCombinationEvents = new Dictionary<Tuple<List<KeyCode>, KeyCode>, UnityEvent<Tuple<List<KeyCode>, KeyCode>>>(_customCombinationComparer);
         }
 
         /// <summary>
@@ -201,16 +206,14 @@ namespace UserInput
 
         public bool AddKeyCombination(Tuple<List<KeyCode>, KeyCode> combination, UnityAction<Tuple<List<KeyCode>, KeyCode>> callback)
         {
-            if (combination.Item1 == null || callback == null) return false;
+            if (combination.Item1 == null || callback == null || combination.Item1.Contains(combination.Item2) || combination.Item1.Count == 0) return false;
             if (_subscribedKeyCombinationEvents == null) InitSubscribedKeyCombinationEvents();
             if (!_subscribedKeyCombinationEvents.ContainsKey(combination)) _subscribedKeyCombinationEvents.Add(combination, new UnityEvent<Tuple<List<KeyCode>, KeyCode>>());
 
             _subscribedKeyCombinationEvents[combination].AddListener(callback);
             return true;
         }
-
-
-
+        
         /// <summary>
         /// Adds a number key combinations that are grouped together.
         /// </summary>
@@ -319,7 +322,7 @@ namespace UserInput
         /// </summary>
         /// <param name="key">List of keycodes</param>
         /// <returns></returns>
-        public UnityEvent<List<KeyCode>> GETEvent(List<KeyCode> key)
+        public UnityEvent<List<KeyCode>> GetEvent(List<KeyCode> key)
         {
             return !_subscribedKeyEvents.ContainsKey(key) ? null : _subscribedKeyEvents[key];
         }
@@ -335,6 +338,12 @@ namespace UserInput
             return true;
         }
 
+        /// <summary>
+        /// Invokes the events and all delegates for the given list of keydowns and the release trigger
+        /// </summary>
+        /// <param name="pressed"></param>
+        /// <param name="release"></param>
+        /// <returns></returns>
         public bool ExecuteKeyCombinationCallback(List<KeyCode> pressed, KeyCode release)
         {
             if (pressed == null) return false;
