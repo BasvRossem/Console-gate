@@ -6,38 +6,31 @@ using Visuals;
 
 public class Level0 : MonoBehaviour
 {
-    [SerializeField] private Monitor _monitor = null;
-    [SerializeField] private Keylistener _keyListener = null;
+    [SerializeField] private Monitor monitor = null;
+    [SerializeField] private Keylistener keylistener = null;
 
-    private readonly List<string> _text = new List<string>();
-    private int _textIndex = 0;
+    private List<string> text = new List<string>();
+    private int textIndex = 0;
 
-    private Layer _textLayer;
-    private Layer _continueLayer;
+    private string nextCursor;
 
     // Start is called before the first frame update
     private void Start()
     {
-        _monitor = _monitor ?? new Monitor();
-        _keyListener = _keyListener ?? new Keylistener();
+        text.Add("Welcome to Console Gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
+        text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
+        text.Add("The game is on.");
 
-        _text.Add("Welcome to Console Gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
-        _text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
-        _text.Add("The game is on.");
+        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
 
-        Debug.Log(_keyListener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext));
+        nextCursor = monitor.AddCursor("NextCursor");
+        monitor.SelectCursor(nextCursor);
+        monitor.selectedCursor.SetBounds(0, 23);
 
-        _textLayer = _monitor.NewLayer();
-        _textLayer.view.SetSize(22, Monitor.Size.columns);
+        monitor.uiCursor.linkedCursor = monitor.selectedCursor;
+        monitor.uiCursor.Blink(true);
 
-        _continueLayer = _monitor.NewLayer();
-        _continueLayer.view.SetSize(1, Monitor.Size.columns);
-        _continueLayer.view.SetMonitorPosition(23, 0);
-
-        _monitor.uiCursor.linkedLayer = _continueLayer;
-        _monitor.uiCursor.Blink(true);
-
-        writeText(_text[0]);
+        writeText(text[0]);
     }
 
     // Update is called once per frame
@@ -47,17 +40,21 @@ public class Level0 : MonoBehaviour
 
     private void writeText(string monitorText)
     {
-        _textLayer.WriteText(monitorText);
-        _continueLayer.WriteText("Press [space] to continue...");
+        monitor.SelectCursor(MonitorCursor.DefaultName);
+        monitor.SetMonitorText(monitorText);
+
+        monitor.SelectCursor(nextCursor);
+        monitor.selectedCursor.ResetPosition();
+        monitor.WriteLine("Press [space] to continue...", false);
     }
 
     public void LoadNext(List<KeyCode> args)
     {
         Debug.Log("Next screen");
-        _textIndex += 1;
-        if (_textIndex < _text.Count)
+        textIndex += 1;
+        if (textIndex < text.Count)
         {
-            writeText(_text[_textIndex]);
+            writeText(text[textIndex]);
         }
         else
         {

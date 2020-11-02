@@ -83,7 +83,7 @@ namespace ControllerStructures
         {
             foreach (Option option in options)
             {
-                monitor.AddMonitorTextLine(option.text);
+                monitor.WriteLine(option.text);
             }
         }
     }

@@ -29,10 +29,10 @@ public class MonitorTestLevel : MonoBehaviour
 
         monitor.selectedCursor.ResetPosition();
 
-        monitor.AddMonitorTextLine("Hello World");
-        monitor.AddMonitorTextLine("How are you doing?");
-        monitor.AddMonitorTextLine("Im fine!");
-        monitor.AddMonitorTextLine(System.DateTime.Now.ToString());
+        monitor.WriteLine("Hello World");
+        monitor.WriteLine("How are you doing?");
+        monitor.WriteLine("Im fine!");
+        monitor.WriteLine(System.DateTime.Now.ToString());
 
         Debug.Log(monitor.selectedCursor.GetName());
 
@@ -41,7 +41,7 @@ public class MonitorTestLevel : MonoBehaviour
         monitor.ClearArea(4, 4, 10, 10);
 
         monitor.SelectCursor(MonitorCursor.DefaultName);
-        monitor.AddMonitorTextLine("Hello World");
+        monitor.WriteLine("Hello World");
 
         monitor.SelectRow(2);
     }
