@@ -1,4 +1,6 @@
-﻿namespace Visuals
+﻿using System;
+
+namespace Visuals
 {
     /// <summary>
     /// A view is used by a layer to regulate what will eventually be rendered on the monitor.
@@ -11,6 +13,9 @@
         public GridPosition externalPosition;
         public GridPosition internalPosition;
 
+        private GridSize _boundSize;
+        private bool _stayInBounds;
+
         private bool _isChanged;
 
         public View(GridSize size, GridPosition internalPosition = new GridPosition(), GridPosition externalPosition = new GridPosition())
@@ -18,7 +23,8 @@
             SetSize(size);
             SetInternalPosition(internalPosition);
             SetExternalPosition(externalPosition);
-
+            StayInBounds(false);
+            
             Change();
         }
 
@@ -32,6 +38,24 @@
             if (Tools.CheckError((newSize.rows <= 0) || (newSize.columns <= 0), "Size cannot be negative or zero.")) return;
             size = newSize;
             Change();
+        }
+
+        /// <summary>
+        /// Set if the view should be able to scroll past the text grid.
+        /// </summary>
+        /// <param name="value"></param>
+        public void StayInBounds(bool value)
+        {
+            _stayInBounds = value;
+        }
+        
+        /// <summary>
+        /// Set the bounds of the view.
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetBounds(GridSize externalBounds)
+        {
+            _boundSize = externalBounds;
         }
 
         /// <summary>
@@ -92,6 +116,12 @@
 
             if (Tools.CheckWarning(internalPosition.row < 0, "New view internal position row cannot be negative. Set to 0.")) internalPosition.row = 0;
             if (Tools.CheckWarning(internalPosition.column < 0, "New view internal position column cannot be negative. Set to 0.")) internalPosition.column = 0;
+
+            if (_stayInBounds)
+            {
+                if (internalPosition.row + size.rows > _boundSize.rows) internalPosition.row = _boundSize.rows - size.rows;
+                if (internalPosition.column + size.columns > _boundSize.columns) internalPosition.column = _boundSize.columns - size.rows;
+            }
             
             Change();
         }
@@ -103,14 +133,19 @@
         /// <param name="externalTextGrid">The external grid to take a slice out of.</param>
         public void SetText(TextGrid externalTextGrid)
         {
+            var externalSize = externalTextGrid.GetSize();
+            
             textGrid = new TextGrid(size);
-
+            
             int endRow = internalPosition.row + size.rows - 1;
             int endColumn = internalPosition.column + size.columns - 1;
 
-            for (int row = internalPosition.row; row <= endRow; row++)
+            int maxRow = Math.Min(endRow + 1, externalSize.rows);
+            int maxCol = Math.Min(endColumn + 1, externalSize.columns);
+            
+            for (int row = internalPosition.row; row < maxRow; row++)
             {
-                for (int column = internalPosition.column; column <= endColumn; column++)
+                for (int column = internalPosition.column; column < maxCol; column++)
                 {
                     char character = externalTextGrid[row, column];
 
