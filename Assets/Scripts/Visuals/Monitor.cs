@@ -98,7 +98,6 @@ namespace Visuals
         {
             _layers.Remove(layer);
         }
-
         
         // Render functions
         /// <summary>

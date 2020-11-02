@@ -8,18 +8,23 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using Visuals;
+using Cursor = Visuals.Cursor;
 
 public class Level1 : MonoBehaviour
 {
     [SerializeField] private Monitor monitor = null;
     [SerializeField] private Keylistener keylistener = null;
 
-    private string screenCursor;
-    private string terminalCursor;
+    private Layer _textLayer;
+    private Layer _userInputLayer;
 
-    private string command = "";
-    private delegate void monitorWriter();
-    private monitorWriter myMonitorWriter;
+    private string _screenCursor;
+    private string _terminalCursor;
+
+    private string _command = "";
+    
+    private delegate void MonitorWriter();
+    private MonitorWriter _myMonitorWriter;
 
     // Start is called before the first frame update
     private void Start()
@@ -35,38 +40,29 @@ public class Level1 : MonoBehaviour
         keylistener.addKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
         keylistener.addKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
 
-        screenCursor = monitor.AddCursor("ScreenCursor");
-        terminalCursor = monitor.AddCursor("TermminalCursor");
-        monitor.SelectCursor(terminalCursor);
-        monitor.selectedCursor.SetBounds(min_y: 23, max_y: 23);
-        monitor.uiCursor.linkedCursor = monitor.selectedCursor;
+        _textLayer = monitor.NewLayer();
+        _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
+        _textLayer.view.StayInBounds(true);
+
+        _userInputLayer = monitor.NewLayer();
+        _userInputLayer.view.SetSize(new GridSize(1, Monitor.Size.columns));
+        _userInputLayer.view.SetExternalPosition(new GridPosition(23, 0));
+        
+        monitor.uiCursor.linkedLayer = _userInputLayer;
         monitor.uiCursor.Blink(true);
 
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-
-        myMonitorWriter = LoadChatlog;
+        _myMonitorWriter = LoadChatlog;
+        LoadChatlog();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        myMonitorWriter();
-
-        monitor.SelectCursor(terminalCursor);
-
-        monitor.ClearArea(22 + monitor.verticalViewOffset, 0, 23 + monitor.verticalViewOffset, 79);
-        monitor.selectedCursor.SetBounds(min_y: 23 + monitor.verticalViewOffset, max_y: 23 + monitor.verticalViewOffset);
-        monitor.selectedCursor.ResetPosition();
-        monitor.WriteLine(command, false);
     }
 
     private void LoadChatlog()
     {
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-        monitor.ResetMonitor();
-        monitor.SetMonitorText(@"-------------------
+       _textLayer.WriteText(@"-------------------
 Chatlog 23 - 10 - 2020
 ------------------ -
 23 - 10 - 2020 16:03, Docent:
@@ -96,14 +92,12 @@ Chatlog 25 - 10 - 2020
 ------------------ -
 25 - 10 - 2020 20:48, SYSTEM:
 Succesfully downloaded ""appendix.txt""");
+       _textLayer.view.SetBounds(_textLayer.textGrid.GetSize());
     }
 
     public void LoadFile()
     {
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-        monitor.ResetMonitor();
-        monitor.WriteLine(@"Filename: appendix
+        _textLayer.WriteLine(@"Filename: appendix
 File extension: .txt
 Path to file: / Downloads / apendix
 
@@ -111,9 +105,9 @@ Date created: 20 - 03 - 2014
 Size: 12381 bytes
 Author: Docent
 IP - adress owner: 52.232.56.79");
-        monitor.DrawLineHorizontal(8, 0, monitor.GetColumnAmount());
-        monitor.selectedCursor.Move(monitor.selectedCursor.Down);
-        monitor.WriteLine(@"Content:
+        _textLayer.DrawLineHorizontal(8, 0, Monitor.Size.columns);
+        _textLayer.cursor.Move(Cursor.Down);
+        _textLayer.WriteLine(@"Content:
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nulla vehicula et ex id eleifend.
@@ -131,62 +125,8 @@ Maecenas scelerisque semper venenatis.
 Suspendisse vel dolor velit.
 Nunc imperdiet cursus velit eget porta.
 In eget ex purus.
-Vivamus pellentesque quam in arcu ultrices varius.
-
-Sed euismod commodo egestas.
-Aliquam posuere vulputate ullamcorper.
-Nulla consequat porttitor ultricies.
-Nulla augue metus, cursus ut feugiat sed, fermentum cursus dui.
-Aenean non ex tortor.
-Sed dolor nunc, molestie sit amet mattis sed, finibus sit amet neque.
-Nullam consequat odio vel ornare facilisis.
-Integer viverra, metus ac eleifend lacinia, ex risus sagittis leo,
-ut maximus sem leo id neque.
-Ut interdum elementum lectus sed venenatis.
-Curabitur ultrices nisi eu diam interdum fringilla.
-Nam eget magna ac tellus tristique pulvinar.
-Suspendisse tempus nunc id metus volutpat, dictum efficitur eros feugiat.
-Aliquam malesuada iaculis nulla nec lobortis.
-Nam feugiat lorem quis nulla pharetra sodales.
-
-Suspendisse vitae convallis ipsum.
-Fusce tincidunt ultrices erat sagittis convallis.
-Vivamus eu felis mattis, pulvinar velit sit amet, molestie mi.
-Proin condimentum diam a dui sagittis mattis eu vel ex.
-Nam varius pulvinar lectus et ultrices.
-Sed eget nisl ut mauris interdum venenatis in sit amet tellus.
-Integer facilisis pulvinar dolor a volutpat.
-
-Vivamus lobortis congue diam, id volutpat tellus porttitor vel.
-Vestibulum laoreet nulla eget elit vehicula, vitae efficitur libero tempor.
-Maecenas suscipit rutrum justo at porttitor.
-Proin semper rhoncus accumsan.
-Mauris malesuada sed libero in scelerisque.
-Nam tellus magna, ultricies eget rhoncus eget, congue volutpat nisi.
-Sed non varius tortor.
-Mauris consectetur blandit arcu eu pharetra.
-In hac habitasse platea dictumst.
-Mauris at ultrices lacus.
-Interdum et malesuada fames ac ante ipsum primis in faucibus.
-In vel velit quis sapien commodo vulputate eu eu mi.
-Maecenas elementum libero sem, nec semper leo ultrices eu.
-
-Ut arcu nisl, placerat vitae pharetra vel, tincidunt ornare magna.
-Suspendisse potenti.
-Quisque in mauris ut lacus imperdiet ornare.
-Cras lacinia in diam at hendrerit.
-Suspendisse congue lectus nec consectetur ultricies.
-Interdum et malesuada fames ac ante ipsum primis in faucibus.
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere curae;
-Vestibulum blandit venenatis urna sit amet sagittis.
-Fusce commodo malesuada nibh, et commodo metus tincidunt eleifend.
-Pellentesque pellentesque est eu rutrum fringilla.
-Praesent tortor orci, placerat vitae tortor ut, ultrices suscipit ex.
-Nulla semper tempor metus in fringilla.
-Nullam mollis ultricies posuere.
-Nulla facilisi.
-Pellentesque eu ante laoreet, maximus sem porta, venenatis nisl.
-Integer egestas quam et diam bibendum lobortis.");
+Vivamus pellentesque quam in arcu ultrices varius.");
+        _textLayer.view.SetBounds(_textLayer.textGrid.GetSize());
     }
 
     private void LoadNextLevel()
@@ -198,8 +138,8 @@ Integer egestas quam et diam bibendum lobortis.");
     {
         if (args.Count <= 0) return;
 
-        if (args[0] == KeyCode.DownArrow) monitor.MoveView(1);
-        else if (args[0] == KeyCode.UpArrow) monitor.MoveView(-1);
+        if (args[0] == KeyCode.DownArrow) _textLayer.view.MoveInternalPosition(down: 1);
+        else if (args[0] == KeyCode.UpArrow) _textLayer.view.MoveInternalPosition(up: 1);
     }
 
     public void UpdateTerminal(List<KeyCode> args)
@@ -207,12 +147,12 @@ Integer egestas quam et diam bibendum lobortis.");
         if (args.Count <= 0) return;
         if (args[0] == KeyCode.LeftShift && args[1] == KeyCode.Alpha2)
         {
-            command += "@";
+            _command += "@";
         }
 
         foreach (KeyCode k in args)
         {
-            command += (char)k;
+            _command += (char)k;
         }
     }
 
@@ -221,63 +161,60 @@ Integer egestas quam et diam bibendum lobortis.");
         if (args == null) return;
         if (args.Item1[0] == KeyCode.LeftShift && args.Item2 == KeyCode.Alpha2)
         {
-            command += "@";
+            _command += "@";
         }
     }
 
     public void RemoveLastTerminalCharacter(List<KeyCode> args)
     {
         if (args.Count <= 0) return;
-        if (command.Length <= 0) return;
+        if (_command.Length <= 0) return;
 
-        StringBuilder sb = new StringBuilder(command);
-        sb.Remove(command.Length - 1, 1);
-        command = sb.ToString();
+        StringBuilder sb = new StringBuilder(_command);
+        sb.Remove(_command.Length - 1, 1);
+        _command = sb.ToString();
     }
 
     public void SendCommand(List<KeyCode> args)
     {
         if (args.Count <= 0) return;
-        var splitCommand = command.Split(' ');
+        var splitCommand = _command.Split(' ');
 
         switch (splitCommand[0])
         {
             case "ssh":
-                sshCall(command);
+                sshCall(_command);
                 break;
 
             case "cat":
-                catCall(command);
+                catCall(_command);
                 break;
 
             case "dir":
-                dirCall(command);
+                dirCall(_command);
                 break;
 
             default:
                 break;
         }
-        command = "";
+        _command = "";
     }
 
     private void sshCall(string command)
     {
         if (command == "ssh user@52.232.56.79")
         {
-            myMonitorWriter = LoadNextLevel;
+            _myMonitorWriter = LoadNextLevel;
         }
         else
         {
-            myMonitorWriter = sshWriter;
+            _myMonitorWriter = sshWriter;
         }
     }
 
     private void sshWriter()
     {
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-        monitor.ResetMonitor();
-        monitor.WriteLine("That IP-address can't be connected to");
+        _textLayer.WriteText("That IP-address can't be connected to");
     }
 
     private void catCall(string command)
@@ -285,24 +222,21 @@ Integer egestas quam et diam bibendum lobortis.");
         if (command == null) return;
         if (command == "cat appendix.txt")
         {
-            myMonitorWriter = LoadFile;
+            _myMonitorWriter = LoadFile;
         }
         else if(command == "cat chatlog.txt")
         {
-            myMonitorWriter = LoadChatlog;
+            _myMonitorWriter = LoadChatlog;
         }
         else
         {
-            myMonitorWriter = catWriter;
+            _myMonitorWriter = catWriter;
         }
     }
 
     private void catWriter()
     {
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-        monitor.ResetMonitor();
-        monitor.WriteLine("Can't find that file, try searching recently downloaded files.\n(cat chatlog.txt might contain useful info)");
+        _textLayer.WriteText("Can't find that file, try searching recently downloaded files.\n(cat chatlog.txt might contain useful info)");
     }
 
     private void dirCall(string command)
@@ -312,15 +246,11 @@ Integer egestas quam et diam bibendum lobortis.");
         if (command == "dir")
         {
             Debug.Log("dirWriter is being set");
-            myMonitorWriter = dirWriter;
+            _myMonitorWriter = dirWriter;
         }
     }
     private void dirWriter()
     {
-        monitor.SelectCursor(screenCursor);
-        monitor.selectedCursor.ResetPosition();
-        monitor.ResetMonitor();
-        monitor.WriteLine("/:\n\tchatlog.txt\n\tappendix.txt");
-
+        _textLayer.WriteText("/:\n\tchatlog.txt\n\tappendix.txt");
     }
 }
