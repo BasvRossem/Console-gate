@@ -15,7 +15,7 @@ namespace Visuals
 
         private GridSize _boundSize;
         private bool _stayInBounds;
-
+        private bool _isStatic;
         private bool _isChanged;
 
         public View(GridSize size, GridPosition internalPosition = new GridPosition(), GridPosition externalPosition = new GridPosition())
@@ -23,6 +23,7 @@ namespace Visuals
             SetSize(size);
             SetInternalPosition(internalPosition);
             SetExternalPosition(externalPosition);
+            MakeStatic(false);
             StayInBounds(true);
             
             Change();
@@ -77,11 +78,21 @@ namespace Visuals
 
         // Positioning
         /// <summary>
+        /// Wether to make the view static to (dis)allow scrolling.
+        /// </summary>
+        /// <param name="value"></param>
+        public void MakeStatic(bool value)
+        {
+            _isStatic = value;
+        }
+        
+        /// <summary>
         /// Set the new top left position of the view relative to its internal text grid.
         /// </summary>
         /// <param name="newInternalPosition">The new top left position.</param>
         public void SetInternalPosition(GridPosition newInternalPosition)
         {
+            if (Tools.CheckWarning(_isStatic, "View is static and cannot be moved")) return;
             if (Tools.CheckError(newInternalPosition.row < 0 || newInternalPosition.column < 0, "Internal position cannot be negative.")) return;
             
             internalPosition = newInternalPosition;
@@ -109,6 +120,7 @@ namespace Visuals
         /// <param name="right">How much to move the internal view right.</param>
         public void MoveInternalPosition(int up = 0, int down = 0, int left = 0, int right = 0)
         {
+            if (Tools.CheckWarning(_isStatic, "View is static and cannot be moved")) return;
             if (Tools.CheckError((up < 0 || down < 0 || left < 0 || right < 0), "Cannot move in a negative direction.")) return;
             
             internalPosition.row += down - up;
