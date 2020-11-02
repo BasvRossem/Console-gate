@@ -106,6 +106,7 @@ namespace Visuals
         /// </summary>
         private void Render()
         {
+            if (_layers.Count <= 0) return;
             if (!LayersHaveChanged()) return;
 
             CombineLayers();
