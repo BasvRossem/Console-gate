@@ -9,9 +9,9 @@ namespace ControllerStructures
     /// </summary>
     public class Menu : MonoBehaviour
     {
-        public Monitor monitor;
-        public Keylistener listener;
-
+        [SerializeField] private Monitor monitor;
+        [SerializeField] private Keylistener listener;
+        private Layer layer;
         private int optionNumber;
 
         public List<Option> options = new List<Option>();
@@ -25,19 +25,12 @@ namespace ControllerStructures
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
 
+            layer = monitor.NewLayer();
+            writeOptionsToLayer();
+            
             optionNumber = 0;
         }
-
-        private void Update()
-        {
-            monitor.ResetMonitor();
-            monitor.selectedCursor.ResetPosition();
-
-            writeOptionsToMonitor();
-
-            monitor.SelectRow(optionNumber);
-        }
-
+        
         /// <summary>
         /// Set a new list of options.
         /// </summary>
@@ -55,6 +48,7 @@ namespace ControllerStructures
         private void next(List<KeyCode> arg)
         {
             if (optionNumber + 1 < options.Count) optionNumber++;
+            monitor.uiCursor.SelectRow(optionNumber);
         }
 
         /// <summary>
@@ -64,6 +58,7 @@ namespace ControllerStructures
         private void previous(List<KeyCode> arg)
         {
             if (optionNumber - 1 >= 0) optionNumber--;
+            monitor.uiCursor.SelectRow(optionNumber);
         }
 
         /// <summary>
@@ -79,11 +74,11 @@ namespace ControllerStructures
         /// <summary>
         /// Writes all the options to the monitor.
         /// </summary>
-        private void writeOptionsToMonitor()
+        private void writeOptionsToLayer()
         {
             foreach (Option option in options)
             {
-                monitor.WriteLine(option.text);
+                layer.WriteLine(option.text);
             }
         }
     }
