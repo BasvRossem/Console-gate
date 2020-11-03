@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
 using UserInput;
@@ -12,10 +13,15 @@ namespace ControllerStructures
     {
         [SerializeField] private Monitor monitor;
         [SerializeField] private KeyListener listener;
-        private Layer _layer;
+        public Layer layer;
         private int _optionNumber;
 
         private List<Option> _options = new List<Option>();
+
+        private void Awake()
+        {
+            layer = monitor.NewLayer();
+        }
 
         private void Start()
         {
@@ -26,13 +32,13 @@ namespace ControllerStructures
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
-            
-            _layer = monitor.NewLayer();
+
             WriteOptionsToLayer();
             
             _optionNumber = 0;
+            monitor.uiCursor.SelectRow(_optionNumber);
         }
-        
+
         /// <summary>
         /// Set a new list of options.
         /// </summary>
@@ -80,7 +86,7 @@ namespace ControllerStructures
         {
             foreach (Option option in _options)
             {
-                _layer.WriteLine(option.text);
+                layer.WriteLine(option.text);
             }
         }
     }
