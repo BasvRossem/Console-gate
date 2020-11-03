@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace ControllerStructures
@@ -22,9 +23,18 @@ namespace ControllerStructures
         }
 
         [Test]
-        public void PrintOptionLevelName()
+        public void PrintOptionPrintText()
         {
-            
+            LogAssert.Expect(LogType.Log, "This is printed.");
+            OptionPrint option = new OptionPrint("Text", "This is printed.");
+            option.Run();
+        }
+
+        [Test]
+        public void LoadLevelOptionLoadsLevel()
+        {
+            OptionLoadLevel option = new OptionLoadLevel("", "This does not exist.");
+            Assert.Throws<InvalidOperationException>(option.Run);
         }
     }
 }
