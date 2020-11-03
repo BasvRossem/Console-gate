@@ -10,7 +10,7 @@ namespace ControllerStructures
     /// </summary>
     public class Option
     {
-        public string text;
+        public readonly string text;
 
         /// <summary>
         /// Initializes a new instance of the Option class.
