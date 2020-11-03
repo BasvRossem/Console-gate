@@ -33,10 +33,7 @@ namespace Visuals
             _rectTransform = GetComponent<RectTransform>();
             
             textMeshCharacterPositions = new List<List<Vector2>>();
-        }
-
-        private void Start()
-        {
+            
             isVisible = true;
             characterSize = new Vector2(8, 18);
             _lastBlinkUpdate = Time.time;
