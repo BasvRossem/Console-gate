@@ -83,11 +83,12 @@ namespace Visuals
         /// <summary>
         /// Create a new layer to be rendered.
         /// </summary>
+        /// <param name="render">If the layer should be rendered from creation.</param>
         /// <returns>The newly created layer.</returns>
-        public Layer NewLayer()
+        public Layer NewLayer(bool render = true)
         {
             var newLayer = new Layer(Size);
-            _layers.Add(newLayer);
+            if(render) _layers.Add(newLayer);
             return newLayer;
         }
 
