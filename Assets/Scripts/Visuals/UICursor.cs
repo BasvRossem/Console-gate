@@ -159,7 +159,7 @@ namespace Visuals
             List<Vector2> rowPositions = textMeshCharacterPositions[row];
 
             Vector2 newSize = new Vector2(characterSize.x * rowPositions.Count, characterSize.y);
-            Vector2 characterCenter = (rowPositions[0] + rowPositions[rowPositions.Count - 1]) / 2;
+            Vector2 characterCenter = (rowPositions[0] + rowPositions[rowPositions.Count - 1]) / 2 + new Vector2(0,2);
 
             SetSize(newSize);
             SetPositionCenter(characterCenter);
