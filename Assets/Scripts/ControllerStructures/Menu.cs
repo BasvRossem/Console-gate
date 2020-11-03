@@ -36,7 +36,7 @@ namespace ControllerStructures
             WriteOptionsToLayer();
             
             _optionNumber = 0;
-            monitor.uiCursor.SelectRow(_optionNumber);
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ControllerStructures
         private void Next(List<KeyCode> arg)
         {
             if (_optionNumber + 1 < _options.Count) _optionNumber++;
-            monitor.uiCursor.SelectRow(_optionNumber);
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ControllerStructures
         private void Previous(List<KeyCode> arg)
         {
             if (_optionNumber - 1 >= 0) _optionNumber--;
-            monitor.uiCursor.SelectRow(_optionNumber);
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 
         /// <summary>
