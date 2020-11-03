@@ -11,7 +11,7 @@ namespace ControllerStructures
     public class Menu : MonoBehaviour
     {
         [SerializeField] private Monitor monitor;
-        [SerializeField] private Keylistener listener;
+        [SerializeField] private KeyListener listener;
         private Layer _layer;
         private int _optionNumber;
 
@@ -19,9 +19,9 @@ namespace ControllerStructures
 
         private void Start()
         {
-            listener.AddKey(new List<KeyCode> { KeyCode.Return }, selectOption);
-            listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
-            listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, next);
+            listener.AddKey(new List<KeyCode> { KeyCode.Return }, SelectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
+            listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
