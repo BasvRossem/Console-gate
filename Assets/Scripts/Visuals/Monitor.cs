@@ -141,7 +141,10 @@ namespace Visuals
                     {
                         int monitorPositionRow = view.externalPosition.row + row;
                         int monitorPositionColumn = view.externalPosition.column + column;
-
+                        
+                        if(monitorPositionRow >= _textGrid.GetSize().rows) continue;
+                        if(monitorPositionColumn >= _textGrid.GetSize().columns) continue;
+                        
                         _textGrid[monitorPositionRow, monitorPositionColumn] = view.textGrid[row, column];
                     }
                 }
