@@ -163,7 +163,6 @@ namespace Visuals
 
             SetSize(newSize);
             SetPositionCenter(characterCenter);
-            Debug.LogWarning("Here");
         }
 
         public void SetGridPosition(GridPosition gridPosition)
