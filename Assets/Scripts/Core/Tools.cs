@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class Tools
@@ -33,5 +35,13 @@ public class Tools
             Debug.LogWarning(errorMessage);
         }
         return condition;
+    }
+
+    public static string ReadFile(string path)
+    {
+        StreamReader reader = new StreamReader(path);
+        string text = reader.ReadToEnd();
+        reader.Close();
+        return text;
     }
 }
