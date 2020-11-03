@@ -127,7 +127,6 @@ public class LogicGates
         public void Toggle()
         {
             _activated = !_activated;
-            Debug.Log($"switch is now {_activated}");
             foreach (var line in lines)
             {
                 line.SetActive(_activated);
@@ -183,6 +182,7 @@ public class Level2 : MonoBehaviour
     [SerializeField] private KeyListener keyListener = null;
 
     private Layer _puzzleLayer;
+    private GridPosition _puzzleLayerOffset;
 
     private int _textIndex = 0;
 
@@ -202,22 +202,26 @@ public class Level2 : MonoBehaviour
 
         _puzzleLayer = monitor.NewLayer();
         _puzzleLayer.view.SetExternalPosition(new GridPosition(5, 17));
+        _puzzleLayerOffset = _puzzleLayer.view.externalPosition;
 
         monitor.uiCursor.Show(true);
         // monitor.uiCursor.linkedLayer = _continueLayer;
         // monitor.uiCursor.Blink(true);
 
         _switches = new List<LogicGates.Switch>(6);
-        _switchPositions.Add(new GridPosition(12,1));
-        _switchPositions.Add(new GridPosition(12,9));
-        _switchPositions.Add(new GridPosition(12,17));
-        _switchPositions.Add(new GridPosition(12,25));
-        _switchPositions.Add(new GridPosition(12,33));
-        _switchPositions.Add(new GridPosition(12,41));
+        _switchPositions = new List<GridPosition>(6) {
+            new GridPosition(12, 1),
+            new GridPosition(12, 9),
+            new GridPosition(12, 17),
+            new GridPosition(12, 25),
+            new GridPosition(12, 33),
+            new GridPosition(12, 41)
+        };
         _selectedSwitch = 0;
 
         CreateLogicLayout();
         LoadLogicPuzzleToLayer();
+        MoveSelectCursor();
     }
 
     private void CreateLogicLayout()
@@ -275,24 +279,30 @@ public class Level2 : MonoBehaviour
 
     private void SelectSwitch(List<KeyCode> args)
     {
-        Debug.Log(_selectedSwitch);
         _switches[_selectedSwitch].Toggle();
+        char currentCharacter = _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row,_switchPositions[_selectedSwitch].column];
+        if (currentCharacter == ' ') _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = 'x';
+        if (currentCharacter == 'x') _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = ' ';
     }
 
     private void MoveSelectLeft(List<KeyCode> args)
     {
-        print("Left called");
         _selectedSwitch -= 1;
         if (_selectedSwitch < 0) _selectedSwitch = 0;
+        MoveSelectCursor();
     }
 
     private void MoveSelectRight(List<KeyCode> args)
     {
-        print("Right called");
         _selectedSwitch += 1;
         if (_selectedSwitch >= _switches.Count) _selectedSwitch = _switches.Count - 1;
+        MoveSelectCursor();
     }
-
+    
+    private void MoveSelectCursor()
+    {
+        monitor.uiCursor.SetGridPosition(_switchPositions[_selectedSwitch] + _puzzleLayerOffset);
+    }
 
     // private void WriteText(string monitorText)
     // {

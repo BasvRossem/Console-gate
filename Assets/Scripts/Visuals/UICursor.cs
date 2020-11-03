@@ -164,5 +164,11 @@ namespace Visuals
             SetPositionCenter(characterCenter);
             Debug.LogWarning("Here");
         }
+
+        public void SetGridPosition(GridPosition gridPosition)
+        {
+            Vector2 newPosition = textMeshCharacterPositions[gridPosition.row][gridPosition.column];
+            SetPositionCenter(newPosition);
+        }
     }
 }
