@@ -68,6 +68,7 @@ namespace Visuals
         public void Blink(bool blink)
         {
             isBlinking = blink;
+            if(blink == false) GetComponent<Image>().enabled = isVisible;
         }
 
         /// <summary>
