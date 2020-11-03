@@ -2,11 +2,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Visuals;
+using UserInput;
 
 public class Level0 : MonoBehaviour
 {
     [SerializeField] private Monitor monitor = null;
-    [SerializeField] private Keylistener keyListener = null;
+    [SerializeField] private KeyListener keylistener = null;
 
     private Layer _textLayer;
     private Layer _continueLayer;
@@ -23,8 +24,8 @@ public class Level0 : MonoBehaviour
 
         if (Tools.CheckError(monitor == null, "No Monitor object has been added")) return;
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
-
-        keyListener.addKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
+        
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));

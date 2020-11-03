@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Visuals;
+using UserInput;
 
 public class Level1 : MonoBehaviour
 {
     [SerializeField] private Monitor monitor = null;
-    [SerializeField] private Keylistener keylistener = null;
+    [SerializeField] private KeyListener keylistener = null;
 
     private Layer _textLayer;
     private Layer _userInputLayer;
@@ -20,16 +21,16 @@ public class Level1 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        keylistener.addKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
-        keylistener.addKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
 
-        keylistener.addOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
-        keylistener.addOption(KeyBoardOptions.Numerical, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
-        keylistener.addKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
+        keylistener.AddOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
+        keylistener.AddOption(KeyBoardOptions.Numerical, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
+        keylistener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));

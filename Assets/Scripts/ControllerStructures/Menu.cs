@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
+using UserInput;
 
 namespace ControllerStructures
 {
@@ -18,9 +19,9 @@ namespace ControllerStructures
 
         private void Start()
         {
-            listener.addKey(new List<KeyCode> { KeyCode.Return }, SelectOption);
-            listener.addKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
-            listener.addKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
+            listener.AddKey(new List<KeyCode> { KeyCode.Return }, selectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
+            listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, next);
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
