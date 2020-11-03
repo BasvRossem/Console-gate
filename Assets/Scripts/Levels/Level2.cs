@@ -117,19 +117,19 @@ public class LogicGates
 
     public class Switch : LogicComponent
     {
-        private bool _activated;
+        public bool activated;
 
         public Switch()
         {
-            _activated = false;
+            activated = false;
         }
 
         public void Toggle()
         {
-            _activated = !_activated;
+            activated = !activated;
             foreach (var line in lines)
             {
-                line.SetActive(_activated);
+                line.SetActive(activated);
             }
         }
     }
@@ -171,7 +171,7 @@ public class LogicGates
 
         public override void CalculateOutput()
         {
-            if (IsActivated()) Debug.Log("Solved!");
+            if (IsActivated()) SceneManager.LoadScene("Level 3");
         }
     }
 }
@@ -181,10 +181,11 @@ public class Level2 : MonoBehaviour
     [SerializeField] private Monitor monitor = null;
     [SerializeField] private KeyListener keyListener = null;
 
+    private Layer _prefaceLayer;
+    private Layer _continueLayer;
     private Layer _puzzleLayer;
+    private Layer _controlLayer;
     private GridPosition _puzzleLayerOffset;
-
-    private int _textIndex = 0;
 
     private List<LogicGates.Switch> _switches;
     private List<GridPosition> _switchPositions;
@@ -196,17 +197,27 @@ public class Level2 : MonoBehaviour
         if (Tools.CheckError(monitor == null, "No Monitor object has been added")) return;
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
 
-        keyListener.AddKey(new List<KeyCode> {KeyCode.Space}, SelectSwitch);
-        keyListener.AddKey(new List<KeyCode> {KeyCode.LeftArrow}, MoveSelectLeft);
-        keyListener.AddKey(new List<KeyCode> {KeyCode.RightArrow}, MoveSelectRight);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.Space}, GoToPuzzle);
+        
+        
+        _puzzleLayer = monitor.NewLayer(false);
+        _controlLayer = monitor.NewLayer(false);
+        
+        _prefaceLayer = monitor.NewLayer();
+        _continueLayer = monitor.NewLayer();
 
-        _puzzleLayer = monitor.NewLayer();
-        _puzzleLayer.view.SetExternalPosition(new GridPosition(5, 17));
+        _continueLayer.view.SetExternalPosition(new GridPosition(23, 0));
+        
+        _puzzleLayer.view.SetExternalPosition(new GridPosition(3, 17));
         _puzzleLayerOffset = _puzzleLayer.view.externalPosition;
+        
+        _controlLayer.view.SetExternalPosition(new GridPosition(21, 0));
+        _controlLayer.zIndex = 1;
 
         monitor.uiCursor.Show(true);
-        // monitor.uiCursor.linkedLayer = _continueLayer;
-        // monitor.uiCursor.Blink(true);
+        monitor.uiCursor.Blink(true);
+        monitor.uiCursor.linkedLayer = _continueLayer;
+
 
         _switches = new List<LogicGates.Switch>(6);
         _switchPositions = new List<GridPosition>(6) {
@@ -219,11 +230,39 @@ public class Level2 : MonoBehaviour
         };
         _selectedSwitch = 0;
 
+        LoadPreface();
+    }
+
+    // Preface
+    private void LoadPreface()
+    {
+        _prefaceLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Preface"));
+        _continueLayer.WriteText("Press [space] to continue...", false);
+    }
+
+    private void GoToPuzzle(List<KeyCode> args)
+    {
+        keyListener.ClearActions();
+        
+        keyListener.AddKey(new List<KeyCode> {KeyCode.Space}, SelectSwitch);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.LeftArrow}, MoveSelectLeft);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.RightArrow}, MoveSelectRight);
+        
+        monitor.DeleteLayer(_prefaceLayer);
+        monitor.DeleteLayer(_continueLayer);
+        
+        monitor.AddLayer(_puzzleLayer);
+        monitor.AddLayer(_controlLayer);
+
+        monitor.uiCursor.linkedLayer = null;
+        monitor.uiCursor.Blink(false);
+        
         CreateLogicLayout();
         LoadLogicPuzzleToLayer();
         MoveSelectCursor();
     }
-
+    
+    // Puzzle
     private void CreateLogicLayout()
     {
         var and10 = new LogicGates.AndGate();
@@ -261,28 +300,18 @@ public class Level2 : MonoBehaviour
 
     private void LoadLogicPuzzleToLayer()
     {
-        _puzzleLayer.WriteText(
-@"                 [ Login ]
-                     .
-                     .
-                 [  And  ]
-             .....       .....
-             .               .
-         [  And  ]       [  OR   ]
-     .....       .........       .....
-     .               .               .
- [  And  ]       [  And  ]       [  OR   ]
- .       .       .       .       .       .
- .       .       .       .       .       .
-[ ]     [ ]     [ ]     [ ]     [ ]     [ ]");
+        _puzzleLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Puzzle"));
+        _controlLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Controls"));
     }
 
     private void SelectSwitch(List<KeyCode> args)
     {
         _switches[_selectedSwitch].Toggle();
-        char currentCharacter = _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row,_switchPositions[_selectedSwitch].column];
-        if (currentCharacter == ' ') _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = 'x';
-        if (currentCharacter == 'x') _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = ' ';
+
+        if (_switches[_selectedSwitch].activated) _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = 'x';
+        else _puzzleLayer.textGrid[_switchPositions[_selectedSwitch].row, _switchPositions[_selectedSwitch].column] = ' ';
+        
+        _puzzleLayer.Change(true);
     }
 
     private void MoveSelectLeft(List<KeyCode> args)
@@ -303,24 +332,4 @@ public class Level2 : MonoBehaviour
     {
         monitor.uiCursor.SetGridPosition(_switchPositions[_selectedSwitch] + _puzzleLayerOffset);
     }
-
-    // private void WriteText(string monitorText)
-    // {
-    //     _puzzleLayer.WriteText(monitorText);
-    //     _continueLayer.WriteText("Press [space] to continue...", false);
-    // }
-    //
-    // public void LoadNext(List<KeyCode> args)
-    // {
-    //     Debug.Log("Next screen");
-    //     _textIndex += 1;
-    //     if (_textIndex < _text.Count)
-    //     {
-    //         WriteText(_text[_textIndex]);
-    //     }
-    //     else
-    //     {
-    //         SceneManager.LoadScene("Level 1");
-    //     }
-    // }
 }
