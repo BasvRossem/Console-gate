@@ -68,8 +68,6 @@ namespace Visuals
                     characterCenter += offset;
 
                     rowPositions.Add(characterCenter);
-                    
-                    Debug.Log(characterCenter.y);
                 }
 
                 textMeshCharacterPositions.Add(rowPositions);
