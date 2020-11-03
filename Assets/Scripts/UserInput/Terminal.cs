@@ -47,6 +47,8 @@ namespace UserInput
             _keyListener.AddKey(new List<KeyCode> { KeyCode.Return }, ProcessReturn);
             _keyListener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
             _keyListener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.RightShift }, KeyCode.Alpha2), UpdateTerminal);
+            _keyListener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftControl }, KeyCode.Backspace), UpdateTerminal);
+            _keyListener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.RightControl }, KeyCode.Backspace), UpdateTerminal);
         }
 
         /// <summary>
@@ -91,18 +93,18 @@ namespace UserInput
         }
 
         /// <summary>
-        /// Adds the specific usecase of @ to the terminal.
+        /// Adds the specific usecase of @ to the terminal, and ctrl+backspace
         /// </summary>
         /// <param name="args"></param>
         private void UpdateTerminal(Tuple<List<KeyCode>, KeyCode> args)
         {
-            if (args == null || args.Item1 == null) return;
-            if (args.Item1[0] == KeyCode.LeftShift && args.Item2 == KeyCode.Alpha2)
+            if (args == null || args.Item1 == null || args.Item1.Count == 0) return;
+            if ((args.Item1[0] == KeyCode.LeftShift || args.Item1[0] == KeyCode.RightShift) && args.Item2 == KeyCode.Alpha2)
             {
                 _command += "@";
-            }else if (args.Item1[0] == KeyCode.RightShift && args.Item2 == KeyCode.Alpha2)
+            }else if ((args.Item1[0] == KeyCode.LeftControl || args.Item1[0] == KeyCode.RightControl) && args.Item2 == KeyCode.Backspace)
             {
-                _command += "@";
+                _command = "";
             }
 
             UpdateTerminalLayer();
