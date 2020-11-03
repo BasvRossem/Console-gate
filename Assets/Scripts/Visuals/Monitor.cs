@@ -101,6 +101,15 @@ namespace Visuals
             _layers.Remove(layer);
         }
         
+        /// <summary>
+        /// Add an existing layer to the monitor to render.
+        /// </summary>
+        /// <param name="layer">The layer to render.</param>
+        public void AddLayer(Layer layer)
+        {
+            _layers.Add(layer);
+        }
+        
         // Render functions
         /// <summary>
         /// Render the layers if they have changed.
@@ -131,6 +140,7 @@ namespace Visuals
         private void CombineLayers()
         {
             var sortedLayers = _layers.OrderBy(layer => layer.zIndex).ToList();
+            _textGrid.Reset();
             foreach (Layer layer in sortedLayers)
             {
                 View view = layer.RenderView();
