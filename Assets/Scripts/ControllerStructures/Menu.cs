@@ -20,6 +20,7 @@ namespace ControllerStructures
         private void Start()
         {
             listener.AddKey(new List<KeyCode> { KeyCode.Return }, SelectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.Space }, SelectOption);
             listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
             listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
 
