@@ -9,7 +9,7 @@
         public readonly TextGrid textGrid;
         public readonly Cursor cursor;
         public readonly View view;
-        public readonly int zIndex;
+        public int zIndex;
 
         private bool _isChanged;
 
