@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a39ae6a67d66914c927c842d913ef29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monitor: {fileID: 803400509}
   menu: {fileID: 1231080430}
 --- !u!1001 &740044346
 PrefabInstance:
