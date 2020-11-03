@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
+using UserInput;
 
 namespace ControllerStructures
 {
@@ -9,42 +10,35 @@ namespace ControllerStructures
     /// </summary>
     public class Menu : MonoBehaviour
     {
-        public Monitor monitor;
-        public Keylistener listener;
+        [SerializeField] private Monitor monitor;
+        [SerializeField] private KeyListener listener;
+        private Layer _layer;
+        private int _optionNumber;
 
-        private int optionNumber;
-
-        public List<Option> options = new List<Option>();
+        private List<Option> _options = new List<Option>();
 
         private void Start()
         {
-            listener.addKey(new List<KeyCode> { KeyCode.Return }, selectOption);
-            listener.addKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
-            listener.addKey(new List<KeyCode> { KeyCode.DownArrow }, next);
+            listener.AddKey(new List<KeyCode> { KeyCode.Return }, SelectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
+            listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
-
-            optionNumber = 0;
+            
+            _layer = monitor.NewLayer();
+            WriteOptionsToLayer();
+            
+            _optionNumber = 0;
         }
-
-        private void Update()
-        {
-            monitor.ResetMonitor();
-            monitor.selectedCursor.ResetPosition();
-
-            writeOptionsToMonitor();
-
-            monitor.SelectRow(optionNumber);
-        }
-
+        
         /// <summary>
         /// Set a new list of options.
         /// </summary>
         /// <param name="newOptions">A list of new options.</param>
         public void SetOptions(List<Option> newOptions)
         {
-            options = newOptions;
+            _options = newOptions;
         }
 
         // Option interactions
@@ -52,39 +46,42 @@ namespace ControllerStructures
         /// Select the next option in the list of options.
         /// </summary>
         /// <param name="arg">Not needed.</param>
-        private void next(List<KeyCode> arg)
+        private void Next(List<KeyCode> arg)
         {
-            if (optionNumber + 1 < options.Count) optionNumber++;
+            if (_optionNumber + 1 < _options.Count) _optionNumber++;
+            monitor.uiCursor.SelectRow(_optionNumber);
         }
 
         /// <summary>
         /// Select the previous option in the list of options.
         /// </summary>
         /// <param name="arg">Not needed.</param>
-        private void previous(List<KeyCode> arg)
+        private void Previous(List<KeyCode> arg)
         {
-            if (optionNumber - 1 >= 0) optionNumber--;
+            if (_optionNumber - 1 >= 0) _optionNumber--;
+            monitor.uiCursor.SelectRow(_optionNumber);
         }
 
         /// <summary>
         /// Run the function of the selected option.
         /// </summary>
         /// <param name="arg">Not needed</param>
-        private void selectOption(List<KeyCode> arg)
+        private void SelectOption(List<KeyCode> arg)
         {
-            options[optionNumber].Run();
+            _options[_optionNumber].Run();
         }
 
         // Monitor interactions
         /// <summary>
         /// Writes all the options to the monitor.
         /// </summary>
-        private void writeOptionsToMonitor()
+        private void WriteOptionsToLayer()
         {
-            foreach (Option option in options)
+            foreach (Option option in _options)
             {
-                monitor.AddMonitorTextLine(option.text);
+                _layer.WriteLine(option.text);
             }
         }
     }
 }
+

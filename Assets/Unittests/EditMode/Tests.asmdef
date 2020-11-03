@@ -3,7 +3,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Visuals"
+        "Visuals",
+        "Core",
+        "UserInput"
     ],
     "includePlatforms": [
         "Editor"

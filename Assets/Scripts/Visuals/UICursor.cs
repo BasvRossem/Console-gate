@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Visuals
 {
@@ -8,31 +13,42 @@ namespace Visuals
     /// </summary>
     public class UICursor : MonoBehaviour
     {
-        public float blinkingSpeed;
-        private float lastBlinkUpdate;
+        public float blinkingSpeed = 0.5f;
+        private float _lastBlinkUpdate;
 
         public bool isVisible;
         public bool isBlinking;
 
         public Vector2 characterSize;
 
-        public MonitorCursor linkedCursor;
+        public Layer linkedLayer;
+
+        public List<List<Vector2>> textMeshCharacterPositions;
+        private Image _image;
+        private RectTransform _rectTransform;
+
+        private void Awake()
+        {
+            _image = GetComponent<Image>();
+            _rectTransform = GetComponent<RectTransform>();
+            
+            textMeshCharacterPositions = new List<List<Vector2>>();
+        }
 
         private void Start()
         {
             isVisible = true;
             characterSize = new Vector2(8, 18);
-            lastBlinkUpdate = Time.time;
+            _lastBlinkUpdate = Time.time;
             SetSize(characterSize);
         }
 
         private void Update()
         {
-            if (isVisible && isBlinking && Time.time - lastBlinkUpdate > blinkingSpeed)
-            {
-                GetComponent<Image>().enabled = !GetComponent<Image>().enabled;
-                lastBlinkUpdate = Time.time;
-            }
+            if (!isVisible) return;
+
+            RenderBlink();
+            UpdateUICursorPosition();
         }
 
         /// <summary>
@@ -46,12 +62,23 @@ namespace Visuals
         }
 
         /// <summary>
-        /// Turn the blinkin geffect on or off.
+        /// Turn the blinking effect on or off.
         /// </summary>
         /// <param name="blink">If the cursor should blink.</param>
         public void Blink(bool blink)
         {
             isBlinking = blink;
+        }
+
+        /// <summary>
+        /// Render the blinking effect.
+        /// </summary>
+        private void RenderBlink()
+        {
+            if (!isBlinking) return;
+            if (!(Time.time - _lastBlinkUpdate > blinkingSpeed)) return;
+            _image.enabled = !_image.enabled;
+            _lastBlinkUpdate = Time.time;
         }
 
         /// <summary>
@@ -70,11 +97,11 @@ namespace Visuals
         /// <param name="newSize">New size of the cursor.</param>
         public void SetSize(Vector2 newSize)
         {
-            GetComponent<RectTransform>().sizeDelta = newSize;
+            _rectTransform.sizeDelta = newSize;
         }
 
         /// <summary>
-        /// Reset the size of the cursor to its inital size.
+        /// Reset the size of the cursor to its initial size.
         /// </summary>
         public void ResetSize()
         {
@@ -96,13 +123,46 @@ namespace Visuals
         /// <param name="newPosition">The new position of the top left.</param>
         public void SetPositionTopLeft(Vector2 newPosition)
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
-            float width = rectTransform.sizeDelta.x;
-            float height = rectTransform.sizeDelta.y;
-            Vector3 centerOffset = new Vector3(width / 2, -height / 2, 0);
+            Vector2 size = _rectTransform.sizeDelta / 2;
+            Vector2 centerOffset = size;
 
-            transform.position = newPosition;
-            transform.position += centerOffset;
+            transform.position = newPosition + centerOffset;
+        }
+
+        /// <summary>
+        /// Update the UI cursor position to its linked cursor.
+        /// </summary>
+        private void UpdateUICursorPosition()
+        {
+            if (linkedLayer == null) return;
+
+            ResetSize();
+            GridPosition viewPosition = linkedLayer.view.externalPosition;
+
+            int characterRow = linkedLayer.cursor.position.row + viewPosition.row;
+            int characterColumn = linkedLayer.cursor.position.column + viewPosition.column;
+
+            if (characterRow >= textMeshCharacterPositions.Count) return;
+            if (characterColumn >= textMeshCharacterPositions[characterRow].Count) return;
+
+            Vector2 newPosition = textMeshCharacterPositions[characterRow][characterColumn];
+            SetPositionCenter(newPosition);
+        }
+
+        /// <summary>
+        /// Select a row on the Layer using the UI cursor.
+        /// </summary>
+        /// <param name="row">The index of the row to be selected</param>
+        public void SelectRow(int row)
+        {
+            List<Vector2> rowPositions = textMeshCharacterPositions[row];
+
+            Vector2 newSize = new Vector2(characterSize.x * rowPositions.Count, characterSize.y);
+            Vector2 characterCenter = (rowPositions[0] + rowPositions[rowPositions.Count - 1]) / 2;
+
+            SetSize(newSize);
+            SetPositionCenter(characterCenter);
+            Debug.LogWarning("Here");
         }
     }
 }
