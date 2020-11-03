@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
+using UserInput;
 
 namespace ControllerStructures
 {
@@ -10,7 +11,7 @@ namespace ControllerStructures
     public class Menu : MonoBehaviour
     {
         public Monitor monitor;
-        public Keylistener listener;
+        public KeyListener listener;
 
         private int optionNumber;
 
@@ -18,9 +19,9 @@ namespace ControllerStructures
 
         private void Start()
         {
-            listener.addKey(new List<KeyCode> { KeyCode.Return }, selectOption);
-            listener.addKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
-            listener.addKey(new List<KeyCode> { KeyCode.DownArrow }, next);
+            listener.AddKey(new List<KeyCode> { KeyCode.Return }, selectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, previous);
+            listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, next);
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);

@@ -8,11 +8,12 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using Visuals;
+using UserInput;
 
 public class Level1 : MonoBehaviour
 {
     [SerializeField] private Monitor monitor = null;
-    [SerializeField] private Keylistener keylistener = null;
+    [SerializeField] private KeyListener keylistener = null;
 
     private string screenCursor;
     private string terminalCursor;
@@ -24,16 +25,16 @@ public class Level1 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        keylistener.addKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
-        keylistener.addKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
 
-        keylistener.addOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
-        keylistener.addOption(KeyBoardOptions.Numerical, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
-        keylistener.addKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
-        keylistener.addKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
+        keylistener.AddOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
+        keylistener.AddOption(KeyBoardOptions.Numerical, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
+        keylistener.AddKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
+        keylistener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
 
         screenCursor = monitor.AddCursor("ScreenCursor");
         terminalCursor = monitor.AddCursor("TermminalCursor");

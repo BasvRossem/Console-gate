@@ -1,5 +1,5 @@
 {
-    "name": "Input",
+    "name": "UserInput",
     "references": [
         "GUID:3443fb40c1738494883fcc476a4aa1fd"
     ],
