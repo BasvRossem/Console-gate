@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ControllerStructures
 {
@@ -9,7 +10,7 @@ namespace ControllerStructures
     /// </summary>
     public class Option
     {
-        public string text;
+        public readonly string text;
 
         /// <summary>
         /// Initializes a new instance of the Option class.
@@ -53,6 +54,21 @@ namespace ControllerStructures
         public override void Run()
         {
             Debug.Log(print);
+        }
+    }
+
+    public class OptionLoadLevel : Option
+    {
+        private string _levelName;
+
+        public OptionLoadLevel(string shownText, string levelName) : base(shownText)
+        {
+            _levelName = levelName;
+        }
+
+        public override void Run()
+        {
+            SceneManager.LoadScene(_levelName);
         }
     }
 }
