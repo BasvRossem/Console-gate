@@ -169,7 +169,7 @@ public class Level3 : MonoBehaviour
     private void CatWriter()
     {
         _textLayer.WriteText(TextManager.GetLevel3CatWrong());
-        _textLayer.view.MakeStatic(true);
+        _textLayer.view.MakeStatic(false);
     }
     
     private void DirCall(string command)
@@ -184,7 +184,7 @@ public class Level3 : MonoBehaviour
     private void DirWriter()
     {
         _textLayer.WriteText(TextManager.GetLevel3Dir());
-        _textLayer.view.MakeStatic(true);
+        _textLayer.view.MakeStatic(false);
         
     }
 
