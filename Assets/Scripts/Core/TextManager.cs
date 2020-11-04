@@ -51,33 +51,38 @@ You decide to take initiative in finding him.";
             return @"-------------------
 Chatlog 23 - 10 - 2020
 ------------------ -
-23 - 10 - 2020 16:03, Docent:
-Bij deze geef ik jullie een extra bijlage als toevoeging op de les
+23 - 10 - 2020 16:03, Professor:
+Hereby an appendix of the last lesson 
 
-23 - 10 = 2020 16:04, Remco:
-ligt het aan mij, of kan ik het bestand nog niet downloaden ?
+23 - 10 - 2020 16:04, Remco:
+is it just me or can't i access the file??
 
 23 - 10 - 2020 16:04, Julianne:
-De docent heeft nog geen download - link gegeven....
+He hasn't uploaded it yet...
 
 23 - 10 - 2020 16:05, Docent:
-Oeps, foutje, bij deze is hij meegedeeld.
+Oh, my mistake. It should be available now.
 
 23 - 10 - 2020 16:06, Julianne:
-Bedankt!
+Thx!
 
 23 - 10 - 2020 16:06, Docent:
-Ik wil graag dat jullie deze stof voor de volgende les(26 - 10 - 2020) doornemen.
+I'd like for you all to just go through it for the coming lesson (26-10).
 
 ------------------ -
 Chatlog 24 - 10 - 2020
 ------------------ -
+24 - 10 - 2020 15:12, Remco:
+I think the file is broken??
+
+24 - 10 - 2020 23:33, Remco:
+Anyone?
 
 -------------------
 Chatlog 25 - 10 - 2020
 ------------------ -
 25 - 10 - 2020 20:48, SYSTEM:
-Succesfully downloaded ""appendix.txt""";
+Successfully downloaded ""appendix.txt""";
         }
         
         public static string GetLevel1AppendixMetadata()
@@ -88,25 +93,25 @@ Path to file: / Downloads / apendix
 
 Date created: 20 - 03 - 2014
 Size: 12381 bytes
-Author: Docent
-IP - adress owner: 52.232.56.79";
+Author: User
+IP - address owner: 52.232.56.79";
         }
         
         public static string GetLevel1AppendixContent()
         {
             return @"Content:
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Nulla vehicula et ex id eleifend.
-Sed cursus, eros non fringilla finibus, augue velit aliquam felis,
-ac mollis augue sem in arcu.
-Nunc odio sapien, varius in vestibulum in, ultrices a diam.
-Nulla vestibulum ac dolor quis eleifend.
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere curae;
-Praesent suscipit feugiat felis id viverra.
-Praesent a lectus sapien.
-Nunc ac mollis ipsum.
-Ut mauris dolor, maximus id diam in, auctor suscipit neque.
+Corem ipsum dolor sit amet, consectetur adipiscing elit.
+Oulla vehicula et ex id eleifend.
+Ned cursus, eros non fringilla finibus, augue velit aliquam felis,
+Nc mollis augue sem in arcu.
+Eunc odio sapien, varius in vestibulum in, ultrices a diam.
+Culla vestibulum ac dolor quis eleifend.
+Testibulum ante ipsum primis in faucibus orci luctus et ultrices posuere curae;
+Traesent suscipit feugiat felis id viverra.
+Oraesent a lectus sapien.
+Munc ac mollis ipsum.
+Et mauris dolor, maximus id diam in, auctor suscipit neque.
 Nam velit eros, accumsan non libero at, placerat semper augue.
 Maecenas scelerisque semper venenatis.
 Suspendisse vel dolor velit.

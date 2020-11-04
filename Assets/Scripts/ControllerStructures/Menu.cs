@@ -37,7 +37,6 @@ namespace ControllerStructures
             WriteOptionsToLayer();
             
             _optionNumber = 0;
-            Debug.LogWarning($"{monitor.uiCursor.textMeshCharacterPositions.Count}");
             
             monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }

@@ -124,7 +124,8 @@ public class Level1 : MonoBehaviour
             case "cat":
                 catCall(command);
                 break;
-
+            
+            case "ls":
             case "dir":
                 dirCall(command);
                 break;
@@ -180,7 +181,7 @@ public class Level1 : MonoBehaviour
     private void dirCall(string command)
     {
         if (command == null) return;
-        if (command == "dir")
+        if (command == "dir" || command == "ls")
         {
             _myMonitorWriter = dirWriter;
         }
