@@ -200,6 +200,7 @@ public class Level2 : MonoBehaviour
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
 
         keyListener.AddKey(new List<KeyCode> {KeyCode.Space}, GoToPuzzle);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
         
         
         _puzzleLayer = monitor.NewLayer(false);
@@ -233,6 +234,12 @@ public class Level2 : MonoBehaviour
         _selectedSwitch = 0;
 
         LoadPreface();
+    }
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
+    {
+        SceneManager.LoadScene("Start Menu");
     }
 
     // Preface

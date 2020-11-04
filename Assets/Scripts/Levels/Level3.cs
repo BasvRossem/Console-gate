@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Visuals;
 using UserInput;
@@ -30,6 +31,7 @@ public class Level3 : MonoBehaviour
         keylistener.AddKey(new List<KeyCode> {KeyCode.Escape}, StartHelp);
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
 
         // Add the base text layer
         _textLayer = monitor.NewLayer();
@@ -45,6 +47,12 @@ public class Level3 : MonoBehaviour
 
         _progressStep = 0;
         InitBinaryAnswers();
+    }
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
+    {
+        SceneManager.LoadScene("Start Menu");
     }
 
     private void MoveView(List<KeyCode> args)

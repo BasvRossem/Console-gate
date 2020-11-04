@@ -29,8 +29,7 @@ public class StartMenu : MonoBehaviour
 
         _artLayer = monitor.NewLayer();
         _artLayer.WriteText(TextManager.GetStartScreenArt());
-        // Debug.Log(menu.layer.view.externalPosition);
-        menu.layer.view.SetExternalPosition(new GridPosition(10, 0));
+        menu.layer.view.SetExternalPosition(new GridPosition(11, 0));
         menu.SetOptions(_levelOptions);
         menu.layer.zIndex = 1;
     }
