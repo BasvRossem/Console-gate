@@ -222,6 +222,10 @@ public class Level3 : MonoBehaviour
 
     private void DecryptorWriter()
     {
+        if (_progressStep >= 8)
+        {
+            SceneManager.LoadScene("Level 4");
+        }
         _textLayer.WriteText(TextManager.GetLevel3Decryptor(_progressStep));
     }
 }
