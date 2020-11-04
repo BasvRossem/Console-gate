@@ -18,9 +18,9 @@ public class Level0 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        _text.Add("Welcome to Console Gate!\nThis game is created by Jens Bouman and Bas van Rossem.");
-        _text.Add("Because of some pandemic, a lot of your classes are online.\nHowever, the professor has not arrived in the chat.\nNo one knows where he is.\nYou decide to take initiative in finding him.");
-        _text.Add("The game is on.");
+        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 1"));
+        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 2"));
+        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 3"));
 
         if (Tools.CheckError(monitor == null, "No Monitor object has been added")) return;
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;

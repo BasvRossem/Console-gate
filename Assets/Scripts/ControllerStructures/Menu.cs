@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Visuals;
 using UserInput;
@@ -12,26 +13,32 @@ namespace ControllerStructures
     {
         [SerializeField] private Monitor monitor;
         [SerializeField] private KeyListener listener;
-        private Layer _layer;
+        public Layer layer;
         private int _optionNumber;
 
         private List<Option> _options = new List<Option>();
 
+        private void Awake()
+        {
+            layer = monitor.NewLayer();
+        }
+
         private void Start()
         {
             listener.AddKey(new List<KeyCode> { KeyCode.Return }, SelectOption);
+            listener.AddKey(new List<KeyCode> { KeyCode.Space }, SelectOption);
             listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
             listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
 
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
-            
-            _layer = monitor.NewLayer();
+
             WriteOptionsToLayer();
             
             _optionNumber = 0;
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
-        
+
         /// <summary>
         /// Set a new list of options.
         /// </summary>
@@ -49,7 +56,7 @@ namespace ControllerStructures
         private void Next(List<KeyCode> arg)
         {
             if (_optionNumber + 1 < _options.Count) _optionNumber++;
-            monitor.uiCursor.SelectRow(_optionNumber);
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 
         /// <summary>
@@ -59,7 +66,7 @@ namespace ControllerStructures
         private void Previous(List<KeyCode> arg)
         {
             if (_optionNumber - 1 >= 0) _optionNumber--;
-            monitor.uiCursor.SelectRow(_optionNumber);
+            monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 
         /// <summary>
@@ -79,7 +86,7 @@ namespace ControllerStructures
         {
             foreach (Option option in _options)
             {
-                _layer.WriteLine(option.text);
+                layer.WriteLine(option.text);
             }
         }
     }

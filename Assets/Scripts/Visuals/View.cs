@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Visuals
 {
@@ -25,6 +26,7 @@ namespace Visuals
             SetExternalPosition(externalPosition);
             MakeStatic(false);
             StayInBounds(true);
+            SetBounds(size);
             
             Change();
         }

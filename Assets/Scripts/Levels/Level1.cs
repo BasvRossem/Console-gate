@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Visuals;
 using UserInput;
 
@@ -11,9 +12,8 @@ public class Level1 : MonoBehaviour
     [SerializeField] private KeyListener keylistener = null;
 
     private Layer _textLayer;
-    private Layer _userInputLayer;
+    private Terminal _userTerminal;
 
-    private string _command = "";
     
     private delegate void MonitorWriter();
     private MonitorWriter _myMonitorWriter;
@@ -21,28 +21,14 @@ public class Level1 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        _userTerminal = new Terminal(monitor, keylistener, SendCommand);
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
-
-        keylistener.AddOption(KeyBoardOptions.Alphabetical, UpdateTerminal);
-        keylistener.AddOption(KeyBoardOptions.Numerical, UpdateTerminal);
-        keylistener.AddKey(new List<KeyCode> { KeyCode.Space }, UpdateTerminal);
-        keylistener.AddKey(new List<KeyCode> { KeyCode.Period }, UpdateTerminal);
-        keylistener.AddKey(new List<KeyCode> { KeyCode.Backspace }, RemoveLastTerminalCharacter);
-        keylistener.AddKey(new List<KeyCode> { KeyCode.Return }, SendCommand);
-        keylistener.AddKeyCombination(new Tuple<List<KeyCode>, KeyCode>(new List<KeyCode> { KeyCode.LeftShift }, KeyCode.Alpha2), UpdateTerminal);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
         _textLayer.view.StayInBounds(true);
-
-        _userInputLayer = monitor.NewLayer();
-        _userInputLayer.view.SetSize(new GridSize(1, Monitor.Size.columns));
-        _userInputLayer.view.SetExternalPosition(new GridPosition(23, 0));
         
-        monitor.uiCursor.linkedLayer = _userInputLayer;
-        monitor.uiCursor.Blink(true);
-
         _myMonitorWriter = LoadChatlog;
         _myMonitorWriter();
     }
@@ -134,7 +120,7 @@ Pellentesque tincidunt urna sit amet ex cursus suscipit.");
     private void LoadNextLevel()
     {
         _textLayer.WriteText("You completed level 1. Level two is still coming...");
-        //SceneManager.LoadScene("Level 2");
+        SceneManager.LoadScene("Level 2");
     }
 
     public void MoveView(List<KeyCode> args)
@@ -145,74 +131,29 @@ Pellentesque tincidunt urna sit amet ex cursus suscipit.");
         else if (args[0] == KeyCode.UpArrow) _textLayer.view.MoveInternalPosition(up: 1);
     }
 
-    public void UpdateTerminal(List<KeyCode> args)
+
+    public void SendCommand(String command)
     {
-        if (args.Count <= 0) return;
-        if (args[0] == KeyCode.LeftShift && args[1] == KeyCode.Alpha2)
-        {
-            _command += "@";
-        }
-
-        foreach (KeyCode k in args)
-        {
-            _command += (char)k;
-        }
-
-        UpdateTerminalLayer();
-    }
-
-    public void UpdateTerminal(Tuple<List<KeyCode>, KeyCode> args)
-    {
-        if (args == null) return;
-        if (args.Item1[0] == KeyCode.LeftShift && args.Item2 == KeyCode.Alpha2)
-        {
-            _command += "@";
-        }
-
-        UpdateTerminalLayer();
-    }
-
-    public void RemoveLastTerminalCharacter(List<KeyCode> args)
-    {
-        if (args.Count <= 0) return;
-        if (_command.Length <= 0) return;
-
-        StringBuilder sb = new StringBuilder(_command);
-        sb.Remove(_command.Length - 1, 1);
-        _command = sb.ToString();
-        UpdateTerminalLayer();
-    }
-
-    private void UpdateTerminalLayer()
-    {
-        _userInputLayer.WriteText(_command, false);
-    }
-
-    public void SendCommand(List<KeyCode> args)
-    {
-        if (args.Count <= 0) return;
-        var splitCommand = _command.Split(' ');
+        var splitCommand = command.Split(' ');
 
         switch (splitCommand[0])
         {
             case "ssh":
-                sshCall(_command);
+                sshCall(command);
                 break;
 
             case "cat":
-                catCall(_command);
+                catCall(command);
                 break;
 
             case "dir":
-                dirCall(_command);
+                dirCall(command);
                 break;
 
             default:
                 break;
         }
-        _command = "";
         _myMonitorWriter();
-        UpdateTerminalLayer();
     }
 
     private void sshCall(string command)

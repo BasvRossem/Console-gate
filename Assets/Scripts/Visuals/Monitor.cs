@@ -68,8 +68,6 @@ namespace Visuals
                     characterCenter += offset;
 
                     rowPositions.Add(characterCenter);
-                    
-                    Debug.Log(characterCenter.y);
                 }
 
                 textMeshCharacterPositions.Add(rowPositions);
@@ -85,11 +83,12 @@ namespace Visuals
         /// <summary>
         /// Create a new layer to be rendered.
         /// </summary>
+        /// <param name="render">If the layer should be rendered from creation.</param>
         /// <returns>The newly created layer.</returns>
-        public Layer NewLayer()
+        public Layer NewLayer(bool render = true)
         {
             var newLayer = new Layer(Size);
-            _layers.Add(newLayer);
+            if(render) _layers.Add(newLayer);
             return newLayer;
         }
 
@@ -101,6 +100,15 @@ namespace Visuals
         public void DeleteLayer(Layer layer)
         {
             _layers.Remove(layer);
+        }
+        
+        /// <summary>
+        /// Add an existing layer to the monitor to render.
+        /// </summary>
+        /// <param name="layer">The layer to render.</param>
+        public void AddLayer(Layer layer)
+        {
+            _layers.Add(layer);
         }
         
         // Render functions
@@ -133,6 +141,7 @@ namespace Visuals
         private void CombineLayers()
         {
             var sortedLayers = _layers.OrderBy(layer => layer.zIndex).ToList();
+            _textGrid.Reset();
             foreach (Layer layer in sortedLayers)
             {
                 View view = layer.RenderView();
@@ -143,7 +152,10 @@ namespace Visuals
                     {
                         int monitorPositionRow = view.externalPosition.row + row;
                         int monitorPositionColumn = view.externalPosition.column + column;
-
+                        
+                        if(monitorPositionRow >= _textGrid.GetSize().rows) continue;
+                        if(monitorPositionColumn >= _textGrid.GetSize().columns) continue;
+                        
                         _textGrid[monitorPositionRow, monitorPositionColumn] = view.textGrid[row, column];
                     }
                 }
