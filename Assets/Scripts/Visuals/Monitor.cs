@@ -24,6 +24,7 @@ namespace Visuals
         private void Awake()
         {
             if (Tools.CheckError(textMesh == null, "No TextMeshPro object has been added")) return;
+            if (Tools.CheckError(uiCursor == null, "No UICursor object has been added")) return;
 
             _mainLayer = new Layer(Size);
             _layers = new List<Layer>();
@@ -41,7 +42,7 @@ namespace Visuals
         /// <summary>
         /// Calibrate the positions of the characters of the text mesh to be used by the UICursor.
         /// </summary>
-        private void CalibrateTextMesh()
+        public void CalibrateTextMesh()
         {
             // Fill text grid with data
             _textGrid.Fill('*');

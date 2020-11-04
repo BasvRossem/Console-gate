@@ -27,6 +27,7 @@ public class StartMenu : MonoBehaviour
             new OptionLoadLevel("Chapter 4", "Level 4")
         };
 
+        // monitor.CalibrateTextMesh();
         _artLayer = monitor.NewLayer();
         _artLayer.WriteText(TextManager.GetStartScreenArt());
         menu.layer.view.SetExternalPosition(new GridPosition(11, 0));
