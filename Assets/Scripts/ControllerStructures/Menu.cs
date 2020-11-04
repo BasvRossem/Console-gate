@@ -30,12 +30,15 @@ namespace ControllerStructures
             listener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, Previous);
             listener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, Next);
 
+            monitor.CalibrateTextMesh();
             monitor.uiCursor.Show(true);
             monitor.uiCursor.Blink(false);
 
             WriteOptionsToLayer();
             
             _optionNumber = 0;
+            Debug.LogWarning($"{monitor.uiCursor.textMeshCharacterPositions.Count}");
+            
             monitor.uiCursor.SelectRow(_optionNumber + layer.view.externalPosition.row);
         }
 

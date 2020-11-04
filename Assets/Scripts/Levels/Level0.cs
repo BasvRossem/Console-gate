@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Visuals;
@@ -18,14 +19,15 @@ public class Level0 : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 1"));
-        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 2"));
-        _text.Add(Tools.ReadFile("Assets/Text/Level 0/Intro 3"));
+        _text.Add(TextManager.GetLevel0Intro1());
+        _text.Add(TextManager.GetLevel0Intro2());
+        _text.Add(TextManager.GetLevel0Intro3());
 
         if (Tools.CheckError(monitor == null, "No Monitor object has been added")) return;
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
         
         keyListener.AddKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
@@ -38,6 +40,12 @@ public class Level0 : MonoBehaviour
         monitor.uiCursor.Blink(true);
 
         WriteText(_text[0]);
+    }
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
+    {
+        SceneManager.LoadScene("Start Menu");
     }
 
     private void WriteText(string monitorText)

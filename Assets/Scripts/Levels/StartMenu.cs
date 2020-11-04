@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ControllerStructures;
+using Core;
 using UnityEditor;
 using UnityEngine;
 using Visuals;
@@ -26,10 +27,10 @@ public class StartMenu : MonoBehaviour
             new OptionLoadLevel("Chapter 4", "Level 4")
         };
 
+        // monitor.CalibrateTextMesh();
         _artLayer = monitor.NewLayer();
-        _artLayer.WriteText(Tools.ReadFile("Assets/Text/Start Menu/Art"));
-        // Debug.Log(menu.layer.view.externalPosition);
-        menu.layer.view.SetExternalPosition(new GridPosition(10, 0));
+        _artLayer.WriteText(TextManager.GetStartScreenArt());
+        menu.layer.view.SetExternalPosition(new GridPosition(11, 0));
         menu.SetOptions(_levelOptions);
         menu.layer.zIndex = 1;
     }
