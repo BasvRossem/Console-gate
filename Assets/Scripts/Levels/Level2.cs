@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using ControllerStructures;
+using Core;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UserInput;
 using Visuals;
 
@@ -236,8 +238,8 @@ public class Level2 : MonoBehaviour
     // Preface
     private void LoadPreface()
     {
-        _prefaceLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Preface"));
-        _continueLayer.WriteText("Press [space] to continue...", false);
+        _prefaceLayer.WriteText(TextManager.GetLevel2Preface());
+        _continueLayer.WriteText(TextManager.GetLevel2Continue(), false);
     }
 
     private void GoToPuzzle(List<KeyCode> args)
@@ -300,8 +302,8 @@ public class Level2 : MonoBehaviour
 
     private void LoadLogicPuzzleToLayer()
     {
-        _puzzleLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Puzzle"));
-        _controlLayer.WriteText(Tools.ReadFile("Assets/Text/Level 2/Controls"));
+        _puzzleLayer.WriteText(TextManager.GetLevel2Puzzle());
+        _controlLayer.WriteText(TextManager.GetLevel2Controls());
     }
 
     private void SelectSwitch(List<KeyCode> args)
