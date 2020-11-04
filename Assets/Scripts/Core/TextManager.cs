@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
@@ -50,33 +51,38 @@ You decide to take initiative in finding him.";
             return @"-------------------
 Chatlog 23 - 10 - 2020
 ------------------ -
-23 - 10 - 2020 16:03, Docent:
-Bij deze geef ik jullie een extra bijlage als toevoeging op de les
+23 - 10 - 2020 16:03, Professor:
+Hereby an appendix of the last lesson 
 
-23 - 10 = 2020 16:04, Remco:
-ligt het aan mij, of kan ik het bestand nog niet downloaden ?
+23 - 10 - 2020 16:04, Remco:
+is it just me or can't i access the file??
 
 23 - 10 - 2020 16:04, Julianne:
-De docent heeft nog geen download - link gegeven....
+He hasn't uploaded it yet...
 
 23 - 10 - 2020 16:05, Docent:
-Oeps, foutje, bij deze is hij meegedeeld.
+Oh, my mistake. It should be available now.
 
 23 - 10 - 2020 16:06, Julianne:
-Bedankt!
+Thx!
 
 23 - 10 - 2020 16:06, Docent:
-Ik wil graag dat jullie deze stof voor de volgende les(26 - 10 - 2020) doornemen.
+I'd like for you all to just go through it for the coming lesson (26-10).
 
 ------------------ -
 Chatlog 24 - 10 - 2020
 ------------------ -
+24 - 10 - 2020 15:12, Remco:
+I think the file is broken??
+
+24 - 10 - 2020 23:33, Remco:
+Anyone?
 
 -------------------
 Chatlog 25 - 10 - 2020
 ------------------ -
 25 - 10 - 2020 20:48, SYSTEM:
-Succesfully downloaded ""appendix.txt""";
+Successfully downloaded ""appendix.txt""";
         }
         
         public static string GetLevel1AppendixMetadata()
@@ -87,25 +93,25 @@ Path to file: / Downloads / apendix
 
 Date created: 20 - 03 - 2014
 Size: 12381 bytes
-Author: Docent
-IP - adress owner: 52.232.56.79";
+Author: User
+IP - address owner: 52.232.56.79";
         }
         
         public static string GetLevel1AppendixContent()
         {
             return @"Content:
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Nulla vehicula et ex id eleifend.
-Sed cursus, eros non fringilla finibus, augue velit aliquam felis,
-ac mollis augue sem in arcu.
-Nunc odio sapien, varius in vestibulum in, ultrices a diam.
-Nulla vestibulum ac dolor quis eleifend.
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere curae;
-Praesent suscipit feugiat felis id viverra.
-Praesent a lectus sapien.
-Nunc ac mollis ipsum.
-Ut mauris dolor, maximus id diam in, auctor suscipit neque.
+Corem ipsum dolor sit amet, consectetur adipiscing elit.
+Oulla vehicula et ex id eleifend.
+Ned cursus, eros non fringilla finibus, augue velit aliquam felis,
+Nc mollis augue sem in arcu.
+Eunc odio sapien, varius in vestibulum in, ultrices a diam.
+Culla vestibulum ac dolor quis eleifend.
+Testibulum ante ipsum primis in faucibus orci luctus et ultrices posuere curae;
+Traesent suscipit feugiat felis id viverra.
+Oraesent a lectus sapien.
+Munc ac mollis ipsum.
+Et mauris dolor, maximus id diam in, auctor suscipit neque.
 Nam velit eros, accumsan non libero at, placerat semper augue.
 Maecenas scelerisque semper venenatis.
 Suspendisse vel dolor velit.
@@ -182,7 +188,7 @@ Pellentesque tincidunt urna sit amet ex cursus suscipit.";
 
 Nice work!
 You have made a connection to the PC of the professor.
-There is only one thing that stops you from ogettin gin entirely.
+There is only one thing that stops you from getting in entirely.
 He has some sort of puzzle as a login.
 
 You take a crack at it nevertheless.";
@@ -225,25 +231,23 @@ You take a crack at it nevertheless.";
             return @"                                                                               
                       Chapter 3: Breaking the encryption.                      
                                                                                
-                                                                               
-Na het verbinden met de computer van je docent, 
-en het hacken van zijn logische poorten sta je nu voor een volgende uitdaging.
+After connecting (and hacking) the pc of the professor,
+ou are now ready to face the next challenge.                                                                               
 
-Om bij de agenda van de docent te komen moet je dit keer een wachtwoord zien te achterhalen. 
+To find out more it seems that you need tto figure out some sort of password.
+But you are in luck. He has saved them all in one place. Convenient.
 
-Gelukkig staan alle wachtwoorden opgeslagen op een centrale locatie.
-
-(Als je er even niet uit komt, [escape] kan je helpen)";
+(If you are having a bit of trouble, [escape] might help you.)";
         }
 
         public static string GetLevel3Help1()
         {
             return @"+------------------------------------------------------------------------------+
-|                                  Helpmenu:                                   |
-|                       (Druk [escape] om terug te gaan)                       |
+|                                    Help:                                     |
+|                         (Press [Escape] to go back)                          |
 |                                                                              |
-| Alle wachtwoorden zijn opgeslagen op de centrale plaats van het systeem.     |
-| (Probeer ""passwd"" te openen, of ""dir"" / ""ls"" te gebruiken).                  |
+| All passwords are saved in one single location on the system.                |
+| (Try opening the ""passwd"" file, of try the command ""dir"" / ""ls"").            |
 |                                                                              |
 +------------------------------------------------------------------------------+";
         }
@@ -251,23 +255,23 @@ Gelukkig staan alle wachtwoorden opgeslagen op een centrale locatie.
         public static string GetLevel3Help2()
         {
             return @"+------------------------------------------------------------------------------+
-|                                  Helpmenu:                                   |
-|                       (Druk [escape] om terug te gaan)                       |
+|                                    Help:                                     |
+|                         (Press [Escape] to go back)                          |
 |                                                                              |
-| Alle wachtwoorden zijn opgeslagen op de centrale plaats van het systeem.     |
-| (Probeer ""passwd"" te openen, of ""dir"" / ""ls"" te gebruiken).                  |
+| All passwords are saved in one single location on the system.                |
+| (Try opening the ""passwd"" file, of try the command ""dir"" / ""ls"").            |
 |                                                                              |
 |                                                                              |
-| Het lijkt erop dat zijn binaire wachtwoord versleuteld is.                   |
-| Tijd om zijn stappen op te volgen.                                           |
+| It seems that the password is encrypted using binary.                        |
+| Lets follow his steps and see what happens.                                  |
 |                                                                              |
-| Voorbeeld binair optellen: 1001 1111 + 1010 0101                             |
+| Example binary calculation: 1001 1111 + 1010 0101                            |
 | 1001 1111                                                                    |
 | 1010 0101                                                                    |
 | --------- +                                                                  |
 | 0100 0100                                                                    |
 |                                                                              |
-| (Altijd afronden naar 8 bits)                                                |
+| (Always round to 8 bits)                                                     |
 +------------------------------------------------------------------------------+";
         }
 
@@ -281,10 +285,10 @@ daemon:x:1:1::/tmp:
 uucp:x:4:4::/var/spool/uucppublic:/usr/lib/uucp/uucico
 user:01101010:181:100:Rik de Jong:/u/user:/bin/ksh
 
-# Je bent aardig ver gekomen, als jij in mijn passwd file zit te rommelen.
-# Tel de basis bij de som van de gebruiker op
-# Haal hier de som van de lagen af.
-# Vermenigvuldig dit met 2, dit leidt je naar je toekomst.";
+# You have come quite far, seeing as you are messing around in my passwd file.
+# Add the base to the sum of the user.
+# Subtract the sum of the layers.
+# Multiply by 2, this will lead you to your future.";
         }
 
         public static string GetLevel3CatWrong()
@@ -303,20 +307,20 @@ user:01101010:181:100:Rik de Jong:/u/user:/bin/ksh
         public static string GetLevel3Decryptor(int progress)
         {
             StringBuilder decryptorText = new StringBuilder(
-                @"                                                                                
-Voer de juiste antwoorden in om het wachtwoord te ontgrendelen als parameter:
-(Bijvoorbeeld ""decryptor 1111 1111"" of ""decryptor 11111111"")   
-Correcte antwoorden komen hieronder te staan
+                @"           
+To unlock the passwords, use the answers as input for the decryptor.
+(For instance ""decryptor 1111 1111"" or ""decryptor 11111111"")                                                                     
+The correct answers will be shown below.
 
                                                                                 
-Stap 1: Basiswachtwoord:                                                    ");
+Step 1: Base password:                                                    ");
         
             if (progress >= 3)
             {
                 decryptorText.Append(@"
 0110 1010                                 
 
-Stap 2: Som der gebruiker ");
+Step 2: Sum of the user");
             }
 
             if (progress >= 4)
@@ -324,7 +328,7 @@ Stap 2: Som der gebruiker ");
                 decryptorText.Append(@"
 1011 1111
                                                                                 
-Stap 3: Basiswachtwoord + som der gebruiker");
+Step 3: base password + sum of the user");
             }
 
             if (progress >= 5)
@@ -332,7 +336,7 @@ Stap 3: Basiswachtwoord + som der gebruiker");
                 decryptorText.Append(@"
 0010 1001                                                                                
                                                                                 
-Stap 4: De som van de lagen");
+Step 4: Sum of the layers");
             }
 
             if (progress >= 6)
@@ -340,7 +344,7 @@ Stap 4: De som van de lagen");
                 decryptorText.Append(@"
 0001 1100
                                                                                 
-Stap 5: Stap 3 - Stap 4");
+Step 5: Step 3 - Step 4");
             }
 
             if (progress >= 7)
@@ -348,15 +352,7 @@ Stap 5: Stap 3 - Stap 4");
                 decryptorText.Append(@"
 0000 1101
                                                                                 
-Stap 6: Stap 5 x 2");
-            }
-
-            if (progress >= 8)
-            {
-                decryptorText.Append(@"
-0001 1010
-
-Gefeliciteerd! Het wachtwoord is ""De geit is gevlogen""");
+Step 6: Step 5 x 2");
             }
 
             return decryptorText.ToString();

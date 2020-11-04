@@ -217,6 +217,8 @@ public class Level2 : MonoBehaviour
         _controlLayer.view.SetExternalPosition(new GridPosition(21, 0));
         _controlLayer.zIndex = 1;
 
+        monitor.CalibrateTextMesh();
+
         monitor.uiCursor.Show(true);
         monitor.uiCursor.Blink(true);
         monitor.uiCursor.linkedLayer = _continueLayer;
