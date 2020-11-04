@@ -232,9 +232,9 @@ You take a crack at it nevertheless.";
                       Chapter 3: Breaking the encryption.                      
                                                                                
 After connecting (and hacking) the pc of the professor,
-ou are now ready to face the next challenge.                                                                               
+You are now ready to face the next challenge.                                                                               
 
-To find out more it seems that you need tto figure out some sort of password.
+To find out more it seems that you need to figure out some sort of password.
 But you are in luck. He has saved them all in one place. Convenient.
 
 (If you are having a bit of trouble, [escape] might help you.)";
