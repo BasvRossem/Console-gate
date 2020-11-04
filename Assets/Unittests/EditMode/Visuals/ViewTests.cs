@@ -73,7 +73,8 @@ namespace VisualsTests
         public void MoveInternalPositionPositive()
         {
             _view.SetInternalPosition(new GridPosition());
-
+            _view.StayInBounds(false);
+            
             GridPosition positionBefore = _view.internalPosition;
             _view.MoveInternalPosition(1, 1, 1, 1);
             GridPosition positionAfter = _view.internalPosition;

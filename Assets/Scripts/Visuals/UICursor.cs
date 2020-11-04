@@ -33,10 +33,7 @@ namespace Visuals
             _rectTransform = GetComponent<RectTransform>();
             
             textMeshCharacterPositions = new List<List<Vector2>>();
-        }
-
-        private void Start()
-        {
+            
             isVisible = true;
             characterSize = new Vector2(8, 18);
             _lastBlinkUpdate = Time.time;
@@ -159,11 +156,10 @@ namespace Visuals
             List<Vector2> rowPositions = textMeshCharacterPositions[row];
 
             Vector2 newSize = new Vector2(characterSize.x * rowPositions.Count, characterSize.y);
-            Vector2 characterCenter = (rowPositions[0] + rowPositions[rowPositions.Count - 1]) / 2;
+            Vector2 characterCenter = (rowPositions[0] + rowPositions[rowPositions.Count - 1]) / 2 + new Vector2(0,2);
 
             SetSize(newSize);
             SetPositionCenter(characterCenter);
-            Debug.LogWarning("Here");
         }
 
         public void SetGridPosition(GridPosition gridPosition)
