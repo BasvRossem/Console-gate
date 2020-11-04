@@ -18,6 +18,8 @@ public class Level1 : MonoBehaviour
     
     private delegate void MonitorWriter();
     private MonitorWriter _myMonitorWriter;
+    private MonitorWriter _previousMonitorWriter;
+    private int _progressStep;
 
     // Start is called before the first frame update
     private void Start()
@@ -25,6 +27,8 @@ public class Level1 : MonoBehaviour
         _userTerminal = new Terminal(monitor, keylistener, SendCommand);
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.Escape}, StartHelp);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
@@ -32,13 +36,51 @@ public class Level1 : MonoBehaviour
         
         _myMonitorWriter = LoadChatlog;
         _myMonitorWriter();
+        _progressStep = 0;
     }
-
-    // Update is called once per frame
-    private void Update()
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
     {
+        SceneManager.LoadScene("Start Menu");
     }
 
+    private void ChangeContext(MonitorWriter newContext, bool changePreviousContext = true)
+    {
+        if(changePreviousContext) _previousMonitorWriter = _myMonitorWriter;
+        _myMonitorWriter = newContext;
+        _myMonitorWriter();
+    }
+
+    private void StartHelp(List<KeyCode> args)
+    {
+        // Write tips for the current layer.
+        keylistener.ClearActions(new List<KeyCode>{KeyCode.Escape}, StartHelp);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.Escape}, ExitHelp);
+        ChangeContext(WriteHelp, true);
+    }
+
+    private void WriteHelp()
+    {
+        if (_progressStep <= 0)
+        {
+            _textLayer.WriteText(TextManager.GetLevel1Help1());
+        }else if (_progressStep >= 1)
+        {
+            _textLayer.WriteText(TextManager.GetLevel1Help2());
+        }
+    }
+
+    private void ExitHelp(List<KeyCode> args)
+    {
+        // don't use the context changer because the menu should be exempt of previous changes.
+        if (_previousMonitorWriter == null) ChangeContext(LoadChatlog, false);
+        else ChangeContext(_previousMonitorWriter, false);
+        // Remove previous listener
+        keylistener.ClearActions(new List<KeyCode> {KeyCode.Escape}, ExitHelp);
+        // Add new listener, back to menu
+        keylistener.AddKey(new List<KeyCode>{KeyCode.Escape}, StartHelp);
+    }
     private void LoadChatlog()
     { 
         _textLayer.view.MakeStatic(false); 
@@ -117,6 +159,7 @@ public class Level1 : MonoBehaviour
         if (command == "cat appendix.txt")
         {
             _myMonitorWriter = LoadFile;
+            _progressStep = _progressStep != 0 ? _progressStep : 1;
         }
         else if(command == "cat chatlog.txt")
         {

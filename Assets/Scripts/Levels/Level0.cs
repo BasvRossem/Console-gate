@@ -27,6 +27,7 @@ public class Level0 : MonoBehaviour
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
         
         keyListener.AddKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
@@ -39,6 +40,12 @@ public class Level0 : MonoBehaviour
         monitor.uiCursor.Blink(true);
 
         WriteText(_text[0]);
+    }
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
+    {
+        SceneManager.LoadScene("Start Menu");
     }
 
     private void WriteText(string monitorText)

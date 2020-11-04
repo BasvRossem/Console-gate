@@ -141,6 +141,36 @@ Pellentesque tincidunt urna sit amet ex cursus suscipit.";
 -appendix.txt";
         }
 
+        public static string GetLevel1Help1()
+        {
+            return @"+------------------------------------------------------------------------------+
+|                                  Helpmenu:                                   |
+|                                                                              |
+|                                                                              |
+| Try finding out the address (ip4) to the teacher's pc. Using metadata from   |
+| recently downloaded files might give more information                        |
+|                                                                              |
+|                                                                              |
+| (press 'm' to go back to the starting menu)                                  |
++------------------------------------------------------------------------------+";
+        }
+        
+        public static string GetLevel1Help2()
+        {
+            return @"+------------------------------------------------------------------------------+
+|                                  Helpmenu:                                   |
+|                                                                              |
+|                                                                              |
+| Try finding out the address (ip4) to the teacher's pc. Using metadata from   |
+| recently downloaded files might give more information                        |
+|                                                                              |
+|                                                                              |
+| SSH can be used to connect to other computers through the internet.          |
+|                                                                              |
+|                                                                              |
+| (press 'm' to go back to the starting menu)                                  |
++------------------------------------------------------------------------------+";
+        }
         
         
         // -----------------------------------
