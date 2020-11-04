@@ -89,7 +89,7 @@ Successfully downloaded ""appendix.txt""";
         {
             return @"Filename: appendix
 File extension: .txt
-Path to file: / Downloads / apendix
+Path to file: / Downloads / appendix.txt
 
 Date created: 20 - 03 - 2014
 Size: 12381 bytes
@@ -206,13 +206,13 @@ You take a crack at it nevertheless.";
             return @"                 [ Login ]
                      .
                      .
-                 [  And  ]
+                 [  AND  ]
              .....       .....
              .               .
-         [  And  ]       [  OR   ]
+         [  AND  ]       [  OR   ]
      .....       .........       .....
      .               .               .
- [  And  ]       [  And  ]       [  OR   ]
+ [  AND  ]       [  AND  ]       [  OR   ]
  .       .       .       .       .       .
  .       .       .       .       .       .
 [ ]     [ ]     [ ]     [ ]     [ ]     [ ]";
