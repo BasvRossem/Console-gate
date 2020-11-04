@@ -120,7 +120,7 @@ Pellentesque tincidunt urna sit amet ex cursus suscipit.");
     private void LoadNextLevel()
     {
         _textLayer.WriteText("You completed level 1. Level two is still coming...");
-        SceneManager.LoadScene("Level 3");
+        SceneManager.LoadScene("Level 2");
     }
 
     public void MoveView(List<KeyCode> args)

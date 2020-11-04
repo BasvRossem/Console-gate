@@ -42,6 +42,7 @@ public class Level3 : MonoBehaviour
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));
         _textLayer.view.StayInBounds(false);
+        _textLayer.view.MakeStatic(false);
         
         // Add the user input layer
         _terminal = new Terminal(monitor, keylistener, TerminalCallback);
