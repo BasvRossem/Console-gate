@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ControllerStructures;
+using Core;
 using UnityEditor;
 using UnityEngine;
 using Visuals;
@@ -27,7 +28,7 @@ public class StartMenu : MonoBehaviour
         };
 
         _artLayer = monitor.NewLayer();
-        _artLayer.WriteText(Tools.ReadFile("Assets/Text/Start Menu/Art"));
+        _artLayer.WriteText(TextManager.GetStartScreenArt());
         // Debug.Log(menu.layer.view.externalPosition);
         menu.layer.view.SetExternalPosition(new GridPosition(10, 0));
         menu.SetOptions(_levelOptions);
