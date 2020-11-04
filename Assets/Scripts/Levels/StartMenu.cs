@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ControllerStructures;
 using UnityEditor;
@@ -27,11 +28,18 @@ public class StartMenu : MonoBehaviour
         };
 
         _artLayer = monitor.NewLayer();
-        _artLayer.WriteText(Tools.ReadFile("Assets/Text/Start Menu/Art"));
+        Tools.ReadFile(this,"https://basvanrossem.com/Assets/Text/Level%200/Intro%201", Callback);
         // Debug.Log(menu.layer.view.externalPosition);
+        _artLayer.WriteText("Please wait, we are loading assets.");
         menu.layer.view.SetExternalPosition(new GridPosition(10, 0));
         menu.SetOptions(_levelOptions);
         menu.layer.zIndex = 1;
     }
 
+    private void Callback(string text)
+    {
+        _artLayer.WriteText(text);
+        Debug.Log(text);
+    }
+    
 }

@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Tools
 {
+    public delegate void WebCallback(string response);
+    
     /// <summary>
     /// Check the condition and throw an error with a custom message if the condition is true.
     /// </summary>
@@ -37,11 +40,30 @@ public class Tools
         return condition;
     }
 
-    public static string ReadFile(string path)
+    public static void ReadFile(MonoBehaviour owner, string path, WebCallback callback)
     {
-        StreamReader reader = new StreamReader(path);
-        string text = reader.ReadToEnd();
-        reader.Close();
-        return text;
+        owner.StartCoroutine(GetText(path, callback));
+        // StreamReader reader = new StreamReader(path);
+        // string text = reader.ReadToEnd();
+        // reader.Close();
+        // return text;
+    }
+    
+    public static IEnumerator GetText(string path, WebCallback callback)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(path))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError) // Error
+            {
+                Debug.Log(request.error);
+            }
+            else // Success
+            {
+                callback(request.downloadHandler.text);
+                Debug.Log(request.downloadHandler.text);
+            }
+        }
     }
 }
