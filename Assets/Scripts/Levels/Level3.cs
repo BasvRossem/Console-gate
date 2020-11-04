@@ -31,7 +31,7 @@ public class Level3 : MonoBehaviour
         keylistener.AddKey(new List<KeyCode> {KeyCode.Escape}, StartHelp);
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
-        keylistener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
 
         // Add the base text layer
         _textLayer = monitor.NewLayer();

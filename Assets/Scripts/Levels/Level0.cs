@@ -27,7 +27,7 @@ public class Level0 : MonoBehaviour
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
         
         keyListener.AddKey(new List<KeyCode> { KeyCode.Space }, LoadNext);
-        keyListener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));

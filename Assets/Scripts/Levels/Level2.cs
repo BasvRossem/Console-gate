@@ -200,7 +200,7 @@ public class Level2 : MonoBehaviour
         if (Tools.CheckError(keyListener == null, "No KeyListener object has been added")) return;
 
         keyListener.AddKey(new List<KeyCode> {KeyCode.Space}, GoToPuzzle);
-        keyListener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
+        keyListener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
         
         
         _puzzleLayer = monitor.NewLayer(false);

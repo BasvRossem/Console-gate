@@ -28,7 +28,7 @@ public class Level1 : MonoBehaviour
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> {KeyCode.Escape}, StartHelp);
-        keylistener.AddKey(new List<KeyCode> {KeyCode.M}, LoadStartMenu);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
 
         _textLayer = monitor.NewLayer();
         _textLayer.view.SetSize(new GridSize(22, Monitor.Size.columns));

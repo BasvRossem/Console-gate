@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UserInput;
 using Visuals;
 
@@ -21,15 +22,6 @@ public class Level4 : MonoBehaviour
 
     private int _progressStep;
     private Dictionary<int, string> _binaryAnswers;
-    private void OnEnable()
-    {
-        Debug.Log("Enable");
-    }
-
-    private void OnDisable()
-    {
-        Debug.Log("Disable");
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +30,7 @@ public class Level4 : MonoBehaviour
         keylistener.AddKey(new List<KeyCode> {KeyCode.Space}, WritePreFace);
         keylistener.AddKey(new List<KeyCode> { KeyCode.DownArrow }, MoveView);
         keylistener.AddKey(new List<KeyCode> { KeyCode.UpArrow }, MoveView);
+        keylistener.AddKey(new List<KeyCode> {KeyCode.Home}, LoadStartMenu);
 
         // Add the base text layer
         _textLayer = monitor.NewLayer();
@@ -53,6 +46,13 @@ public class Level4 : MonoBehaviour
 
         ConcludeChapterThree();
     }
+    
+    // Load the startmenu scene
+    private void LoadStartMenu(List<KeyCode> args)
+    {
+        SceneManager.LoadScene("Start Menu");
+    }
+
 
     private void MoveView(List<KeyCode> args)
     {
