@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Visuals;
 using UserInput;
 
@@ -323,10 +324,7 @@ Stap 6: Stap 5 x 2");
 
         if (_progressStep >= 8)
         {
-            decryptorText.Append(@"
-0001 1010
-
-Gefeliciteerd! Het wachtwoord is ""De geit is gevlogen""");
+            SceneManager.LoadScene("Level 4");
         }
         _textLayer.WriteText(decryptorText.ToString());
 
