@@ -96,7 +96,7 @@ This all starts to feel a bit too relevant.");
         string text = @"I see that you have come far.
 As far as my statistics show you are the only one that has managed to decrypt
 the password.
-Now please fill in the password you just created. 
+Now please fill in the password you just decrypted. 
 ";
         _textLayer.WriteText(text);
     }

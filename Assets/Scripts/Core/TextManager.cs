@@ -286,7 +286,7 @@ uucp:x:4:4::/var/spool/uucppublic:/usr/lib/uucp/uucico
 user:01101010:181:100:Rik de Jong:/u/user:/bin/ksh
 
 # You have come quite far, seeing as you are messing around in my passwd file.
-# Add the base to the sum of the user.
+# Add the base to the sum of user.
 # Subtract the sum of the layers.
 # Multiply by 2, this will lead you to your future.";
         }
@@ -320,7 +320,7 @@ Step 1: Base password:                                                    ");
                 decryptorText.Append(@"
 0110 1010                                 
 
-Step 2: Sum of the user");
+Step 2: Sum of user");
             }
 
             if (progress >= 4)
